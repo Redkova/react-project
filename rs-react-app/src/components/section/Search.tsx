@@ -4,6 +4,7 @@ import Button from '../Button';
 
 interface Props {
   onSearch: (value: string) => void;
+  initialValue: string;
 }
 
 interface State {
@@ -12,8 +13,14 @@ interface State {
 
 class SearchSection extends Component<Props, State> {
   state: State = {
-    value: '',
+    value: this.props.initialValue || '',
   };
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.initialValue !== this.props.initialValue) {
+      this.setState({ value: this.props.initialValue });
+    }
+  }
 
   render() {
     return (
