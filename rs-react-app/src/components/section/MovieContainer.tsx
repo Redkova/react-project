@@ -43,6 +43,14 @@ class MovieContainer extends Component<Record<string, never>, State> {
       const { search, page } = this.state;
       const data = await searchMovies(search, page);
 
+      if (data.error === 'Too many results.') {
+        this.setState({
+          results: [],
+          error: 'No movies found with this title.',
+        });
+        return;
+      }
+
       this.setState({
         results: data.movies,
         error: data.error ?? null,
