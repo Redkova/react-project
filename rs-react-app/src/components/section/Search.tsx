@@ -24,7 +24,7 @@ class SearchSection extends Component<Props, State> {
 
   render() {
     return (
-      <section className="w-full max-w-2xl mt-10 bg-white p-6 rounded-2xl shadow-md border">
+      <section className="w-full max-w-2xl bg-white p-6 rounded-2xl shadow-md border">
         <form
           className="flex gap-3"
           onSubmit={(e) => {

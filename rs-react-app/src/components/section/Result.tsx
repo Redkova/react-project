@@ -23,7 +23,7 @@ class ResultsSection extends Component<Props> {
     const { movies, loading, error, onNext, onPrev, page } = this.props;
 
     return (
-      <section className="w-full max-w-2xl mt-6 mb-10 bg-white p-6 rounded-2xl shadow-md border flex flex-col">
+      <section className="w-full max-w-2xl mt-6 pb-10 bg-white p-6 rounded-2xl shadow-md border flex flex-col">
         <div className="flex-1">
           <div className="flex justify-between items-center px-2 pb-3 border-b mb-4">
             <span className="text-gray-600 font-semibold pl-2">Movie name</span>
