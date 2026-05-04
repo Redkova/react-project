@@ -84,17 +84,25 @@ class MovieContainer extends Component<Record<string, never>, State> {
   };
 
   handleSearch = (value: string) => {
-    if (value.length < 3) {
+    const trimmed = value.trim();
+    console.log(value);
+    console.log(trimmed);
+
+    if (trimmed.length < 3) {
       this.setState({ error: 'Please enter at least 3 characters' });
       return;
     }
 
-    localStorage.setItem('searchTerm', value);
+    if (trimmed === this.state.search) {
+      return;
+    }
+
+    localStorage.setItem('searchTerm', trimmed);
     localStorage.setItem('page', '1');
 
     this.setState(
       {
-        search: value,
+        search: trimmed,
         page: 1,
         error: null,
       },
