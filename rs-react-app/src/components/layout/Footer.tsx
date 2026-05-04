@@ -1,0 +1,13 @@
+import { Component } from 'react';
+
+class Footer extends Component {
+  render() {
+    return (
+      <footer className="w-full py-4 text-center text-sm text-gray-500">
+        © 2026 Alexandra Redkova
+      </footer>
+    );
+  }
+}
+
+export default Footer;
