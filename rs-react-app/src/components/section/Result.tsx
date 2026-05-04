@@ -27,7 +27,11 @@ class ResultsSection extends Component<Props> {
           </div>
         )}
 
-        {error && <p className="text-center text-red-500">{error}</p>}
+        {error && (
+          <p className="mt-4 text-sm text-red-700 bg-red-100 border border-red-300 px-4 py-2 rounded-md text-center">
+            {error}
+          </p>
+        )}
 
         {!loading && !error && movies.length === 0 && (
           <p className="text-center text-gray-500">No results found</p>
@@ -50,6 +54,9 @@ class ResultsSection extends Component<Props> {
                         src={m.Poster}
                         alt={m.Title}
                         className="w-14 h-20 object-cover rounded-md border"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
                       />
                     )}
 

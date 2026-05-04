@@ -64,10 +64,13 @@ class MovieContainer extends Component<Record<string, never>, State> {
       const { search, page } = this.state;
       const data = await searchMovies(search, page);
 
-      if (data.error === 'Too many results.') {
+      if (
+        data.error === 'Too many results.' ||
+        data.error === 'Movie not found!'
+      ) {
         this.setState({
           results: [],
-          error: 'No movies found with this title.',
+          error: 'No movies found with that title!',
         });
         return;
       }
@@ -85,8 +88,6 @@ class MovieContainer extends Component<Record<string, never>, State> {
 
   handleSearch = (value: string) => {
     const trimmed = value.trim();
-    console.log(value);
-    console.log(trimmed);
 
     if (trimmed.length < 3) {
       this.setState({ error: 'Please enter at least 3 characters' });
