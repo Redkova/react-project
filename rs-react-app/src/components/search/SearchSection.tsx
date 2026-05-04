@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Input from '../Input';
-import Button from '../Button';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
 
 interface Props {
   onSearch: (value: string) => void;
@@ -37,7 +37,9 @@ class SearchSection extends Component<Props, State> {
             value={this.state.value}
             onChange={(e) => this.setState({ value: e.target.value })}
           />
-          <Button type="submit">Search</Button>
+          <Button className="text-white" type="submit">
+            Search
+          </Button>
         </form>
       </section>
     );

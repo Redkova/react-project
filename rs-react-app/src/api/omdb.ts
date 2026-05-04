@@ -1,4 +1,4 @@
-import type { OmdbSearchResponse, MoviesResult } from './types';
+import type { OmdbMovieSearchResponse, MoviesResult } from './types';
 
 const API_KEY = '88101ce2';
 const BASE_URL = 'https://www.omdbapi.com/';
@@ -26,7 +26,7 @@ export async function searchMovies(
     throw new Error(`HTTP error: ${response.status}`);
   }
 
-  const data: OmdbSearchResponse = await response.json();
+  const data: OmdbMovieSearchResponse = await response.json();
   if (data.Response === 'False') {
     return {
       movies: [],

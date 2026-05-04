@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import MainLayout from './components/layout/Main';
-import MovieContainer from './components/section/MovieContainer';
+import MainLayout from './components/layout/Layout';
+import MovieContainer from './components/movies/MovieContainer';
 
 class App extends Component {
   render() {

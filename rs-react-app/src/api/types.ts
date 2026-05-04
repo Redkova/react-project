@@ -1,4 +1,4 @@
-export interface OmdbMovieShort {
+export interface OmdbMovie {
   Title: string;
   Year: string;
   imdbID: string;
@@ -6,15 +6,15 @@ export interface OmdbMovieShort {
   Poster: string;
 }
 
-export interface OmdbSearchResponse {
-  Search?: OmdbMovieShort[];
+export interface OmdbMovieSearchResponse {
+  Search?: OmdbMovie[];
   totalResults?: string;
   Response: 'True' | 'False';
   Error?: string;
 }
 
 export interface MoviesResult {
-  movies: OmdbMovieShort[];
+  movies: OmdbMovie[];
   total: number;
   error?: string;
 }
