@@ -21,7 +21,12 @@ class ResultsSection extends Component<Props> {
           <span className="text-gray-600 font-semibold pr-2">Year</span>
         </div>
 
-        {loading && <p className="text-center text-gray-600">Loading...</p>}
+        {loading && (
+          <div className="flex justify-center py-10">
+            <div className="h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+
         {error && <p className="text-center text-red-500">{error}</p>}
 
         {!loading && !error && movies.length === 0 && (
