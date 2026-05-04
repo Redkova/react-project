@@ -33,8 +33,29 @@ class MovieContainer extends Component<Record<string, never>, State> {
         },
         this.loadMovies
       );
+      return;
     }
+
+    this.loadMoviesWithDefault();
   }
+
+  loadMoviesWithDefault = async () => {
+    this.setState({ loading: true, error: null });
+
+    try {
+      const data = await searchMovies('star', 1);
+
+      this.setState({
+        results: data.movies,
+        error: data.error ?? null,
+        page: 1,
+      });
+    } catch {
+      this.setState({ error: 'Failed to load data' });
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
 
   loadMovies = async () => {
     this.setState({ loading: true, error: null });

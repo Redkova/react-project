@@ -25,8 +25,6 @@ class SearchSection extends Component<Props, State> {
   render() {
     return (
       <section className="w-full max-w-2xl mt-10 bg-white p-6 rounded-2xl shadow-md border">
-        <h2 className="text-xl font-semibold mb-4 text-center">Search</h2>
-
         <form
           className="flex gap-3"
           onSubmit={(e) => {
@@ -35,7 +33,7 @@ class SearchSection extends Component<Props, State> {
           }}
         >
           <Input
-            placeholder="Type something"
+            placeholder="Search movies by title"
             value={this.state.value}
             onChange={(e) => this.setState({ value: e.target.value })}
           />
