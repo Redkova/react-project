@@ -3,10 +3,8 @@ import { vi } from 'vitest';
 import App from './App';
 import type { ComponentProps } from 'react';
 import MainLayout from './components/layout/Layout';
-import MovieContainer from './components/movies/MovieContainer';
 
 type LayoutProps = ComponentProps<typeof MainLayout>;
-type MovieProps = ComponentProps<typeof MovieContainer>;
 
 vi.mock('./components/layout/Layout', () => ({
   default: ({ children }: LayoutProps) => (
@@ -15,7 +13,7 @@ vi.mock('./components/layout/Layout', () => ({
 }));
 
 vi.mock('./components/movies/MovieContainer', () => ({
-  default: (_props: MovieProps) => <div data-testid="movie-container" />,
+  default: () => <div data-testid="movie-container" />,
 }));
 
 describe('App', () => {
