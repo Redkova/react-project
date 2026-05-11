@@ -1,5 +1,4 @@
 import { Component } from 'react';
-// import { searchMovies } from '../../api/omdb';
 import type { OmdbMovie } from '../../api/types';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
