@@ -38,4 +38,14 @@ describe('SearchSection', () => {
     await user.click(screen.getByRole('button', { name: 'Search' }));
     expect(onSearch).toHaveBeenCalledWith('Matrix');
   });
+
+  it('updates input value when initialValue prop changes', () => {
+    const { rerender } = render(
+      <SearchSection initialValue="Batman" onSearch={() => {}} />
+    );
+
+    expect(screen.getByRole('textbox')).toHaveValue('Batman');
+    rerender(<SearchSection initialValue="Matrix" onSearch={() => {}} />);
+    expect(screen.getByRole('textbox')).toHaveValue('Matrix');
+  });
 });
