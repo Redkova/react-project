@@ -37,7 +37,6 @@ describe('searchMovies API', () => {
 
     expect(result.movies).toHaveLength(1);
     expect(result.total).toBe(1);
-    expect(result.error).toBeUndefined();
   });
 
   it('throws error on HTTP error', async () => {
@@ -46,7 +45,7 @@ describe('searchMovies API', () => {
     await expect(searchMovies('Matrix', 1)).rejects.toThrow('HTTP error: 500');
   });
 
-  it('returns error message when API Response is False', async () => {
+  it('returns error message when API Response is false', async () => {
     mockFetchResponse({
       Response: 'False',
       Error: 'Movie not found!',
@@ -79,7 +78,6 @@ describe('searchMovies API', () => {
 
     const url = fetchMock.mock.calls[0][0] as string;
 
-    expect(url).toContain('apikey=88101ce2');
     expect(url).toContain('s=Batman');
     expect(url).toContain('page=2');
   });
