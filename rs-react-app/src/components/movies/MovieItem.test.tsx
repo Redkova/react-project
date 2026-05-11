@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import MovieItem from './MovieItem';
 import type { OmdbMovie } from '../../api/types';
 
@@ -30,6 +30,15 @@ describe('MovieItem', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
+  it('sets correct image src and alt attributes', () => {
+    render(<MovieItem movie={movieWithPoster} />);
+
+    const image = screen.getByRole('img');
+
+    expect(image).toHaveAttribute('src', 'poster.jpg');
+    expect(image).toHaveAttribute('alt', 'Matrix');
+  });
+
   it('does not render image when poster is N/A', () => {
     render(<MovieItem movie={movieWithoutPoster} />);
     expect(screen.queryByRole('img')).toBeNull();
@@ -38,5 +47,15 @@ describe('MovieItem', () => {
   it('does not render image when poster is empty string', () => {
     render(<MovieItem movie={{ ...movieWithoutPoster, Poster: '' }} />);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
+  });
+
+  it('hides image on load error', () => {
+    render(<MovieItem movie={movieWithPoster} />);
+
+    const image = screen.getByRole('img') as HTMLImageElement;
+
+    fireEvent.error(image);
+
+    expect(image.style.display).toBe('none');
   });
 });
