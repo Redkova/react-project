@@ -8,44 +8,54 @@ import ResultsSection from './ResultSection';
 import { storage } from '../../utils/storage';
 import { fetchMovies } from '../../api/services/movieService';
 
+const DEFAULT_QUERY = 'star';
+
 function MovieContainer() {
+  const savedSearch = storage.getSearch();
+  const savedPage = storage.getPage() || 1;
+  const initialSearch = savedSearch || '';
+  const initialQuery = savedSearch || DEFAULT_QUERY;
+
   const [results, setResults] = useState<OmdbMovie[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState(initialSearch);
+  const [query, setQuery] = useState(initialQuery);
+  const [page, setPage] = useState(savedPage);
 
-  const loadMovies = async (currentSearch = search, currentPage = page) => {
-    setLoading(true);
-    setError(null);
-
+  const loadMovies = async (currentQuery: string, currentPage: number) => {
     try {
-      const { movies, error } = await fetchMovies(currentSearch, currentPage);
+      const { movies, error } = await fetchMovies(currentQuery, currentPage);
 
-      setResults(movies);
-      setError(error);
+      return {
+        movies,
+        error: error ?? null,
+      };
     } catch {
-      setError('Failed to load data');
-    } finally {
-      setLoading(false);
+      return {
+        movies: [],
+        error: 'Failed to load data',
+      };
     }
   };
 
   useEffect(() => {
-    const savedSearch = storage.getSearch();
-    const savedPage = storage.getPage();
+    let cancelled = false;
 
-    if (savedSearch) {
-      setSearch(savedSearch);
-      setPage(savedPage);
+    void loadMovies(query, page).then(({ movies, error }) => {
+      if (cancelled) return;
 
-      loadMovies(savedSearch, savedPage);
-    } else {
-      loadMovies('star', 1);
-    }
-  }, []);
+      setResults(movies);
+      setError(error);
+      setLoading(false);
+    });
 
-  const handleSearch = (value: string) => {
+    return () => {
+      cancelled = true;
+    };
+  }, [query, page]);
+
+  const handleSearch = async (value: string) => {
     const trimmed = value.trim();
 
     if (trimmed.length < 3) {
@@ -53,41 +63,59 @@ function MovieContainer() {
       return;
     }
 
-    if (trimmed === search) return;
-
     storage.setSearch(trimmed);
     storage.setPage(1);
 
+    setLoading(true);
     setSearch(trimmed);
+    setQuery(trimmed);
     setPage(1);
     setError(null);
 
-    loadMovies(trimmed, 1);
+    const { movies, error } = await loadMovies(trimmed, 1);
+
+    setResults(movies);
+    setError(error);
+    setLoading(false);
   };
 
-  const nextPage = () => {
+  const nextPage = async () => {
     const newPage = page + 1;
 
     storage.setPage(newPage);
 
+    setLoading(true);
     setPage(newPage);
 
-    loadMovies(search, newPage);
+    const { movies, error } = await loadMovies(query, newPage);
+
+    setResults(movies);
+    setError(error);
+    setLoading(false);
   };
 
-  const prevPage = () => {
+  const prevPage = async () => {
     const newPage = Math.max(page - 1, 1);
 
     storage.setPage(newPage);
 
+    setLoading(true);
     setPage(newPage);
 
-    loadMovies(search, newPage);
+    const { movies, error } = await loadMovies(query, newPage);
+
+    setResults(movies);
+    setError(error);
+    setLoading(false);
   };
 
   return (
     <>
-      <SearchSection onSearch={handleSearch} initialValue={search} />
+      <SearchSection
+        key={search || 'empty'}
+        onSearch={handleSearch}
+        initialValue={search}
+      />
 
       <ResultsSection
         movies={results}

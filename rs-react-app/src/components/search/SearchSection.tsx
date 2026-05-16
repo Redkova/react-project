@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 
@@ -8,11 +8,7 @@ interface Props {
 }
 
 function SearchSection({ onSearch, initialValue }: Props) {
-  const [value, setValue] = useState(initialValue || '');
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
+  const [value, setValue] = useState(initialValue ?? '');
 
   return (
     <section className="w-full max-w-2xl bg-white p-6 rounded-2xl shadow-md border">

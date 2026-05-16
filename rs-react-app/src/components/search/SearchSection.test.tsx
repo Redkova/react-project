@@ -45,7 +45,9 @@ describe('SearchSection', () => {
     );
 
     expect(screen.getByRole('textbox')).toHaveValue('Batman');
-    rerender(<SearchSection initialValue="Matrix" onSearch={() => {}} />);
+    rerender(
+      <SearchSection key="matrix" initialValue="Matrix" onSearch={() => {}} />
+    );
     expect(screen.getByRole('textbox')).toHaveValue('Matrix');
   });
 });
