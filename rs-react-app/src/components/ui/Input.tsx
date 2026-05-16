@@ -1,14 +1,12 @@
-import { Component } from 'react';
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-class Input extends Component<React.InputHTMLAttributes<HTMLInputElement>> {
-  render() {
-    return (
-      <input
-        {...this.props}
-        className="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    );
-  }
+function Input({ className = '', ...props }: InputProps) {
+  return (
+    <input
+      {...props}
+      className={`flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400${className}`}
+    />
+  );
 }
 
 export default Input;
