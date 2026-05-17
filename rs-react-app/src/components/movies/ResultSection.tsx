@@ -13,6 +13,8 @@ interface Props {
   onNext: () => void;
   onPrev: () => void;
   page: number;
+  isFirstPage: boolean;
+  isLastPage: boolean;
 }
 
 function ResultsSection({
@@ -22,6 +24,8 @@ function ResultsSection({
   onNext,
   onPrev,
   page,
+  isFirstPage,
+  isLastPage,
 }: Props) {
   const [forceError, setForceError] = useState(false);
 
@@ -48,7 +52,13 @@ function ResultsSection({
         {!loading && !error && movies.length > 0 && (
           <>
             <MovieList movies={movies} />
-            <MoviesPagination page={page} onNext={onNext} onPrev={onPrev} />
+            <MoviesPagination
+              page={page}
+              onNext={onNext}
+              onPrev={onPrev}
+              isFirstPage={isFirstPage}
+              isLastPage={isLastPage}
+            />
           </>
         )}
       </div>
@@ -56,7 +66,7 @@ function ResultsSection({
       <div className="flex justify-center mt-4">
         <Button
           onClick={() => setForceError(true)}
-          className="text-white bg-red-500  hover:bg-red-600"
+          className="text-white bg-red-500 border border-red-500 hover:bg-red-400 hover:border-red-600 hover:shadow-lg transition"
         >
           Simulate Error
         </Button>

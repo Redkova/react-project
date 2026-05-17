@@ -25,7 +25,10 @@ function SearchSection({ onSearch, initialValue }: Props) {
           onChange={(e) => setValue(e.target.value)}
         />
 
-        <Button className="text-white" type="submit">
+        <Button
+          className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+          type="submit"
+        >
           Search
         </Button>
       </form>

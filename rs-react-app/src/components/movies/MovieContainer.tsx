@@ -125,6 +125,9 @@ function MovieContainer() {
     setLoading(false);
   };
 
+  const isFirstPage = page === 1;
+  const isLastPage = results.length < 10;
+
   return (
     <>
       <SearchSection
@@ -140,6 +143,8 @@ function MovieContainer() {
         onNext={nextPage}
         onPrev={prevPage}
         page={page}
+        isFirstPage={isFirstPage}
+        isLastPage={isLastPage}
       />
     </>
   );

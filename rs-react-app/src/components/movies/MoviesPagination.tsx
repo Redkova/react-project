@@ -4,14 +4,27 @@ interface Props {
   page: number;
   onNext: () => void;
   onPrev: () => void;
+  isFirstPage: boolean;
+  isLastPage: boolean;
 }
 
-function MoviesPagination({ page, onNext, onPrev }: Props) {
+function MoviesPagination({
+  page,
+  onNext,
+  onPrev,
+  isFirstPage,
+  isLastPage,
+}: Props) {
   return (
     <div className="flex justify-center gap-4 mt-6">
       <Button
         onClick={onPrev}
-        className="text-black bg-gray-200 hover:bg-gray-300"
+        disabled={isFirstPage}
+        className={
+          isFirstPage
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-gray-200 text-black hover:bg-gray-300'
+        }
       >
         Prev
       </Button>
@@ -20,7 +33,12 @@ function MoviesPagination({ page, onNext, onPrev }: Props) {
 
       <Button
         onClick={onNext}
-        className="bg-gray-200 text-black hover:bg-gray-300"
+        disabled={isLastPage}
+        className={
+          isLastPage
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-gray-200 text-black hover:bg-gray-300'
+        }
       >
         Next
       </Button>

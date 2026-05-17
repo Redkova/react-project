@@ -1,10 +1,12 @@
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function Button({ children, className = '', ...props }: ButtonProps) {
+function Button({ children, className = '', disabled, ...props }: ButtonProps) {
   return (
     <button
       {...props}
-      className={`${className} px-5 py-2 bg-blue-500 rounded-xl hover:bg-blue-600 transition cursor-pointer `}
+      className={`px-5 py-2 rounded-xl transition
+        ${className} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+        ${disabled ? '' : 'hover:bg-blue-600'}`}
     >
       {children}
     </button>
