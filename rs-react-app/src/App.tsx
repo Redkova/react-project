@@ -1,12 +1,7 @@
-import MainLayout from './components/layout/Layout';
-import MovieContainer from './components/movies/MovieContainer';
+import { AppRouter } from './router/AppRouter';
 
 function App() {
-  return (
-    <MainLayout>
-      <MovieContainer />
-    </MainLayout>
-  );
+  return <AppRouter />;
 }
 
 export default App;

@@ -1,11 +1,105 @@
-import { useParams } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
+import type { OmdbMovieDetails } from '../api/types';
+import Spinner from '../components/movies/Spinner';
 
 export function MovieDetailSection() {
-  const { itemID } = useParams();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const id = params.get('details');
+  const page = params.get('page') || 1;
+  const [movie, setMovie] = useState<OmdbMovieDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+
+    async function load() {
+      const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${id}&plot=full`;
+      const res = await fetch(url);
+      const data: OmdbMovieDetails = await res.json();
+      setMovie(data);
+      setLoading(false);
+    }
+
+    load();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!movie || movie.Response === 'False') {
+    return <p className="text-red-500 text-center">Movie not found</p>;
+  }
+
+  const isLong = movie.Plot.length > 700;
+  const shortPlot =
+    movie.Plot.length > 700 ? movie.Plot.slice(0, 700) + '...' : movie.Plot;
+
+  const hasPoster =
+    movie.Poster && movie.Poster !== 'N/A' && movie.Poster.trim() !== '';
 
   return (
-    <div className="p-4 border-l w-full">
-      <h2 className="text-xl font-bold">Details for {itemID}</h2>
+    <div className="relative w-full max-w-lg bg-white py-6 px-4 rounded-xl shadow-lg">
+      <button
+        onClick={() => navigate(`/?page=${page}`)}
+        className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
+      >
+        ✕
+      </button>
+      <div className="flex gap-4">
+        {hasPoster && (
+          <img
+            src={movie.Poster}
+            alt={movie.Title}
+            className="w-28 h-40 object-cover rounded-md shadow"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        )}
+
+        <div className="flex flex-col justify-start gap-1">
+          <h2 className="text-2xl font-bold">{movie.Title}</h2>
+          <p className="text-black">
+            <strong className="text-gray-700">Year:</strong> {movie.Year}
+          </p>
+          <p className="text-black">
+            <strong className="text-gray-700">Genre:</strong> {movie.Genre}
+          </p>
+          <p className="text-black">
+            <strong className="text-gray-700">Country:</strong> {movie.Country}
+          </p>
+          <p className="text-black flex items-center gap-1">
+            <strong className="text-gray-700">IMDb:</strong>
+            <span className="text-yellow-500 text-lg">★</span>
+            {movie.imdbRating}
+          </p>
+        </div>
+      </div>
+      <div className="mt-4">
+        <p className="text-black">
+          <strong className="text-gray-800">Actors:</strong> {movie.Actors}
+        </p>
+      </div>
+      <p className="mt-4 text-black leading-relaxed">
+        {expanded || !isLong ? movie.Plot : shortPlot}
+
+        {isLong && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="ml-2 text-blue-600 hover:underline"
+          >
+            {expanded ? 'Show less' : 'Show more'}
+          </button>
+        )}
+      </p>
     </div>
   );
 }

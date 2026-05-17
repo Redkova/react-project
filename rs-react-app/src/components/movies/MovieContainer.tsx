@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-
+import { Outlet, useSearchParams, useNavigate } from 'react-router';
 import type { OmdbMovie } from '../../api/types';
-
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
-
 import { storage } from '../../utils/storage';
 import { fetchMovies } from '../../api/services/movieService';
 
@@ -15,6 +13,9 @@ function MovieContainer() {
   const savedPage = storage.getPage() || 1;
   const initialSearch = savedSearch || '';
   const initialSearchTerm = savedSearch || DEFAULT_SEARCH_TERM;
+  const [params] = useSearchParams();
+  const isDetailOpen = params.get('details') !== null;
+  const navigate = useNavigate();
 
   const [results, setResults] = useState<OmdbMovie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,6 +73,7 @@ function MovieContainer() {
   }, [searchTerm, page]);
 
   const handleSearch = async (value: string) => {
+    navigate('/');
     const trimmed = value.trim();
 
     if (trimmed.length < 3) {
@@ -102,6 +104,7 @@ function MovieContainer() {
 
     setLoading(true);
     setPage(newPage);
+    navigate(`/?page=${newPage}`);
 
     const { movies, error } = await loadMovies(searchTerm, newPage);
 
@@ -117,6 +120,7 @@ function MovieContainer() {
 
     setLoading(true);
     setPage(newPage);
+    navigate(`/?page=${newPage}`);
 
     const { movies, error } = await loadMovies(searchTerm, newPage);
 
@@ -130,22 +134,35 @@ function MovieContainer() {
 
   return (
     <>
-      <SearchSection
-        key={search || 'empty'}
-        onSearch={handleSearch}
-        initialValue={search}
-      />
+      <div
+        className={
+          isDetailOpen ? 'flex w-full gap-4 px-4' : 'flex w-full justify-center'
+        }
+      >
+        <div className={isDetailOpen ? 'w-[50%]' : 'w-full max-w-2xl'}>
+          <SearchSection
+            key={search || 'empty'}
+            onSearch={handleSearch}
+            initialValue={search}
+          />
 
-      <ResultsSection
-        movies={results}
-        loading={loading}
-        error={error}
-        onNext={nextPage}
-        onPrev={prevPage}
-        page={page}
-        isFirstPage={isFirstPage}
-        isLastPage={isLastPage}
-      />
+          <ResultsSection
+            movies={results}
+            loading={loading}
+            error={error}
+            onNext={nextPage}
+            onPrev={prevPage}
+            page={page}
+            isFirstPage={isFirstPage}
+            isLastPage={isLastPage}
+          />
+        </div>
+        {isDetailOpen && (
+          <div className="w-[50%] pl-2 pt-30 flex justify-center items-start">
+            <Outlet />
+          </div>
+        )}
+      </div>
     </>
   );
 }

@@ -18,3 +18,17 @@ export interface MoviesResult {
   total: number;
   error?: string;
 }
+
+export interface OmdbMovieDetails {
+  Title: string;
+  Year: string;
+  Genre: string;
+  Country: string;
+  imdbID: string;
+  Poster: string;
+  Actors: string;
+  Plot: string;
+  imdbRating: string;
+  Response: 'True' | 'False';
+  Error?: string;
+}

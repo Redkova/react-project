@@ -1,4 +1,5 @@
 import type { OmdbMovie } from '../../api/types';
+import { Link, useSearchParams } from 'react-router';
 
 interface Props {
   movie: OmdbMovie;
@@ -7,21 +8,26 @@ interface Props {
 function MovieItem({ movie }: Props) {
   const hasPoster =
     movie.Poster && movie.Poster !== 'N/A' && movie.Poster !== '';
+  const [params] = useSearchParams();
+  const page = params.get('page') || 1;
+
   return (
-    <div className="flex justify-between items-center p-4 border rounded-xl bg-gray-50 shadow-sm hover:shadow-md transition">
-      <div className="flex items-center gap-4">
-        {hasPoster && (
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            className="w-14 h-20 object-cover rounded-md border"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-          />
-        )}
-        <h3 className="text-lg font-semibold">{movie.Title}</h3>
+    <Link to={`/?page=${page}&details=${movie.imdbID}`}>
+      <div className="flex justify-between items-center p-4 border rounded-xl bg-gray-50 shadow-sm hover:shadow-md transition">
+        <div className="flex items-center gap-4">
+          {hasPoster && (
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              className="w-14 h-20 object-cover rounded-md border"
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+            />
+          )}
+          <h3 className="text-lg font-semibold">{movie.Title}</h3>
+        </div>
+        <p className="text-gray-700 text-lg font-medium">{movie.Year}</p>
       </div>
-      <p className="text-gray-700 text-lg font-medium">{movie.Year}</p>
-    </div>
+    </Link>
   );
 }
 

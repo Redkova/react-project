@@ -7,7 +7,7 @@ interface Props {
 
 function MovieList({ movies }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       {movies.map((movie) => (
         <MovieItem key={movie.imdbID} movie={movie} />
       ))}
