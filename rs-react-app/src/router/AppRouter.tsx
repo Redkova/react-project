@@ -16,12 +16,13 @@ export function AppRouter() {
             <Outlet />
           </MainLayout>
         }
-      />
-      <Route index element={<SearchPage />} />
-      <Route path={PagePath.item} element={<MovieDetailSection />} />
-      <Route path={PagePath.about} element={<AboutPage />} />
-      <Route path={PagePath.notFound} element={<NotFoundPage />} />
-      <Route path="*" element={<Navigate to="/404" replace />} />
+      >
+        <Route index element={<SearchPage />} />
+        <Route path={PagePath.item} element={<MovieDetailSection />} />
+        <Route path={PagePath.about} element={<AboutPage />} />
+        <Route path={PagePath.notFound} element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+      </Route>
     </Routes>
   );
 }

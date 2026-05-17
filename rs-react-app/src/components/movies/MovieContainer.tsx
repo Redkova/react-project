@@ -8,24 +8,27 @@ import ResultsSection from './ResultSection';
 import { storage } from '../../utils/storage';
 import { fetchMovies } from '../../api/services/movieService';
 
-const DEFAULT_QUERY = 'star';
+const DEFAULT_SEARCH_TERM = 'star';
 
 function MovieContainer() {
   const savedSearch = storage.getSearch();
   const savedPage = storage.getPage() || 1;
   const initialSearch = savedSearch || '';
-  const initialQuery = savedSearch || DEFAULT_QUERY;
+  const initialSearchTerm = savedSearch || DEFAULT_SEARCH_TERM;
 
   const [results, setResults] = useState<OmdbMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState(initialSearch);
-  const [query, setQuery] = useState(initialQuery);
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [page, setPage] = useState(savedPage);
 
-  const loadMovies = async (currentQuery: string, currentPage: number) => {
+  const loadMovies = async (currentSearchTerm: string, currentPage: number) => {
     try {
-      const { movies, error } = await fetchMovies(currentQuery, currentPage);
+      const { movies, error } = await fetchMovies(
+        currentSearchTerm,
+        currentPage
+      );
 
       return {
         movies,
@@ -40,9 +43,22 @@ function MovieContainer() {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams();
+    if (results.length > 0) {
+      params.set('page', String(page));
+    }
+
+    const url = params.toString()
+      ? `?${params.toString()}`
+      : window.location.pathname;
+
+    window.history.replaceState({}, '', url);
+  }, [page, results.length]);
+
+  useEffect(() => {
     let cancelled = false;
 
-    void loadMovies(query, page).then(({ movies, error }) => {
+    void loadMovies(searchTerm, page).then(({ movies, error }) => {
       if (cancelled) return;
 
       setResults(movies);
@@ -53,7 +69,7 @@ function MovieContainer() {
     return () => {
       cancelled = true;
     };
-  }, [query, page]);
+  }, [searchTerm, page]);
 
   const handleSearch = async (value: string) => {
     const trimmed = value.trim();
@@ -68,7 +84,7 @@ function MovieContainer() {
 
     setLoading(true);
     setSearch(trimmed);
-    setQuery(trimmed);
+    setSearchTerm(trimmed);
     setPage(1);
     setError(null);
 
@@ -87,7 +103,7 @@ function MovieContainer() {
     setLoading(true);
     setPage(newPage);
 
-    const { movies, error } = await loadMovies(query, newPage);
+    const { movies, error } = await loadMovies(searchTerm, newPage);
 
     setResults(movies);
     setError(error);
@@ -102,7 +118,7 @@ function MovieContainer() {
     setLoading(true);
     setPage(newPage);
 
-    const { movies, error } = await loadMovies(query, newPage);
+    const { movies, error } = await loadMovies(searchTerm, newPage);
 
     setResults(movies);
     setError(error);
