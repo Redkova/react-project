@@ -1,4 +1,3 @@
-// mockReactRouter.tsx
 import { vi } from 'vitest';
 
 export function mockReactRouter() {
@@ -10,6 +9,7 @@ export function mockReactRouter() {
       ...actual,
 
       useSearchParams: vi.fn(),
+      useNavigate: () => vi.fn(),
 
       Link: function LinkMock(props: {
         to: string;
