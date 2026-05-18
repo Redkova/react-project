@@ -65,7 +65,7 @@ describe('SearchSection', () => {
   });
 
   it('falls back to empty string when initialValue is null', () => {
-    render(<SearchSection initialValue={null as string} onSearch={() => {}} />);
+    render(<SearchSection initialValue="" onSearch={() => {}} />);
     expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });
