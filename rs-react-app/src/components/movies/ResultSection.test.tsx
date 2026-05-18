@@ -1,9 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import ResultsSection from './ResultSection';
 import type { OmdbMovie } from '../../api/types';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
+import { mockReactRouter } from '../../test-utils/mockReactRouter';
+import { useSearchParams } from 'react-router';
+
+mockReactRouter();
+import ResultsSection from './ResultSection';
+
+const mockedUseSearchParams = vi.mocked(useSearchParams);
 
 const movies: OmdbMovie[] = [
   {
@@ -22,11 +28,18 @@ const defaultProps = {
   onNext: vi.fn(),
   onPrev: vi.fn(),
   page: 1,
+  isFirstPage: false,
+  isLastPage: false,
 };
 
 describe('ResultsSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ page: '1' }),
+      vi.fn(),
+    ]);
   });
 
   it('renders column headers', () => {
