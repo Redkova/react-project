@@ -64,13 +64,8 @@ describe('SearchSection', () => {
     expect(screen.getByRole('textbox')).toHaveValue('Matrix');
   });
 
-  it('falls back to empty string when initialValue is undefined', () => {
-    const props = { initialValue: undefined } as {
-      initialValue: string | undefined;
-    };
-
-    render(<SearchSection {...props} onSearch={() => {}} />);
-
+  it('falls back to empty string when initialValue is null', () => {
+    render(<SearchSection initialValue={null as string} onSearch={() => {}} />);
     expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });
