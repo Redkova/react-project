@@ -136,7 +136,7 @@ function MovieContainer() {
     <>
       <div
         className={
-          isDetailOpen ? 'flex w-full gap-4 px-4' : 'flex w-full justify-center'
+          isDetailOpen ? 'flex w-full gap-1 px-8' : 'flex w-full justify-center'
         }
       >
         <div className={isDetailOpen ? 'w-[50%]' : 'w-full max-w-2xl'}>
