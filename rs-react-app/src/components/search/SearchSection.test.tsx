@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import SearchSection from './SearchSection';
 
 describe('SearchSection', () => {
@@ -39,13 +40,32 @@ describe('SearchSection', () => {
     expect(onSearch).toHaveBeenCalledWith('Matrix');
   });
 
+  it('submits form when pressing Enter', async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn();
+
+    render(<SearchSection initialValue="" onSearch={onSearch} />);
+
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'Avatar{enter}');
+
+    expect(onSearch).toHaveBeenCalledWith('Avatar');
+  });
+
   it('updates input value when initialValue prop changes', () => {
     const { rerender } = render(
       <SearchSection initialValue="Batman" onSearch={() => {}} />
     );
 
     expect(screen.getByRole('textbox')).toHaveValue('Batman');
-    rerender(<SearchSection initialValue="Matrix" onSearch={() => {}} />);
+    rerender(
+      <SearchSection key="matrix" initialValue="Matrix" onSearch={() => {}} />
+    );
     expect(screen.getByRole('textbox')).toHaveValue('Matrix');
+  });
+
+  it('falls back to empty string when initialValue is null', () => {
+    render(<SearchSection initialValue="" onSearch={() => {}} />);
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });

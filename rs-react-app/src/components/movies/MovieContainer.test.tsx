@@ -1,12 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import MovieContainer from './MovieContainer';
 import { fetchMovies } from '../../api/services/movieService';
 import { storage } from '../../utils/storage';
 import type { ComponentProps } from 'react';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
+import { mockReactRouter } from '../../test-utils/mockReactRouter';
+import { useSearchParams } from 'react-router';
+
+mockReactRouter();
+import MovieContainer from './MovieContainer';
+
+const mockedUseSearchParams = vi.mocked(useSearchParams);
 
 type SearchProps = ComponentProps<typeof SearchSection>;
 type ResultsProps = ComponentProps<typeof ResultsSection>;
@@ -57,6 +63,8 @@ const mockedStorage = vi.mocked(storage);
 describe('MovieContainer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mockedUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
 
     mockedStorage.getSearch.mockReturnValue('');
     mockedStorage.getPage.mockReturnValue(1);

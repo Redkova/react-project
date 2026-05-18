@@ -1,18 +1,18 @@
-import { Component, type ReactNode } from 'react';
 import type { OmdbMovie } from '../../api/types';
+import { Link, useSearchParams } from 'react-router';
 
 interface Props {
   movie: OmdbMovie;
 }
 
-class MovieItem extends Component<Props> {
-  render(): ReactNode {
-    const { movie } = this.props;
+function MovieItem({ movie }: Props) {
+  const hasPoster =
+    movie.Poster && movie.Poster !== 'N/A' && movie.Poster !== '';
+  const [params] = useSearchParams();
+  const page = params.get('page') || 1;
 
-    const hasPoster =
-      movie.Poster && movie.Poster !== 'N/A' && movie.Poster !== '';
-
-    return (
+  return (
+    <Link to={`/?page=${page}&details=${movie.imdbID}`}>
       <div className="flex justify-between items-center p-4 border rounded-xl bg-gray-50 shadow-sm hover:shadow-md transition">
         <div className="flex items-center gap-4">
           {hasPoster && (
@@ -27,8 +27,8 @@ class MovieItem extends Component<Props> {
         </div>
         <p className="text-gray-700 text-lg font-medium">{movie.Year}</p>
       </div>
-    );
-  }
+    </Link>
+  );
 }
 
 export default MovieItem;
