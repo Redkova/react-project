@@ -5,6 +5,7 @@ import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
 import { storage } from '../../utils/storage';
 import { fetchMovies } from '../../api/services/movieService';
+import { Navigate } from 'react-router';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
@@ -71,6 +72,19 @@ function MovieContainer() {
       cancelled = true;
     };
   }, [searchTerm, page]);
+
+  const pageParam = params.get('page');
+
+  if (pageParam !== null) {
+    if (!/^\d+$/.test(pageParam)) {
+      return <Navigate to="/404" replace />;
+    }
+
+    const pageNum = Number(pageParam);
+    if (pageNum < 1) {
+      return <Navigate to="/404" replace />;
+    }
+  }
 
   const handleSearch = async (value: string) => {
     navigate('/');

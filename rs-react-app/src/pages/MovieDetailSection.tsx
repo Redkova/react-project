@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import type { OmdbMovieDetails } from '../api/types';
 import Spinner from '../components/movies/Spinner';
+import { Navigate } from 'react-router';
 
 export function MovieDetailSection() {
   const navigate = useNavigate();
@@ -25,6 +26,14 @@ export function MovieDetailSection() {
 
     load();
   }, [id]);
+
+  if (!id || !/^tt\d+$/.test(id)) {
+    return <Navigate to="/404" replace />;
+  }
+  const pageNum = Number(page);
+  if (Number.isNaN(pageNum) || pageNum < 1) {
+    return <Navigate to="/404" replace />;
+  }
 
   if (loading) {
     return (
