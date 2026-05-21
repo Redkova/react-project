@@ -1,23 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, Navigate } from 'react-router';
 import type { OmdbMovieDetails } from '../api/types';
 import Spinner from '../components/movies/Spinner';
-import { Navigate } from 'react-router';
+import { useMovieParams } from '../hooks/useMovieParams';
 
 export function MovieDetailSection() {
+  const { search, page, details } = useMovieParams();
   const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const id = params.get('details');
-  const page = params.get('page') || 1;
   const [movie, setMovie] = useState<OmdbMovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!details) return;
 
     async function load() {
-      const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${id}&plot=full`;
+      const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${details}&plot=full`;
       const res = await fetch(url);
       const data: OmdbMovieDetails = await res.json();
       setMovie(data);
@@ -25,9 +23,9 @@ export function MovieDetailSection() {
     }
 
     load();
-  }, [id]);
+  }, [details]);
 
-  if (!id || !/^tt\d+$/.test(id)) {
+  if (!details || !/^tt\d+$/.test(details)) {
     return <Navigate to="/404" replace />;
   }
   const pageNum = Number(page);
@@ -57,7 +55,7 @@ export function MovieDetailSection() {
   return (
     <div className="relative w-full max-w-lg bg-white py-6 px-4 rounded-xl shadow-lg">
       <button
-        onClick={() => navigate(`/?page=${page}`)}
+        onClick={() => navigate(`/?search=${search}&page=${page}`)}
         className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
       >
         ✕

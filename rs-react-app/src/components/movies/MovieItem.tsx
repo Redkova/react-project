@@ -1,5 +1,6 @@
 import type { OmdbMovie } from '../../api/types';
-import { Link, useSearchParams } from 'react-router';
+import { Link } from 'react-router';
+import { useMovieParams } from '../../hooks/useMovieParams';
 
 interface Props {
   movie: OmdbMovie;
@@ -8,11 +9,10 @@ interface Props {
 function MovieItem({ movie }: Props) {
   const hasPoster =
     movie.Poster && movie.Poster !== 'N/A' && movie.Poster !== '';
-  const [params] = useSearchParams();
-  const page = params.get('page') || 1;
+  const { search, page } = useMovieParams();
 
   return (
-    <Link to={`/?page=${page}&details=${movie.imdbID}`}>
+    <Link to={`/?search=${search}&page=${page}&details=${movie.imdbID}`}>
       <div className="flex justify-between items-center p-4 border rounded-xl bg-gray-50 shadow-sm hover:shadow-md transition">
         <div className="flex items-center gap-4">
           {hasPoster && (
