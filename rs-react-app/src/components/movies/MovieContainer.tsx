@@ -172,7 +172,7 @@ function MovieContainer() {
           />
         </div>
         {isDetailOpen && (
-          <div className="w-[50%] pl-2 pt-30 flex justify-center items-start">
+          <div className="w-[50%] pl-2 pt-30 flex justify-center sticky top-0 h-fit">
             <Outlet />
           </div>
         )}
