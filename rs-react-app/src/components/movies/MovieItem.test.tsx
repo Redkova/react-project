@@ -38,7 +38,7 @@ const movieWithoutPoster: OmdbMovie = {
 describe('MovieItem', () => {
   beforeEach(() => {
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ page: '3' }),
+      new URLSearchParams({ search: 'Batman', page: '3' }),
       vi.fn(),
     ]);
   });
@@ -81,17 +81,20 @@ describe('MovieItem', () => {
     expect(image.style.display).toBe('none');
   });
 
-  it('creates correct link with page param and imdbID', () => {
+  it('creates correct link with search, page and imdbID', () => {
     render(<MovieItem movie={movieWithPoster} />);
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/?page=3&details=1');
+    expect(link).toHaveAttribute('href', '/?search=Batman&page=3&details=1');
   });
 
   it('defaults page to 1 when no page param exists', () => {
-    mockedUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: 'Batman' }),
+      vi.fn(),
+    ]);
 
     render(<MovieItem movie={movieWithPoster} />);
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/?page=1&details=1');
+    expect(link).toHaveAttribute('href', '/?search=Batman&page=1&details=1');
   });
 });
