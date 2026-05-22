@@ -26,7 +26,7 @@ export function MovieDetailSection() {
   }, [details]);
 
   if (!details || !/^tt\d+$/.test(details)) {
-    return <Navigate to="/404" replace />;
+    return <p className="text-red-500 text-center">Movie not found</p>;
   }
   const pageNum = Number(page);
   if (Number.isNaN(pageNum) || pageNum < 1) {
