@@ -2,7 +2,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { fetchMovies } from '../../api/services/movieService';
-import { storage } from '../../utils/storage';
 import type { ComponentProps } from 'react';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
@@ -13,6 +12,7 @@ mockReactRouter();
 import MovieContainer from './MovieContainer';
 
 const mockedUseSearchParams = vi.mocked(useSearchParams);
+const mockedFetchMovies = vi.mocked(fetchMovies);
 
 type SearchProps = ComponentProps<typeof SearchSection>;
 type ResultsProps = ComponentProps<typeof ResultsSection>;
@@ -48,26 +48,14 @@ vi.mock('../../api/services/movieService', () => ({
   fetchMovies: vi.fn(),
 }));
 
-vi.mock('../../utils/storage', () => ({
-  storage: {
-    getSearch: vi.fn(),
-    getPage: vi.fn(),
-    setSearch: vi.fn(),
-    setPage: vi.fn(),
-  },
-}));
-
-const mockedFetchMovies = vi.mocked(fetchMovies);
-const mockedStorage = vi.mocked(storage);
-
 describe('MovieContainer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockedUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
-
-    mockedStorage.getSearch.mockReturnValue('');
-    mockedStorage.getPage.mockReturnValue(1);
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: '', page: '1' }),
+      vi.fn(),
+    ]);
 
     mockedFetchMovies.mockResolvedValue({
       movies: [],
@@ -75,7 +63,7 @@ describe('MovieContainer', () => {
     });
   });
 
-  it('loads default movies when no saved search exists', async () => {
+  it('loads default movies when no search is provided', async () => {
     render(<MovieContainer />);
 
     await waitFor(() => {
@@ -83,9 +71,11 @@ describe('MovieContainer', () => {
     });
   });
 
-  it('loads saved search and page from storage', async () => {
-    mockedStorage.getSearch.mockReturnValue('Matrix');
-    mockedStorage.getPage.mockReturnValue(3);
+  it('loads movies based on URL search and page', async () => {
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: 'Matrix', page: '3' }),
+      vi.fn(),
+    ]);
 
     render(<MovieContainer />);
 
@@ -129,50 +119,55 @@ describe('MovieContainer', () => {
 
   it('handles successful search', async () => {
     const user = userEvent.setup();
+    const setParams = vi.fn();
+
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: '', page: '1' }),
+      setParams,
+    ]);
 
     render(<MovieContainer />);
 
     await user.click(screen.getByTestId('search-long'));
 
-    await waitFor(() => {
-      expect(mockedStorage.setSearch).toHaveBeenCalledWith('Batman');
-      expect(mockedStorage.setPage).toHaveBeenCalledWith(1);
-      expect(mockedFetchMovies).toHaveBeenCalledWith('Batman', 1);
-    });
+    expect(setParams).toHaveBeenCalledWith(
+      new URLSearchParams({ search: 'Batman', page: '1' })
+    );
   });
 
   it('goes to next page', async () => {
     const user = userEvent.setup();
+    const setParams = vi.fn();
 
-    mockedStorage.getSearch.mockReturnValue('Batman');
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: 'Batman', page: '1' }),
+      setParams,
+    ]);
 
     render(<MovieContainer />);
 
     await user.click(screen.getByTestId('next'));
 
-    await waitFor(() => {
-      expect(mockedStorage.setPage).toHaveBeenCalledWith(2);
-      expect(mockedFetchMovies).toHaveBeenCalledWith('Batman', 2);
-    });
+    expect(setParams).toHaveBeenCalledWith(
+      new URLSearchParams({ search: 'Batman', page: '2' })
+    );
   });
 
   it('goes to previous page', async () => {
     const user = userEvent.setup();
+    const setParams = vi.fn();
 
-    mockedStorage.getSearch.mockReturnValue('Batman');
-    mockedStorage.getPage.mockReturnValue(3);
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams({ search: 'Batman', page: '3' }),
+      setParams,
+    ]);
 
     render(<MovieContainer />);
 
-    await waitFor(() => {
-      expect(mockedFetchMovies).toHaveBeenCalledWith('Batman', 3);
-    });
-
     await user.click(screen.getByTestId('prev'));
 
-    await waitFor(() => {
-      expect(mockedStorage.setPage).toHaveBeenCalledWith(2);
-      expect(mockedFetchMovies).toHaveBeenLastCalledWith('Batman', 2);
-    });
+    expect(setParams).toHaveBeenCalledWith(
+      new URLSearchParams({ search: 'Batman', page: '2' })
+    );
   });
 });
