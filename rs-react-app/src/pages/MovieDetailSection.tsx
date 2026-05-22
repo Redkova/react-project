@@ -10,6 +10,7 @@ export function MovieDetailSection() {
   const [movie, setMovie] = useState<MovieDetailsResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (!details) return;
@@ -52,6 +53,8 @@ export function MovieDetailSection() {
   const hasPoster =
     movie.Poster && movie.Poster !== 'N/A' && movie.Poster.trim() !== '';
 
+  const showPoster = hasPoster && !imageError;
+
   return (
     <div className="relative w-full max-w-lg bg-white py-6 px-4 rounded-xl shadow-lg">
       <button
@@ -61,15 +64,19 @@ export function MovieDetailSection() {
         ✕
       </button>
       <div className="flex gap-4">
-        {hasPoster && (
+        {showPoster ? (
           <img
             src={movie.Poster}
             alt={movie.Title}
             className="w-28 h-40 object-cover rounded-md shadow"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
+            onError={() => setImageError(true)}
           />
+        ) : (
+          <div className="w-28 h-40 rounded-md bg-linear-to-br from-gray-100 to-gray-300 border border-gray-200 flex flex-col items-center justify-center shadow-sm">
+            <span className="text-[10px] text-gray-600 text-center leading-tight px-1">
+              No image
+            </span>
+          </div>
         )}
 
         <div className="flex flex-col justify-start gap-1">
