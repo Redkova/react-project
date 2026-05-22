@@ -5,8 +5,7 @@ import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
 
 export function MovieDetailSection() {
-  const { search, page, details } = useMovieParams();
-  const navigate = useNavigate();
+  const { page, details, updateParams } = useMovieParams();
   const [movie, setMovie] = useState<MovieDetailsResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
@@ -58,7 +57,7 @@ export function MovieDetailSection() {
   return (
     <div className="relative w-full max-w-lg bg-white py-6 px-4 rounded-xl shadow-lg">
       <button
-        onClick={() => navigate(`/?search=${search}&page=${page}`)}
+        onClick={() => updateParams({ details: null })}
         className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
       >
         ✕
