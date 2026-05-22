@@ -5,12 +5,17 @@ import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
 import { fetchMovies } from '../../api/services/movieService';
 import { useMovieParams } from '../../hooks/useMovieParams';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
 function MovieContainer() {
+  const [savedSearch, setSavedSearch] = useLocalStorage(
+    'movie-search',
+    DEFAULT_SEARCH_TERM
+  );
   const { search, page, details, updateParams } = useMovieParams();
-  const effectiveSearch = search || DEFAULT_SEARCH_TERM;
+  const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
 
   const [results, setResults] = useState<OmdbMovie[]>([]);
@@ -43,6 +48,7 @@ function MovieContainer() {
       setError('Please enter at least 3 characters');
       return;
     }
+    setSavedSearch(trimmed);
 
     updateParams({
       search: trimmed,
