@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router';
-import type { OmdbMovieDetails } from '../api/types';
+import type { MovieDetailsResult } from '../api/types';
 import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
 
 export function MovieDetailSection() {
   const { search, page, details } = useMovieParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState<OmdbMovieDetails | null>(null);
+  const [movie, setMovie] = useState<MovieDetailsResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
@@ -17,7 +17,7 @@ export function MovieDetailSection() {
     async function load() {
       const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${details}&plot=full`;
       const res = await fetch(url);
-      const data: OmdbMovieDetails = await res.json();
+      const data: MovieDetailsResult = await res.json();
       setMovie(data);
       setLoading(false);
     }
