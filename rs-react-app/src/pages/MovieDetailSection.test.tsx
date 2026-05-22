@@ -38,7 +38,7 @@ const mockMovie: OmdbMovieDetails = {
   Response: 'True',
 };
 
-function mockFetch(data: any): void {
+function mockFetch(data: OmdbMovieDetails | { Response: 'False' }): void {
   globalThis.fetch = vi.fn(
     async () =>
       new Response(JSON.stringify(data), {

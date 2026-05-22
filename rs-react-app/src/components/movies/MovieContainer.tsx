@@ -13,10 +13,6 @@ function MovieContainer() {
   const effectiveSearch = search || DEFAULT_SEARCH_TERM;
   const isDetailOpen = Boolean(details);
 
-  if (page < 1 || Number.isNaN(page)) {
-    return <Navigate to="/404" replace />;
-  }
-
   const [results, setResults] = useState<OmdbMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +32,10 @@ function MovieContainer() {
 
     return () => {};
   }, [effectiveSearch, page]);
+
+  if (page < 1 || Number.isNaN(page)) {
+    return <Navigate to="/404" replace />;
+  }
 
   function handleSearch(value: string) {
     const trimmed = value.trim();
