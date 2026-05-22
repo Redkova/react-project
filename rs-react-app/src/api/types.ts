@@ -20,7 +20,7 @@ export interface MoviesResult {
 }
 
 export interface OmdbMovieDetails {
-  Response: true;
+  Response: 'True';
   Title: string;
   Year: string;
   Genre: string;

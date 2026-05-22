@@ -6,6 +6,15 @@ import type { OmdbMovieDetails } from '../api/types';
 
 const mockNavigate = vi.fn();
 
+vi.mock('../hooks/useMovieParams', () => ({
+  useMovieParams: () => ({
+    search: 'Batman',
+    page: 2,
+    details: 'tt0111161',
+    updateParams: vi.fn(),
+  }),
+}));
+
 vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
@@ -13,12 +22,6 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-    useSearchParams: () => [
-      new URLSearchParams({
-        details: 'tt0111161',
-        page: '2',
-      }),
-    ],
   };
 });
 
@@ -35,14 +38,12 @@ const mockMovie: OmdbMovieDetails = {
   Response: 'True',
 };
 
-function mockFetch(data: OmdbMovieDetails): void {
+function mockFetch(data: any): void {
   globalThis.fetch = vi.fn(
-    async (): Promise<Response> =>
+    async () =>
       new Response(JSON.stringify(data), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       })
   );
 }
@@ -62,7 +63,6 @@ describe('MovieDetailSection', () => {
     );
 
     expect(await screen.findByText(mockMovie.Title)).toBeInTheDocument();
-
     expect(screen.getByText(mockMovie.Year)).toBeInTheDocument();
     expect(screen.getByText(mockMovie.Genre)).toBeInTheDocument();
     expect(screen.getByText(mockMovie.Country)).toBeInTheDocument();
@@ -70,13 +70,8 @@ describe('MovieDetailSection', () => {
     expect(screen.getByText(mockMovie.Actors)).toBeInTheDocument();
   });
 
-  it('shows movie not found', async () => {
-    const failedMovie: OmdbMovieDetails = {
-      ...mockMovie,
-      Response: 'False',
-    };
-
-    mockFetch(failedMovie);
+  it('shows movie not found when Response is False', async () => {
+    mockFetch({ ...mockMovie, Response: 'False' });
 
     render(
       <MemoryRouter>
@@ -98,13 +93,10 @@ describe('MovieDetailSection', () => {
 
     await screen.findByText(mockMovie.Title);
 
-    const closeButton = screen.getByRole('button', {
-      name: '✕',
-    });
-
+    const closeButton = screen.getByRole('button', { name: '✕' });
     fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/?page=2');
+    expect(mockNavigate).toHaveBeenCalledWith('/?search=Batman&page=2');
   });
 
   it('hides image on error', async () => {
@@ -121,19 +113,12 @@ describe('MovieDetailSection', () => {
     fireEvent.error(image);
 
     await waitFor(() => {
-      expect(image).toHaveStyle({
-        display: 'none',
-      });
+      expect(image.style.display).toBe('none');
     });
   });
 
   it('does not render image if poster is N/A', async () => {
-    const movieWithoutPoster: OmdbMovieDetails = {
-      ...mockMovie,
-      Poster: 'N/A',
-    };
-
-    mockFetch(movieWithoutPoster);
+    mockFetch({ ...mockMovie, Poster: 'N/A' });
 
     render(
       <MemoryRouter>
@@ -147,12 +132,7 @@ describe('MovieDetailSection', () => {
   });
 
   it('does not render image if poster is empty string', async () => {
-    const movieWithoutPoster: OmdbMovieDetails = {
-      ...mockMovie,
-      Poster: '',
-    };
-
-    mockFetch(movieWithoutPoster);
+    mockFetch({ ...mockMovie, Poster: '' });
 
     render(
       <MemoryRouter>
