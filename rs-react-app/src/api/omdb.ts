@@ -1,4 +1,5 @@
 import type { OmdbMovieSearchResponse, MoviesResult } from './types';
+import { type OmdbMovieDetails, type OmdbErrorResponse } from './types';
 
 const API_KEY = '88101ce2';
 const BASE_URL = 'https://www.omdbapi.com/';
@@ -39,4 +40,17 @@ export async function searchMovies(
     movies: data.Search ?? [],
     total: Number(data.totalResults ?? 0),
   };
+}
+
+export async function fetchMovieDetails(
+  imdbID: string
+): Promise<OmdbMovieDetails | null> {
+  const url = buildUrl({ i: imdbID, plot: 'short' });
+
+  const response = await fetch(url);
+  const data: OmdbMovieDetails | OmdbErrorResponse = await response.json();
+
+  if (data.Response === 'False') return null;
+
+  return data;
 }

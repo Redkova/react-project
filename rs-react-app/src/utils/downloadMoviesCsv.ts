@@ -1,27 +1,19 @@
-import type { OmdbMovie } from '../api/types';
+import type { OmdbMovie, OmdbMovieDetails } from '../api/types';
+import { fetchMovieDetails } from '../api/omdb';
+import { generateMovieDetailsCsv } from './moviesDetailsCsv';
 
-function formattedValueCsv(value: string): string {
-  if (!value) return '';
-  const formattedValue = value.replace(/"/g, '""');
-  return /[",\n]/.test(formattedValue) ? `"${formattedValue}"` : formattedValue;
-}
-
-export function downloadMoviesCsv(movies: OmdbMovie[]) {
-  const header = ['Title', 'Year', 'imdbID', 'Poster', 'DetailsURL'];
-
-  const rows = movies.map((movie) => [
-    formattedValueCsv(movie.Title),
-    formattedValueCsv(movie.Year),
-    formattedValueCsv(movie.imdbID),
-    formattedValueCsv(movie.Poster),
-    formattedValueCsv(`/?details=${movie.imdbID}`),
-  ]);
-
-  const csvContent = [header.join(','), ...rows.map((r) => r.join(','))].join(
-    '\n'
+export async function downloadMoviesCsv(movies: OmdbMovie[]) {
+  const details = await Promise.all(
+    movies.map((m) => fetchMovieDetails(m.imdbID))
   );
 
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const validMovieDetails = details.filter(
+    (detail): detail is OmdbMovieDetails => detail !== null
+  );
+
+  const moviesCsv = generateMovieDetailsCsv(validMovieDetails);
+
+  const blob = new Blob([moviesCsv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
 
   const filename = `${movies.length}_items.csv`;
