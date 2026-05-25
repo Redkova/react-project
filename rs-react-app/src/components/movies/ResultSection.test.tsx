@@ -3,13 +3,39 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import type { OmdbMovie } from '../../api/types';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
-import { mockReactRouter } from '../../test-utils/mockReactRouter';
-import { useSearchParams } from 'react-router';
-
-mockReactRouter();
 import ResultsSection from './ResultSection';
 
-const mockedUseSearchParams = vi.mocked(useSearchParams);
+vi.mock('./Spinner', () => ({
+  default: () => <div data-testid="spinner">Loading...</div>,
+}));
+
+vi.mock('./MoviesError', () => ({
+  default: ({ message }: { message: string }) => <p>{message}</p>,
+}));
+
+vi.mock('./MoviesList', () => ({
+  default: ({ movies }: { movies: OmdbMovie[] }) => (
+    <div data-testid="movie-list">
+      {movies.map((movie) => (
+        <span key={movie.imdbID}>{movie.Title}</span>
+      ))}
+    </div>
+  ),
+}));
+
+vi.mock('./MoviesPagination', () => ({
+  default: () => <div data-testid="pagination">Pagination</div>,
+}));
+
+vi.mock('../ui/Button', () => ({
+  default: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
+}));
 
 const movies: OmdbMovie[] = [
   {
@@ -35,11 +61,6 @@ const defaultProps = {
 describe('ResultsSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ page: '1' }),
-      vi.fn(),
-    ]);
   });
 
   it('renders column headers', () => {
@@ -63,9 +84,12 @@ describe('ResultsSection', () => {
     expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 
-  it('renders movie list when data exists', () => {
+  it('renders movie list and pagination when movies exist', () => {
     render(<ResultsSection {...defaultProps} movies={movies} />);
+
     expect(screen.getByText('Matrix')).toBeInTheDocument();
+    expect(screen.getByTestId('movie-list')).toBeInTheDocument();
+    expect(screen.getByTestId('pagination')).toBeInTheDocument();
   });
 
   it('shows ErrorBoundary when simulate error is clicked', async () => {
