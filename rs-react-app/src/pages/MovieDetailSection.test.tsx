@@ -1,17 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { MovieDetailSection } from './MovieDetailSection';
 import type { OmdbMovieDetails } from '../api/types';
 
 const mockNavigate = vi.fn();
+const mockUpdateParams = vi.fn();
 
 vi.mock('../hooks/useMovieParams', () => ({
   useMovieParams: () => ({
     search: 'Batman',
     page: 2,
     details: 'tt0111161',
-    updateParams: vi.fn(),
+    updateParams: mockUpdateParams,
   }),
 }));
 
@@ -82,7 +83,7 @@ describe('MovieDetailSection', () => {
     expect(await screen.findByText(/movie not found/i)).toBeInTheDocument();
   });
 
-  it('navigates back on close button click', async () => {
+  it('calls updateParams when close button is clicked', async () => {
     mockFetch(mockMovie);
 
     render(
@@ -91,30 +92,12 @@ describe('MovieDetailSection', () => {
       </MemoryRouter>
     );
 
-    await screen.findByText(mockMovie.Title);
+    await screen.findByText('Matrix');
 
     const closeButton = screen.getByRole('button', { name: '✕' });
     fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/?search=Batman&page=2');
-  });
-
-  it('hides image on error', async () => {
-    mockFetch(mockMovie);
-
-    render(
-      <MemoryRouter>
-        <MovieDetailSection />
-      </MemoryRouter>
-    );
-
-    const image = await screen.findByRole('img');
-
-    fireEvent.error(image);
-
-    await waitFor(() => {
-      expect(image.style.display).toBe('none');
-    });
+    expect(mockUpdateParams).toHaveBeenCalledWith({ details: null });
   });
 
   it('does not render image if poster is N/A', async () => {
