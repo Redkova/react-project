@@ -2,22 +2,41 @@ import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import MovieList from './MoviesList';
 import type { OmdbMovie } from '../../api/types';
-import { useSearchParams } from 'react-router';
 
-vi.mock('react-router', async () => {
-  const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+vi.mock('react-router', () => ({
+  useNavigate: () => vi.fn(),
+}));
 
-  return {
-    ...actual,
-    useSearchParams: vi.fn(),
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-      <a href={to}>{children}</a>
-    ),
-  };
-});
+vi.mock('../../hooks/useMovieParams', () => ({
+  useMovieParams: () => ({
+    search: 'Batman',
+    page: 1,
+    details: null,
+    updateParams: vi.fn(),
+  }),
+}));
 
-const mockedUseSearchParams = vi.mocked(useSearchParams);
+vi.mock('../../hooks/reduxHooks', () => ({
+  useAppDispatch: () => vi.fn(),
+  useAppSelector: () => false,
+}));
+
+vi.mock('../ui/Checkbox', () => ({
+  Checkbox: ({
+    checked,
+    onChange,
+  }: {
+    checked: boolean;
+    onChange: () => void;
+  }) => (
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      data-testid="checkbox"
+    />
+  ),
+}));
 
 const movies: OmdbMovie[] = [
   {
@@ -37,13 +56,6 @@ const movies: OmdbMovie[] = [
 ];
 
 describe('MovieList', () => {
-  beforeEach(() => {
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ page: '1' }),
-      vi.fn(),
-    ]);
-  });
-
   it('renders list of movies', () => {
     render(<MovieList movies={movies} />);
 
@@ -54,7 +66,7 @@ describe('MovieList', () => {
   it('renders correct number of MovieItem components', () => {
     render(<MovieList movies={movies} />);
 
-    const items = screen.getAllByRole('link');
-    expect(items).toHaveLength(2);
+    const titles = screen.getAllByRole('heading', { level: 3 });
+    expect(titles).toHaveLength(2);
   });
 });
