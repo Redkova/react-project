@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../context/useTheme';
 
 function Header() {
   const { theme, toggleTheme } = useTheme();

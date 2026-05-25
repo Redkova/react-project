@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Navigate } from 'react-router';
+import { Navigate } from 'react-router';
 import type { MovieDetailsResult } from '../api/types';
 import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
