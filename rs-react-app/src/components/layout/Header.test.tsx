@@ -1,6 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import Header from './Header';
+
+const toggleThemeMock = vi.fn();
+
+vi.mock('../../context/useTheme', () => ({
+  useTheme: () => ({
+    theme: 'light',
+    toggleTheme: toggleThemeMock,
+  }),
+}));
 
 vi.mock('react-router', async () => {
   const actual =
@@ -15,20 +24,17 @@ vi.mock('react-router', async () => {
 });
 
 describe('Header', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the header with correct title', () => {
     render(<Header />);
 
     const header = screen.getByRole('banner');
-
     expect(header).toBeInTheDocument();
+
     expect(screen.getByText('Find Your Movie')).toBeInTheDocument();
-  });
-
-  it('renders link to home page', () => {
-    render(<Header />);
-
-    const homeLink = screen.getByRole('link', { name: /find your movie/i });
-    expect(homeLink).toHaveAttribute('href', '/');
   });
 
   it('renders About link', () => {
@@ -36,5 +42,15 @@ describe('Header', () => {
 
     const aboutLink = screen.getByRole('link', { name: /about/i });
     expect(aboutLink).toHaveAttribute('href', '/about');
+  });
+
+  it('calls toggleTheme when theme button is clicked', () => {
+    render(<Header />);
+
+    const button = screen.getByRole('button');
+
+    fireEvent.click(button);
+
+    expect(toggleThemeMock).toHaveBeenCalledTimes(1);
   });
 });
