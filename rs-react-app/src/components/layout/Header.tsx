@@ -1,10 +1,8 @@
 import { Link } from 'react-router';
-import { useMovieParams } from '../../hooks/useMovieParams';
 import { useTheme } from '../../context/ThemeContext';
 
 function Header() {
   const { theme, toggleTheme } = useTheme();
-  const { search, page } = useMovieParams();
   return (
     <header className="w-full bg-(--bg) shadow-(--header-shadow)">
       <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
@@ -18,15 +16,7 @@ function Header() {
             }`}
           />
         </button>
-        <Link
-          to={`/?search=${search}&page=${page}`}
-          className="text-xl font-bold text-center flex-1 transition 
-            hover:scale-[1.2] 
-            hover:text-blue-600"
-        >
-          <h1>Find Your Movie</h1>
-        </Link>
-
+        <h1 className="text-xl font-bold text-center">Find Your Movie</h1>
         <nav className="w-24 text-right">
           <Link
             to="/about"
