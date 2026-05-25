@@ -11,7 +11,7 @@ function SearchSection({ onSearch, initialValue }: Props) {
   const [value, setValue] = useState(initialValue ?? '');
 
   return (
-    <section className="w-full max-w-2xl bg-white p-6 rounded-2xl shadow-md border">
+    <section className="w-full max-w-2xl bg-(--card-bg) p-6 rounded-2xl shadow-(--card-border-shadow) border">
       <form
         className="flex gap-3"
         onSubmit={(e) => {
@@ -26,7 +26,7 @@ function SearchSection({ onSearch, initialValue }: Props) {
         />
 
         <Button
-          className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+          className="px-5 py-2 bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
           type="submit"
         >
           Search

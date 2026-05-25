@@ -34,11 +34,15 @@ function ResultsSection({
   }
 
   return (
-    <section className="w-full max-w-2xl mt-6 pb-10 bg-white p-6 rounded-2xl shadow-md border flex flex-col">
+    <section className="w-full max-w-2xl mt-6 pb-10 bg-(--card-bg) p-6 rounded-2xl shadow-(--card-border-shadow) border flex flex-col">
       <div className="className=flex-1">
         <div className="flex justify-between items-center px-2 pb-3 border-b mb-4">
-          <span className="text-gray-600 font-semibold pl-2">Movie name</span>
-          <span className="text-gray-600 font-semibold pr-2">Year</span>
+          <span className="text-(--text-color-secondary) font-semibold pl-2">
+            Movie name
+          </span>
+          <span className="text-(--text-color-secondary) font-semibold pr-2">
+            Year
+          </span>
         </div>
 
         {loading && <Spinner />}
@@ -46,7 +50,9 @@ function ResultsSection({
         {error && <MovieError message={error} />}
 
         {!loading && !error && movies.length === 0 && (
-          <p className="text-center text-gray-500">No results found</p>
+          <p className="text-center text-(text-(--text-color-secondary))">
+            No results found
+          </p>
         )}
 
         {!loading && !error && movies.length > 0 && (
@@ -66,7 +72,7 @@ function ResultsSection({
       <div className="flex justify-center mt-4">
         <Button
           onClick={() => setForceError(true)}
-          className="text-white bg-red-500 border border-red-500 hover:bg-red-400 hover:border-red-600 hover:shadow-lg transition"
+          className="text-white bg-(--error-btn-bg) border border-(--error-btn-border) hover:bg-(--error-btn-hover-bg) hover:border-(--error-btn-hover-border) hover:shadow-lg transition"
         >
           Simulate Error
         </Button>

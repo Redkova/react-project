@@ -1,147 +1,75 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useSearchParams, useNavigate } from 'react-router';
+import { Outlet, Navigate } from 'react-router';
 import type { OmdbMovie } from '../../api/types';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
-import { storage } from '../../utils/storage';
 import { fetchMovies } from '../../api/services/movieService';
-import { Navigate } from 'react-router';
+import { useMovieParams } from '../../hooks/useMovieParams';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
 function MovieContainer() {
-  const savedSearch = storage.getSearch();
-  const savedPage = storage.getPage() || 1;
-  const initialSearch = savedSearch || '';
-  const initialSearchTerm = savedSearch || DEFAULT_SEARCH_TERM;
-  const [params] = useSearchParams();
-  const isDetailOpen = params.get('details') !== null;
-  const navigate = useNavigate();
+  const [savedSearch, setSavedSearch] = useLocalStorage(
+    'movie-search',
+    DEFAULT_SEARCH_TERM
+  );
+  const { search, page, details, updateParams } = useMovieParams();
+  const effectiveSearch = search || savedSearch;
+  const isDetailOpen = Boolean(details);
 
   const [results, setResults] = useState<OmdbMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState(initialSearch);
-  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
-  const [page, setPage] = useState(savedPage);
-
-  const loadMovies = async (currentSearchTerm: string, currentPage: number) => {
-    try {
-      const { movies, error } = await fetchMovies(
-        currentSearchTerm,
-        currentPage
-      );
-
-      return {
-        movies,
-        error: error ?? null,
-      };
-    } catch {
-      return {
-        movies: [],
-        error: 'Failed to load data',
-      };
-    }
-  };
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (results.length > 0) {
-      params.set('page', String(page));
-    }
+    async function load() {
+      setLoading(true);
 
-    const url = params.toString()
-      ? `?${params.toString()}`
-      : window.location.pathname;
-
-    window.history.replaceState({}, '', url);
-  }, [page, results.length]);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    void loadMovies(searchTerm, page).then(({ movies, error }) => {
-      if (cancelled) return;
+      const { movies, error } = await fetchMovies(effectiveSearch, page);
 
       setResults(movies);
       setError(error);
       setLoading(false);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [searchTerm, page]);
-
-  const pageParam = params.get('page');
-
-  if (pageParam !== null) {
-    if (!/^\d+$/.test(pageParam)) {
-      return <Navigate to="/404" replace />;
     }
 
-    const pageNum = Number(pageParam);
-    if (pageNum < 1) {
-      return <Navigate to="/404" replace />;
-    }
+    void load();
+
+    return () => {};
+  }, [effectiveSearch, page]);
+
+  if (page < 1 || Number.isNaN(page)) {
+    return <Navigate to="/404" replace />;
   }
 
-  const handleSearch = async (value: string) => {
-    navigate('/');
+  function handleSearch(value: string) {
     const trimmed = value.trim();
-
     if (trimmed.length < 3) {
       setError('Please enter at least 3 characters');
       return;
     }
+    setSavedSearch(trimmed);
 
-    storage.setSearch(trimmed);
-    storage.setPage(1);
+    updateParams({
+      search: trimmed,
+      page: '1',
+      details: null,
+    });
+  }
 
-    setLoading(true);
-    setSearch(trimmed);
-    setSearchTerm(trimmed);
-    setPage(1);
-    setError(null);
+  function nextPage() {
+    updateParams({
+      search,
+      page: String(page + 1),
+    });
+  }
 
-    const { movies, error } = await loadMovies(trimmed, 1);
-
-    setResults(movies);
-    setError(error);
-    setLoading(false);
-  };
-
-  const nextPage = async () => {
-    const newPage = page + 1;
-
-    storage.setPage(newPage);
-
-    setLoading(true);
-    setPage(newPage);
-    navigate(`/?page=${newPage}`);
-
-    const { movies, error } = await loadMovies(searchTerm, newPage);
-
-    setResults(movies);
-    setError(error);
-    setLoading(false);
-  };
-
-  const prevPage = async () => {
-    const newPage = Math.max(page - 1, 1);
-
-    storage.setPage(newPage);
-
-    setLoading(true);
-    setPage(newPage);
-    navigate(`/?page=${newPage}`);
-
-    const { movies, error } = await loadMovies(searchTerm, newPage);
-
-    setResults(movies);
-    setError(error);
-    setLoading(false);
-  };
+  function prevPage() {
+    updateParams({
+      search,
+      page: String(Math.max(1, page - 1)),
+    });
+  }
 
   const isFirstPage = page === 1;
   const isLastPage = results.length < 10;
@@ -172,7 +100,7 @@ function MovieContainer() {
           />
         </div>
         {isDetailOpen && (
-          <div className="w-[50%] pl-2 pt-30 flex justify-center items-start">
+          <div className="w-[50%] pl-2 pt-30 flex justify-center sticky top-0 h-fit">
             <Outlet />
           </div>
         )}

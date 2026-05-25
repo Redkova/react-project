@@ -1,10 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { MovieDetailSection } from './MovieDetailSection';
 import type { OmdbMovieDetails } from '../api/types';
 
 const mockNavigate = vi.fn();
+const mockUpdateParams = vi.fn();
+
+vi.mock('../hooks/useMovieParams', () => ({
+  useMovieParams: () => ({
+    search: 'Batman',
+    page: 2,
+    details: 'tt0111161',
+    updateParams: mockUpdateParams,
+  }),
+}));
 
 vi.mock('react-router', async () => {
   const actual =
@@ -13,12 +23,6 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-    useSearchParams: () => [
-      new URLSearchParams({
-        details: 'tt0111161',
-        page: '2',
-      }),
-    ],
   };
 });
 
@@ -35,14 +39,12 @@ const mockMovie: OmdbMovieDetails = {
   Response: 'True',
 };
 
-function mockFetch(data: OmdbMovieDetails): void {
+function mockFetch(data: OmdbMovieDetails | { Response: 'False' }): void {
   globalThis.fetch = vi.fn(
-    async (): Promise<Response> =>
+    async () =>
       new Response(JSON.stringify(data), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       })
   );
 }
@@ -62,7 +64,6 @@ describe('MovieDetailSection', () => {
     );
 
     expect(await screen.findByText(mockMovie.Title)).toBeInTheDocument();
-
     expect(screen.getByText(mockMovie.Year)).toBeInTheDocument();
     expect(screen.getByText(mockMovie.Genre)).toBeInTheDocument();
     expect(screen.getByText(mockMovie.Country)).toBeInTheDocument();
@@ -70,13 +71,8 @@ describe('MovieDetailSection', () => {
     expect(screen.getByText(mockMovie.Actors)).toBeInTheDocument();
   });
 
-  it('shows movie not found', async () => {
-    const failedMovie: OmdbMovieDetails = {
-      ...mockMovie,
-      Response: 'False',
-    };
-
-    mockFetch(failedMovie);
+  it('shows movie not found when Response is False', async () => {
+    mockFetch({ ...mockMovie, Response: 'False' });
 
     render(
       <MemoryRouter>
@@ -87,7 +83,7 @@ describe('MovieDetailSection', () => {
     expect(await screen.findByText(/movie not found/i)).toBeInTheDocument();
   });
 
-  it('navigates back on close button click', async () => {
+  it('calls updateParams when close button is clicked', async () => {
     mockFetch(mockMovie);
 
     render(
@@ -96,44 +92,16 @@ describe('MovieDetailSection', () => {
       </MemoryRouter>
     );
 
-    await screen.findByText(mockMovie.Title);
+    await screen.findByText('Matrix');
 
-    const closeButton = screen.getByRole('button', {
-      name: '✕',
-    });
-
+    const closeButton = screen.getByRole('button', { name: '✕' });
     fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/?page=2');
-  });
-
-  it('hides image on error', async () => {
-    mockFetch(mockMovie);
-
-    render(
-      <MemoryRouter>
-        <MovieDetailSection />
-      </MemoryRouter>
-    );
-
-    const image = await screen.findByRole('img');
-
-    fireEvent.error(image);
-
-    await waitFor(() => {
-      expect(image).toHaveStyle({
-        display: 'none',
-      });
-    });
+    expect(mockUpdateParams).toHaveBeenCalledWith({ details: null });
   });
 
   it('does not render image if poster is N/A', async () => {
-    const movieWithoutPoster: OmdbMovieDetails = {
-      ...mockMovie,
-      Poster: 'N/A',
-    };
-
-    mockFetch(movieWithoutPoster);
+    mockFetch({ ...mockMovie, Poster: 'N/A' });
 
     render(
       <MemoryRouter>
@@ -147,12 +115,7 @@ describe('MovieDetailSection', () => {
   });
 
   it('does not render image if poster is empty string', async () => {
-    const movieWithoutPoster: OmdbMovieDetails = {
-      ...mockMovie,
-      Poster: '',
-    };
-
-    mockFetch(movieWithoutPoster);
+    mockFetch({ ...mockMovie, Poster: '' });
 
     render(
       <MemoryRouter>

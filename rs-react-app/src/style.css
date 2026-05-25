@@ -1,1 +1,63 @@
 @import 'tailwindcss';
+
+:root {
+  --bg-gradient: #e5e7eb;
+  --bg: #ffffff;
+  --text-color: #000000;
+  --text-color-secondary: #606e8a;
+  --card-bg: #f8f9fa;
+  --card-border-shadow: 0 1px 2px #00000014;
+  --card-border-hover-shadow: 0 1px 6px #082693e7;
+  --movie-card-bg: #f9fafb;
+  --button-bg: #2b7fff;
+  --btn-hover-bg: #0b54d3;
+  --btn-gray: #d1d5db;
+  --btn-hoover-gray: #d1d5db;
+  --btn-disable-gray: #353639;
+  --error-text: #ef4444;
+  --error-text-bg: #fee2e2;
+  --error-btn-bg: #ef4444;
+  --error-btn-hover-bg: #d20e0e;
+  --error-btn-border: #ef4444;
+  --error-btn-hover-border: #dc2626;
+  --header-shadow: 0 1px 3px #00000014;
+  --header-text-hover: #1d4ed8;
+  --footer-text: #6b7280;
+  --border-color: #000000;
+  --flyout-bg: #ffffff;
+  --link-text-color: #2b7fff;
+  --link-text-hover: #0b54d3;
+}
+
+.dark {
+  --bg-gradient: #0f172a;
+  --bg: #040523;
+
+  --text-color: #f3f4f6;
+  --text-color-secondary: #e4dede;
+
+  --card-bg: #1f2937;
+  --card-border-shadow: 0 1px 2px #fffffff1;
+  --card-border-hover-shadow: 0 1px 6px #fffffff1;
+  --movie-card-bg: #f9fafb22;
+  --button-bg: #567ae495;
+  --btn-hover-bg: #093fb4;
+
+  --btn-gray: #374151;
+  --btn-hoover-gray: #4b5563;
+  --btn-disable-gray: #939598;
+  --error-text: #580808;
+  --error-text-bg: #dda4a47c;
+  --error-btn-bg: #580808;
+  --error-btn-hover-bg: #903737;
+  --error-btn-border: #dc2626;
+  --error-btn-hover-border: #b91c1c;
+
+  --header-shadow: 0 1px 6px #fffffff1;
+  --header-text-hover: #2563eb;
+  --footer-text: #ffffff;
+  --border-color: #e5e7eb;
+  --flyout-bg: #040523;
+  --link-text-color: #567ae495;
+  --link-text-hover: #093fb4;
+}

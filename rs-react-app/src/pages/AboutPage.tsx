@@ -1,23 +1,25 @@
+import { Link } from 'react-router';
+
 export function AboutPage() {
   return (
-    <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-white shadow-sm hover:shadow-md">
-      <p className="text-lg mb-4 leading-relaxed">
+    <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-(--bg) shadow-(--card-border-shadow)">
+      <p className="text-(--text-color) text-lg mb-4 leading-relaxed">
         This application was developed by <strong>Alexandra Redkova</strong> as
         part of the RS School React Course.
       </p>
 
-      <p className="text-lg mb-6 leading-relaxed">
+      <p className="text-(--text-color) text-lg mb-6 leading-relaxed">
         The project demonstrates React fundamentals, routing, API integration,
         testing, and modern UI/UX practices.
       </p>
 
-      <div className="border-t pt-6 flex flex-col gap-3 text-center">
+      <div className="border-t pt-6 flex flex-col gap-3 text-center items-center">
         <a
           href="https://github.com/Redkova"
           target="_blank"
           rel="noopener noreferrer"
           className="
-            text-blue-600 
+            text-(--link-text-color) 
             hover:text-blue-700 
             transition 
             hover:underline
@@ -31,7 +33,7 @@ export function AboutPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="
-            text-blue-600 
+            text-(--link-text-color) 
             hover:text-blue-700 
             transition 
             hover:underline
@@ -39,6 +41,22 @@ export function AboutPage() {
         >
           RS School
         </a>
+        <Link
+          to="/"
+          className="
+          inline-block 
+          px-6 py-3 
+          bg-(--button-bg) 
+          text-white 
+          rounded-lg 
+          shadow-md 
+          hover:bg-(--btn-hover-bg) 
+          hover:shadow-lg 
+          transition-all
+        "
+        >
+          Back to main
+        </Link>
       </div>
     </div>
   );

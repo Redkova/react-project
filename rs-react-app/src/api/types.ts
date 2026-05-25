@@ -20,6 +20,7 @@ export interface MoviesResult {
 }
 
 export interface OmdbMovieDetails {
+  Response: 'True';
   Title: string;
   Year: string;
   Genre: string;
@@ -29,6 +30,11 @@ export interface OmdbMovieDetails {
   Actors: string;
   Plot: string;
   imdbRating: string;
-  Response: 'True' | 'False';
-  Error?: string;
 }
+
+export interface OmdbErrorResponse {
+  Response: 'False';
+  Error: string;
+}
+
+export type MovieDetailsResult = OmdbMovieDetails | OmdbErrorResponse;
