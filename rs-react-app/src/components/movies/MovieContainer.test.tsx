@@ -5,10 +5,30 @@ import { fetchMovies } from '../../api/services/movieService';
 import type { ComponentProps } from 'react';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
-import { mockReactRouter } from '../../test-utils/mockReactRouter';
 import { useSearchParams } from 'react-router';
 
-mockReactRouter();
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+
+  return {
+    ...actual,
+
+    useSearchParams: vi.fn(),
+    useNavigate: () => vi.fn(),
+
+    Navigate: ({ to }: { to: string }) => (
+      <div data-testid="mock-navigate">{to}</div>
+    ),
+
+    Outlet: () => <div data-testid="mock-outlet">OUTLET</div>,
+
+    Link: function LinkMock(props: { to: string; children: React.ReactNode }) {
+      return <a href={props.to}>{props.children}</a>;
+    },
+  };
+});
+
 import MovieContainer from './MovieContainer';
 
 const mockedUseSearchParams = vi.mocked(useSearchParams);
