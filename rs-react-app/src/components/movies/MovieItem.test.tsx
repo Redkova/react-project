@@ -1,23 +1,41 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import { useSearchParams } from 'react-router';
 import MovieItem from './MovieItem';
 import type { OmdbMovie } from '../../api/types';
+import { useNavigate } from 'react-router';
+import { useMovieParams } from '../../hooks/useMovieParams';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
-vi.mock('react-router', async () => {
-  const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+vi.mock('react-router', () => ({
+  useNavigate: vi.fn(),
+}));
 
-  return {
-    ...actual,
-    useSearchParams: vi.fn(),
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-      <a href={to}>{children}</a>
-    ),
-  };
-});
+vi.mock('../../hooks/useMovieParams', () => ({
+  useMovieParams: vi.fn(),
+}));
 
-const mockedUseSearchParams = vi.mocked(useSearchParams);
+vi.mock('../../hooks/reduxHooks', () => ({
+  useAppDispatch: vi.fn(),
+  useAppSelector: vi.fn(),
+}));
+
+vi.mock('../ui/Checkbox', () => ({
+  Checkbox: ({
+    checked,
+    onChange,
+  }: {
+    checked: boolean;
+    onChange: () => void;
+  }) => (
+    <input
+      type="checkbox"
+      checked={checked}
+      data-testid="checkbox"
+      onClick={(e) => e.stopPropagation()}
+      onChange={onChange}
+    />
+  ),
+}));
 
 const movieWithPoster: OmdbMovie = {
   Title: 'Matrix',
@@ -36,11 +54,23 @@ const movieWithoutPoster: OmdbMovie = {
 };
 
 describe('MovieItem', () => {
+  const mockNavigate = vi.fn();
+  const mockDispatch = vi.fn();
+
   beforeEach(() => {
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: 'Batman', page: '3' }),
-      vi.fn(),
-    ]);
+    vi.mocked(useNavigate).mockReturnValue(mockNavigate);
+    vi.mocked(useAppDispatch).mockReturnValue(mockDispatch);
+    vi.mocked(useAppSelector).mockReturnValue(false);
+
+    vi.mocked(useMovieParams).mockReturnValue({
+      search: 'Batman',
+      page: 3,
+      details: null,
+      updateParams: vi.fn(),
+    });
+
+    mockNavigate.mockClear();
+    mockDispatch.mockClear();
   });
 
   it('renders movie title and year', () => {
@@ -54,47 +84,47 @@ describe('MovieItem', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
-  it('sets correct image src and alt attributes', () => {
-    render(<MovieItem movie={movieWithPoster} />);
-    const image = screen.getByRole('img');
-    expect(image).toHaveAttribute('src', 'poster.jpg');
-    expect(image).toHaveAttribute('alt', 'Matrix');
-  });
-
   it('does not render image when poster is N/A', () => {
     render(<MovieItem movie={movieWithoutPoster} />);
     expect(screen.queryByRole('img')).toBeNull();
+    expect(screen.getByText('No image')).toBeInTheDocument();
   });
 
-  it('does not render image when poster is empty string', () => {
-    render(<MovieItem movie={{ ...movieWithoutPoster, Poster: '' }} />);
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
-  });
-
-  it('hides image on load error', () => {
+  it('navigates to details on item click', () => {
     render(<MovieItem movie={movieWithPoster} />);
 
-    const image = screen.getByRole('img') as HTMLImageElement;
+    const container = screen.getByText('Matrix').closest('div')!;
+    fireEvent.click(container);
 
-    fireEvent.error(image);
-
-    expect(image.style.display).toBe('none');
+    expect(mockNavigate).toHaveBeenCalledWith(
+      '/?search=Batman&page=3&details=1'
+    );
   });
 
-  it('creates correct link with search, page and imdbID', () => {
+  it('dispatches toggleMovieSelection when checkbox is clicked', () => {
     render(<MovieItem movie={movieWithPoster} />);
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/?search=Batman&page=3&details=1');
+
+    const checkbox = screen.getByTestId('checkbox');
+    fireEvent.click(checkbox);
+
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
   });
 
-  it('defaults page to 1 when no page param exists', () => {
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: 'Batman' }),
-      vi.fn(),
-    ]);
+  it('checkbox click does NOT trigger navigation', () => {
+    render(<MovieItem movie={movieWithPoster} />);
+
+    const checkbox = screen.getByTestId('checkbox');
+    fireEvent.click(checkbox);
+
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('shows selected checkbox when movie is selected', () => {
+    vi.mocked(useAppSelector).mockReturnValue(true);
 
     render(<MovieItem movie={movieWithPoster} />);
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/?search=Batman&page=1&details=1');
+
+    const checkbox = screen.getByTestId('checkbox') as HTMLInputElement;
+    expect(checkbox.checked).toBe(true);
   });
 });
