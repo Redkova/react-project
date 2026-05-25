@@ -21,9 +21,9 @@ export function SelectedMoviesFlyout() {
   return (
     <>
       <div
-        className="fixed bottom-0 left-0 right-0
-        bg-(--flyout-bg) border-t shadow-(--header-shadow)
-        p-4 flex flex-col items-center gap-3
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[70%]
+        bg-(--flyout-bg) border rounded-lg shadow-(--header-shadow)
+        p-8 flex flex-col items-center gap-3
         z-50"
       >
         <p className="text-lg text-(--text-color) font-medium text-center">
