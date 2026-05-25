@@ -22,25 +22,25 @@ export function SelectedMoviesFlyout() {
     <>
       <div
         className="fixed bottom-0 left-0 right-0
-        bg-white border-t shadow-lg
+        bg-(--flyout-bg) border-t shadow-(--header-shadow)
         p-4 flex flex-col items-center gap-3
         z-50"
       >
-        <p className="text-lg font-medium text-center">
+        <p className="text-lg text-(--text-color) font-medium text-center">
           Selected movies:{' '}
           <span className="font-bold">{selectedMoviesCount}</span>
         </p>
 
         <div className="flex gap-3">
           <Button
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
+            className="px-4 py-2 bg-(--button-bg) text-white rounded hover:bg-(--btn-hover-bg) transition"
             onClick={() => dispatch(unselectAllMovies())}
           >
             Unselect all
           </Button>
 
           <Button
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
             onClick={handleDownload}
           >
             Download

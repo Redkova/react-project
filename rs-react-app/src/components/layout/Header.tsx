@@ -6,13 +6,17 @@ function Header() {
   const { theme, toggleTheme } = useTheme();
   const { search, page } = useMovieParams();
   return (
-    <header className="w-full bg-white shadow-sm">
+    <header className="w-full bg-(--bg) shadow-(--header-shadow)">
       <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
         <button
           onClick={toggleTheme}
-          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 transition"
+          className="w-12 h-6 rounded-full bg-(--card-bg) border relative transition cursor-pointer"
         >
-          {theme === 'light' ? 'Dark mode' : 'Light mode'}
+          <span
+            className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-(--button-bg) transition ${
+              theme === 'light' ? 'left-0.5' : 'left-6'
+            }`}
+          />
         </button>
         <Link
           to={`/?search=${search}&page=${page}`}
@@ -27,7 +31,7 @@ function Header() {
           <Link
             to="/about"
             className=" 
-              hover:text-blue-600
+              hover:text-(--header-text-hover)
               transition"
           >
             About

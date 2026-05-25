@@ -37,7 +37,7 @@ function MovieItem({ movie }: Props) {
   return (
     <div
       onClick={handleOpenDetails}
-      className="flex justify-between items-center p-4 border rounded-xl bg-gray-50 shadow-sm hover:shadow-md transition"
+      className="flex justify-between items-center p-4 border rounded-xl bg-(--movie-card-bg) shadow-(--card-border-shadow) hover:shadow-(--card-border-hover-shadow) transition cursor-pointer"
     >
       <div className="flex items-center gap-4">
         <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
@@ -58,7 +58,9 @@ function MovieItem({ movie }: Props) {
         )}
         <h3 className="text-lg font-semibold">{movie.Title}</h3>
       </div>
-      <p className="text-gray-700 text-lg font-medium">{movie.Year}</p>
+      <p className="text-(--text-color-secondary) text-lg font-medium">
+        {movie.Year}
+      </p>
     </div>
   );
 }

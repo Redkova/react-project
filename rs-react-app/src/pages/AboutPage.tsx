@@ -1,12 +1,12 @@
 export function AboutPage() {
   return (
-    <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-white shadow-sm hover:shadow-md">
-      <p className="text-lg mb-4 leading-relaxed">
+    <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-(--bg) shadow-(--card-border-shadow)">
+      <p className="text-(--text-color) text-lg mb-4 leading-relaxed">
         This application was developed by <strong>Alexandra Redkova</strong> as
         part of the RS School React Course.
       </p>
 
-      <p className="text-lg mb-6 leading-relaxed">
+      <p className="text-(--text-color) text-lg mb-6 leading-relaxed">
         The project demonstrates React fundamentals, routing, API integration,
         testing, and modern UI/UX practices.
       </p>
@@ -17,7 +17,7 @@ export function AboutPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="
-            text-blue-600 
+            text-(--link-text-color) 
             hover:text-blue-700 
             transition 
             hover:underline
@@ -31,7 +31,7 @@ export function AboutPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="
-            text-blue-600 
+            text-(--link-text-color) 
             hover:text-blue-700 
             transition 
             hover:underline

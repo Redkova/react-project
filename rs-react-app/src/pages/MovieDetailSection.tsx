@@ -55,7 +55,7 @@ export function MovieDetailSection() {
   const showPoster = hasPoster && !imageError;
 
   return (
-    <div className="relative w-full max-w-lg bg-white py-6 px-4 rounded-xl shadow-lg">
+    <div className="relative w-full max-w-lg bg-(--movie-card-bg) py-6 px-4 rounded-xl shadow-(--card-border-shadow)">
       <button
         onClick={() => updateParams({ details: null })}
         className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
@@ -80,34 +80,38 @@ export function MovieDetailSection() {
 
         <div className="flex flex-col justify-start gap-1">
           <h2 className="text-2xl font-bold">{movie.Title}</h2>
-          <p className="text-black">
-            <strong className="text-gray-700">Year:</strong> {movie.Year}
+          <p className="text-(--text-color)">
+            <strong className="text-(--text-color-secondary)">Year:</strong>{' '}
+            {movie.Year}
           </p>
-          <p className="text-black">
-            <strong className="text-gray-700">Genre:</strong> {movie.Genre}
+          <p className="text-(--text-color)">
+            <strong className="text-(--text-color-secondary)">Genre:</strong>{' '}
+            {movie.Genre}
           </p>
-          <p className="text-black">
-            <strong className="text-gray-700">Country:</strong> {movie.Country}
+          <p className="text-(--text-color)">
+            <strong className="text-(--text-color-secondary)">Country:</strong>{' '}
+            {movie.Country}
           </p>
-          <p className="text-black flex items-center gap-1">
-            <strong className="text-gray-700">IMDb:</strong>
+          <p className="text-(--text-color) flex items-center gap-1">
+            <strong className="text-(--text-color-secondary)">IMDb:</strong>
             <span className="text-yellow-500 text-lg">★</span>
             {movie.imdbRating}
           </p>
         </div>
       </div>
       <div className="mt-4">
-        <p className="text-black">
-          <strong className="text-gray-800">Actors:</strong> {movie.Actors}
+        <p className="text-(--text-color)">
+          <strong className="text-(--text-color-secondary)">Actors:</strong>{' '}
+          {movie.Actors}
         </p>
       </div>
-      <p className="mt-4 text-black leading-relaxed">
+      <p className="mt-4 text-(--text-color) leading-relaxed">
         {expanded || !isLong ? movie.Plot : shortPlot}
 
         {isLong && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="ml-2 text-blue-600 hover:underline"
+            className="ml-2 text-(--link-text-color) hover:underline"
           >
             {expanded ? 'Show less' : 'Show more'}
           </button>
