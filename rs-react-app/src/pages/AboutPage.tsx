@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function AboutPage() {
   return (
     <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-(--bg) shadow-(--card-border-shadow)">
@@ -11,7 +13,7 @@ export function AboutPage() {
         testing, and modern UI/UX practices.
       </p>
 
-      <div className="border-t pt-6 flex flex-col gap-3 text-center">
+      <div className="border-t pt-6 flex flex-col gap-3 text-center items-center">
         <a
           href="https://github.com/Redkova"
           target="_blank"
@@ -39,6 +41,22 @@ export function AboutPage() {
         >
           RS School
         </a>
+        <Link
+          to="/"
+          className="
+          inline-block 
+          px-6 py-3 
+          bg-(--button-bg) 
+          text-white 
+          rounded-lg 
+          shadow-md 
+          hover:bg-(--btn-hover-bg) 
+          hover:shadow-lg 
+          transition-all
+        "
+        >
+          Back to main
+        </Link>
       </div>
     </div>
   );
