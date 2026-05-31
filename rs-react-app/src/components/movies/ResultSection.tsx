@@ -57,7 +57,7 @@ function ResultsSection({
 
         {!loading && !error && movies.length > 0 && (
           <>
-            <MovieList movies={movies} />
+            <MovieList key={page} movies={movies} />
             <MoviesPagination
               page={page}
               onNext={onNext}

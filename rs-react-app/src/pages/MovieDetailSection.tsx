@@ -3,11 +3,11 @@ import { Navigate } from 'react-router';
 import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
 import { useGetMovieDetailsQuery } from '../api/api';
+import { PosterImage } from '../components/ui/PosterImage';
 
 export function MovieDetailSection() {
   const { page, details, updateParams } = useMovieParams();
   const [expanded, setExpanded] = useState(false);
-  const [imageError, setImageError] = useState(false);
 
   const {
     data: movie,
@@ -20,6 +20,7 @@ export function MovieDetailSection() {
   if (!details || !/^tt\d+$/.test(details)) {
     return <p className="text-red-500 text-center">Movie not found</p>;
   }
+
   const pageNum = Number(page);
   if (Number.isNaN(pageNum) || pageNum < 1) {
     return <Navigate to="/404" replace />;
@@ -41,11 +42,6 @@ export function MovieDetailSection() {
   const shortPlot =
     movie.Plot.length > 700 ? movie.Plot.slice(0, 700) + '...' : movie.Plot;
 
-  const hasPoster =
-    movie.Poster && movie.Poster !== 'N/A' && movie.Poster.trim() !== '';
-
-  const showPoster = hasPoster && !imageError;
-
   return (
     <div className="relative w-full max-w-lg bg-(--movie-card-bg) py-6 px-4 rounded-xl shadow-(--card-border-shadow)">
       <button
@@ -55,20 +51,11 @@ export function MovieDetailSection() {
         ✕
       </button>
       <div className="flex gap-4">
-        {showPoster ? (
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            className="w-28 h-40 object-cover rounded-md shadow"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="w-28 h-40 rounded-md bg-linear-to-br from-gray-100 to-gray-300 border border-gray-200 flex flex-col items-center justify-center shadow-sm">
-            <span className="text-[10px] text-gray-600 text-center leading-tight px-1">
-              No image
-            </span>
-          </div>
-        )}
+        <PosterImage
+          src={movie.Poster}
+          alt={movie.Title}
+          className="w-28 h-40"
+        />
 
         <div className="flex flex-col justify-start gap-1">
           <h2 className="text-2xl font-bold">{movie.Title}</h2>
