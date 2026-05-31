@@ -4,6 +4,8 @@ import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
 import { useGetMovieDetailsQuery } from '../api/api';
 import { PosterImage } from '../components/ui/PosterImage';
+import MovieError from '../components/movies/MoviesError';
+import { mapMovieError } from '../utils/errorMapper';
 
 export function MovieDetailSection() {
   const { page, details, updateParams } = useMovieParams();
@@ -13,12 +15,13 @@ export function MovieDetailSection() {
     data: movie,
     isLoading,
     isError,
+    error,
   } = useGetMovieDetailsQuery(details!, {
     skip: !details,
   });
 
   if (!details || !/^tt\d+$/.test(details)) {
-    return <p className="text-red-500 text-center">Movie not found</p>;
+    return <MovieError message="Movie not found" />;
   }
 
   const pageNum = Number(page);
@@ -34,8 +37,12 @@ export function MovieDetailSection() {
     );
   }
 
-  if (isError || !movie || movie.Response === 'False') {
-    return <p className="text-red-500 text-center">Movie not found</p>;
+  if (isError) {
+    return <MovieError message={mapMovieError(error)} />;
+  }
+
+  if (!movie || movie.Response === 'False') {
+    return <MovieError message="Movie not found" />;
   }
 
   const isLong = movie.Plot.length > 700;

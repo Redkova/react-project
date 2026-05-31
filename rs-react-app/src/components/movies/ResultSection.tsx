@@ -5,11 +5,12 @@ import MoviesPagination from './MoviesPagination';
 import MovieError from './MoviesError';
 import Spinner from './Spinner';
 import Button from '../ui/Button';
+import { mapMovieError } from '../../utils/errorMapper';
 
 interface Props {
   movies: OmdbMovie[];
   loading: boolean;
-  error: string | null;
+  error: unknown;
   onNext: () => void;
   onPrev: () => void;
   page: number;
@@ -47,11 +48,11 @@ function ResultsSection({
 
         {loading && <Spinner />}
 
-        {error && <MovieError message={error} />}
+        {error && <MovieError message={mapMovieError(error)} />}
 
         {!loading && !error && movies.length === 0 && (
-          <p className="text-center text-(text-(--text-color-secondary))">
-            No results found
+          <p className="mt-4 text-sm text-(--error-text) bg-(--error-text-bg) border border-red-300 px-4 py-2 rounded-md text-center">
+            No results found.
           </p>
         )}
 

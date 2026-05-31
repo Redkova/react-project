@@ -13,13 +13,13 @@ function MovieContainer() {
     'movie-search',
     DEFAULT_SEARCH_TERM
   );
+
+  const [inputError, setInputError] = useState<string | null>(null);
   const { search, page, details, updateParams } = useMovieParams();
   const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
 
-  const [error, setError] = useState<string | null>(null);
-
-  const { data, isLoading, isError } = useSearchMoviesQuery(
+  const { data, isLoading, error } = useSearchMoviesQuery(
     { query: effectiveSearch, page },
     { skip: !effectiveSearch }
   );
@@ -31,11 +31,11 @@ function MovieContainer() {
   function handleSearch(value: string) {
     const trimmed = value.trim();
     if (trimmed.length < 3) {
-      setError('Please enter at least 3 characters');
+      setInputError('Please enter at least 3 characters');
       return;
     }
 
-    setError(null);
+    setInputError(null);
     setSavedSearch(trimmed);
 
     updateParams({
@@ -75,13 +75,13 @@ function MovieContainer() {
             key={search || 'empty'}
             onSearch={handleSearch}
             initialValue={search}
-            error={error}
+            error={inputError}
           />
 
           <ResultsSection
             movies={movies}
             loading={isLoading}
-            error={isError ? 'Failed to load movies' : null}
+            error={inputError || error}
             onNext={nextPage}
             onPrev={prevPage}
             page={page}
