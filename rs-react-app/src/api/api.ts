@@ -1,0 +1,58 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type {
+  OmdbMovieSearchResponse,
+  OmdbMovieDetails,
+  OmdbErrorResponse,
+} from './types';
+
+const cacheTTL = Number(import.meta.env.VITE_CACHE_TTL ?? 60);
+
+export const movieApi = createApi({
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_OMDB_API_URL,
+  }),
+  keepUnusedDataFor: cacheTTL,
+  tagTypes: ['Movies', 'Movie'],
+  endpoints: (builder) => ({
+    searchMovies: builder.query<
+      OmdbMovieSearchResponse,
+      { query: string; page: number }
+    >({
+      query: ({ query, page }) => ({
+        url: '',
+        params: {
+          apikey: import.meta.env.VITE_OMDB_API_KEY,
+          s: query,
+          page,
+        },
+      }),
+      providesTags: (result) =>
+        result?.Search
+          ? [
+              ...result.Search.map((m) => ({
+                type: 'Movie' as const,
+                id: m.imdbID,
+              })),
+              { type: 'Movies', id: 'LIST' },
+            ]
+          : [{ type: 'Movies', id: 'LIST' }],
+    }),
+    getMovieDetails: builder.query<
+      OmdbMovieDetails | OmdbErrorResponse,
+      string
+    >({
+      query: (id) => ({
+        url: '',
+        params: {
+          apikey: import.meta.env.VITE_OMDB_API_KEY,
+          i: id,
+          plot: 'short',
+        },
+      }),
+      providesTags: (result, error, id) => [{ type: 'Movie', id }],
+    }),
+  }),
+});
+
+export const { useSearchMoviesQuery, useGetMovieDetailsQuery } = movieApi;
