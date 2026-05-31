@@ -5,9 +5,10 @@ import Button from '../ui/Button';
 interface Props {
   onSearch: (value: string) => void;
   initialValue: string;
+  error?: string | null;
 }
 
-function SearchSection({ onSearch, initialValue }: Props) {
+function SearchSection({ onSearch, initialValue, error }: Props) {
   const [value, setValue] = useState(initialValue ?? '');
 
   return (
@@ -32,6 +33,7 @@ function SearchSection({ onSearch, initialValue }: Props) {
           Search
         </Button>
       </form>
+      {error && <p className="text-red-500 text-sm mt-2 ml-1">{error}</p>}
     </section>
   );
 }

@@ -1,29 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router';
-import type { MovieDetailsResult } from '../api/types';
 import Spinner from '../components/movies/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
+import { useGetMovieDetailsQuery } from '../api/api';
 
 export function MovieDetailSection() {
   const { page, details, updateParams } = useMovieParams();
-  const [movie, setMovie] = useState<MovieDetailsResult | null>(null);
-  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  useEffect(() => {
-    if (!details) return;
-
-    async function load() {
-      const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${details}&plot=full`;
-      const res = await fetch(url);
-      const data: MovieDetailsResult = await res.json();
-      setMovie(data);
-      setLoading(false);
-    }
-
-    load();
-  }, [details]);
+  const {
+    data: movie,
+    isLoading,
+    isError,
+  } = useGetMovieDetailsQuery(details!, {
+    skip: !details,
+  });
 
   if (!details || !/^tt\d+$/.test(details)) {
     return <p className="text-red-500 text-center">Movie not found</p>;
@@ -33,7 +25,7 @@ export function MovieDetailSection() {
     return <Navigate to="/404" replace />;
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center py-10">
         <Spinner />
@@ -41,7 +33,7 @@ export function MovieDetailSection() {
     );
   }
 
-  if (!movie || movie.Response === 'False') {
+  if (isError || !movie || movie.Response === 'False') {
     return <p className="text-red-500 text-center">Movie not found</p>;
   }
 
