@@ -18,7 +18,7 @@ function MovieItem({ movie }: Props) {
   const [imageError, setImageError] = useState(false);
 
   const isSelected = useAppSelector((state) =>
-    state.selectedMovies.selectedMovies.some((m) => m.imdbID === movie.imdbID)
+    state.selectedMovies.movieItems.some((m) => m.imdbID === movie.imdbID)
   );
 
   const hasPoster =
