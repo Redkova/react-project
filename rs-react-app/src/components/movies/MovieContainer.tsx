@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet, Navigate } from 'react-router';
-import type { OmdbMovie } from '../../api/types';
 import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
-import { fetchMovies } from '../../api/services/movieService';
 import { useMovieParams } from '../../hooks/useMovieParams';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useSearchMoviesQuery } from '../../api/api';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
@@ -18,25 +17,12 @@ function MovieContainer() {
   const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
 
-  const [results, setResults] = useState<OmdbMovie[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-
-      const { movies, error } = await fetchMovies(effectiveSearch, page);
-
-      setResults(movies);
-      setError(error);
-      setLoading(false);
-    }
-
-    void load();
-
-    return () => {};
-  }, [effectiveSearch, page]);
+  const { data, isLoading, isError } = useSearchMoviesQuery(
+    { query: effectiveSearch, page },
+    { skip: !effectiveSearch }
+  );
 
   if (page < 1 || Number.isNaN(page)) {
     return <Navigate to="/404" replace />;
@@ -48,6 +34,8 @@ function MovieContainer() {
       setError('Please enter at least 3 characters');
       return;
     }
+
+    setError(null);
     setSavedSearch(trimmed);
 
     updateParams({
@@ -71,8 +59,9 @@ function MovieContainer() {
     });
   }
 
+  const movies = data?.Search ?? [];
   const isFirstPage = page === 1;
-  const isLastPage = results.length < 10;
+  const isLastPage = movies.length < 10;
 
   return (
     <>
@@ -86,12 +75,13 @@ function MovieContainer() {
             key={search || 'empty'}
             onSearch={handleSearch}
             initialValue={search}
+            error={error}
           />
 
           <ResultsSection
-            movies={results}
-            loading={loading}
-            error={error}
+            movies={movies}
+            loading={isLoading}
+            error={isError ? 'Failed to load movies' : null}
             onNext={nextPage}
             onPrev={prevPage}
             page={page}
