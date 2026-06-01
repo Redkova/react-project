@@ -13,7 +13,7 @@ export const movieApi = createApi({
     baseUrl: import.meta.env.VITE_OMDB_API_URL,
   }),
   keepUnusedDataFor: cacheTTL,
-  tagTypes: ['Movies', 'Movie'],
+  tagTypes: ['Movies', 'MovieDetails'],
   endpoints: (builder) => ({
     searchMovies: builder.query<
       OmdbMovieSearchResponse,
@@ -29,13 +29,7 @@ export const movieApi = createApi({
       }),
       providesTags: (result) =>
         result?.Search
-          ? [
-              ...result.Search.map((m) => ({
-                type: 'Movie' as const,
-                id: m.imdbID,
-              })),
-              { type: 'Movies', id: 'LIST' },
-            ]
+          ? [{ type: 'Movies', id: 'LIST' }]
           : [{ type: 'Movies', id: 'LIST' }],
     }),
     getMovieDetails: builder.query<
@@ -50,7 +44,7 @@ export const movieApi = createApi({
           plot: 'short',
         },
       }),
-      providesTags: (result, error, id) => [{ type: 'Movie', id }],
+      providesTags: (result, error, id) => [{ type: 'MovieDetails', id }],
     }),
   }),
 });

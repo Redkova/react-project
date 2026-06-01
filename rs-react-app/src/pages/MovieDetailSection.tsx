@@ -6,8 +6,12 @@ import { useGetMovieDetailsQuery } from '../api/api';
 import { PosterImage } from '../components/ui/PosterImage';
 import MovieError from '../components/movies/MoviesError';
 import { mapMovieError } from '../utils/errorMapper';
+import Button from '../components/ui/Button';
+import { useDispatch } from 'react-redux';
+import { movieApi } from '../api/api';
 
 export function MovieDetailSection() {
+  const dispatch = useDispatch();
   const { page, details, updateParams } = useMovieParams();
   const [expanded, setExpanded] = useState(false);
 
@@ -16,9 +20,15 @@ export function MovieDetailSection() {
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetMovieDetailsQuery(details!, {
     skip: !details,
   });
+
+  function refreshDetails() {
+    dispatch(movieApi.util.invalidateTags([{ type: 'MovieDetails' }]));
+    refetch();
+  }
 
   if (!details || !/^tt\d+$/.test(details)) {
     return <MovieError message="Movie not found" />;
@@ -103,6 +113,14 @@ export function MovieDetailSection() {
           </button>
         )}
       </p>
+      <div className="flex justify-center items-center mt-4">
+        <Button
+          onClick={refreshDetails}
+          className="bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
+        >
+          Refresh
+        </Button>
+      </div>
     </div>
   );
 }

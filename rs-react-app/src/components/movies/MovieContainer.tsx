@@ -4,11 +4,13 @@ import SearchSection from '../search/SearchSection';
 import ResultsSection from './ResultSection';
 import { useMovieParams } from '../../hooks/useMovieParams';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { useSearchMoviesQuery } from '../../api/api';
+import { movieApi, useSearchMoviesQuery } from '../../api/api';
+import { useDispatch } from 'react-redux';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
 function MovieContainer() {
+  const dispatch = useDispatch();
   const [savedSearch, setSavedSearch] = useLocalStorage(
     'movie-search',
     DEFAULT_SEARCH_TERM
@@ -19,7 +21,7 @@ function MovieContainer() {
   const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
 
-  const { data, isLoading, error } = useSearchMoviesQuery(
+  const { data, isLoading, error, refetch } = useSearchMoviesQuery(
     { query: effectiveSearch, page },
     { skip: !effectiveSearch }
   );
@@ -59,6 +61,11 @@ function MovieContainer() {
     });
   }
 
+  function refreshMovies() {
+    dispatch(movieApi.util.invalidateTags(['Movies']));
+    refetch();
+  }
+
   const movies = data?.Search ?? [];
   const isFirstPage = page === 1;
   const isLastPage = movies.length < 10;
@@ -87,6 +94,7 @@ function MovieContainer() {
             page={page}
             isFirstPage={isFirstPage}
             isLastPage={isLastPage}
+            onRefresh={refreshMovies}
           />
         </div>
         {isDetailOpen && (

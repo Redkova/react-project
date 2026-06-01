@@ -16,6 +16,7 @@ interface Props {
   page: number;
   isFirstPage: boolean;
   isLastPage: boolean;
+  onRefresh: () => void;
 }
 
 function ResultsSection({
@@ -27,6 +28,7 @@ function ResultsSection({
   page,
   isFirstPage,
   isLastPage,
+  onRefresh,
 }: Props) {
   const [forceError, setForceError] = useState(false);
 
@@ -70,7 +72,13 @@ function ResultsSection({
         )}
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex flex-col justify-center items-center gap-3 mt-4">
+        <Button
+          onClick={onRefresh}
+          className="bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
+        >
+          Refresh
+        </Button>
         <Button
           onClick={() => setForceError(true)}
           className="text-white bg-(--error-btn-bg) border border-(--error-btn-border) hover:bg-(--error-btn-hover-bg) hover:border-(--error-btn-hover-border) hover:shadow-lg transition"
