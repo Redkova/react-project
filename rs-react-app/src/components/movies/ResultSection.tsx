@@ -10,6 +10,7 @@ import { mapMovieError } from '../../utils/errorMapper';
 interface Props {
   movies: OmdbMovie[];
   loading: boolean;
+  fetching: boolean;
   error: unknown;
   onNext: () => void;
   onPrev: () => void;
@@ -47,8 +48,6 @@ function ResultsSection({
             Year
           </span>
         </div>
-
-        {loading && <Spinner />}
 
         {error && <MovieError message={mapMovieError(error)} />}
 

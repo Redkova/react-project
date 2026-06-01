@@ -17,7 +17,7 @@ export function MovieDetailSection() {
 
   const {
     data: movie,
-    isLoading,
+    isFetching,
     isError,
     error,
     refetch,
@@ -39,7 +39,7 @@ export function MovieDetailSection() {
     return <Navigate to="/404" replace />;
   }
 
-  if (isLoading) {
+  if (isFetching && !movie) {
     return (
       <div className="flex justify-center py-10">
         <Spinner />
@@ -67,6 +67,13 @@ export function MovieDetailSection() {
       >
         ✕
       </button>
+
+      {isFetching && (
+        <div className="absolute inset-0 flex justify-center items-center bg-black/40 backdrop-blur-sm z-[999] pointer-events-none rounded-xl">
+          <Spinner />
+        </div>
+      )}
+
       <div className="flex gap-4">
         <PosterImage
           src={movie.Poster}

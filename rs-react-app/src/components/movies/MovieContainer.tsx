@@ -6,6 +6,7 @@ import { useMovieParams } from '../../hooks/useMovieParams';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { movieApi, useSearchMoviesQuery } from '../../api/api';
 import { useDispatch } from 'react-redux';
+import Spinner from './Spinner';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
@@ -21,7 +22,7 @@ function MovieContainer() {
   const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
 
-  const { data, isLoading, error, refetch } = useSearchMoviesQuery(
+  const { data, isLoading, isFetching, error, refetch } = useSearchMoviesQuery(
     { query: effectiveSearch, page },
     { skip: !effectiveSearch }
   );
@@ -77,7 +78,17 @@ function MovieContainer() {
           isDetailOpen ? 'flex w-full gap-1 px-8' : 'flex w-full justify-center'
         }
       >
-        <div className={isDetailOpen ? 'w-[50%]' : 'w-full max-w-2xl'}>
+        <div
+          className={
+            isDetailOpen ? 'w-[50%] relative' : 'w-full max-w-2xl relative'
+          }
+        >
+          {(isLoading || isFetching) && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black/40 backdrop-blur-sm z-[999] pointer-events-none">
+              <Spinner />
+            </div>
+          )}
+
           <SearchSection
             key={search || 'empty'}
             onSearch={handleSearch}
@@ -88,6 +99,7 @@ function MovieContainer() {
           <ResultsSection
             movies={movies}
             loading={isLoading}
+            fetching={isFetching}
             error={inputError || error}
             onNext={nextPage}
             onPrev={prevPage}
