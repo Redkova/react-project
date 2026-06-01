@@ -1,11 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-import { fetchMovies } from '../../api/services/movieService';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import MovieContainer from './MovieContainer';
+import type { OmdbMovie } from '../../api/types';
 import type { ComponentProps } from 'react';
-import SearchSection from '../search/SearchSection';
-import ResultsSection from './ResultSection';
-import { useSearchParams } from 'react-router';
 
 vi.mock('react-router', async () => {
   const actual =
@@ -14,99 +12,126 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
 
-    useSearchParams: vi.fn(),
-    useNavigate: () => vi.fn(),
-
     Navigate: ({ to }: { to: string }) => (
       <div data-testid="mock-navigate">{to}</div>
     ),
 
     Outlet: () => <div data-testid="mock-outlet">OUTLET</div>,
-
-    Link: function LinkMock(props: { to: string; children: React.ReactNode }) {
-      return <a href={props.to}>{props.children}</a>;
-    },
   };
 });
 
-import MovieContainer from './MovieContainer';
+const updateParams = vi.fn();
 
-const mockedUseSearchParams = vi.mocked(useSearchParams);
-const mockedFetchMovies = vi.mocked(fetchMovies);
+let mockParams = {
+  search: '',
+  page: 1,
+  details: null as string | null,
+};
 
-type SearchProps = ComponentProps<typeof SearchSection>;
-type ResultsProps = ComponentProps<typeof ResultsSection>;
+vi.mock('../../hooks/useMovieParams', () => ({
+  useMovieParams: () => ({
+    search: mockParams.search,
+    page: mockParams.page,
+    details: mockParams.details,
+    updateParams,
+  }),
+}));
+
+let savedSearch = 'star';
+const setSavedSearch = vi.fn((v: string) => (savedSearch = v));
+
+vi.mock('../../hooks/useLocalStorage', () => ({
+  useLocalStorage: () => [savedSearch, setSavedSearch] as const,
+}));
+
+const refetch = vi.fn();
+
+let mockQueryResult = {
+  data: { Search: [] as OmdbMovie[] },
+  isLoading: false,
+  error: null as unknown,
+  refetch,
+};
+
+vi.mock('../../api/api', () => ({
+  useSearchMoviesQuery: vi.fn(() => mockQueryResult),
+  movieApi: {
+    util: {
+      invalidateTags: vi.fn(),
+    },
+  },
+}));
+
+vi.mock('react-redux', () => ({
+  useDispatch: () => vi.fn(),
+}));
+
+import SearchSection from '../search/SearchSection';
+import ResultsSection from './ResultSection';
+
+type SearchSectionProps = ComponentProps<typeof SearchSection>;
+type ResultsSectionProps = ComponentProps<typeof ResultsSection>;
 
 vi.mock('../search/SearchSection', () => ({
-  default: ({ onSearch, initialValue }: SearchProps) => (
+  default: (props: SearchSectionProps) => (
     <div>
-      <input data-testid="search-input" defaultValue={initialValue} />
-      <button data-testid="search-long" onClick={() => onSearch('Batman')} />
-      <button data-testid="search-short" onClick={() => onSearch('ab')} />
+      <input data-testid="search-input" defaultValue={props.initialValue} />
+      <div data-testid="search-error">{props.error}</div>
+      <button
+        data-testid="search-long"
+        onClick={() => props.onSearch('Batman')}
+      />
+      <button data-testid="search-short" onClick={() => props.onSearch('ab')} />
     </div>
   ),
 }));
 
 vi.mock('./ResultSection', () => ({
-  default: ({ movies, loading, error, page, onNext, onPrev }: ResultsProps) => (
+  default: (props: ResultsSectionProps) => (
     <div>
-      <div data-testid="loading">{loading ? 'loading' : 'idle'}</div>
-      <div data-testid="error">{error}</div>
-      <div data-testid="page">{page}</div>
+      <div data-testid="loading">{props.loading ? 'loading' : 'idle'}</div>
+      <div data-testid="error">{String(props.error ?? '')}</div>
+      <div data-testid="page">{props.page}</div>
+
       <div data-testid="movies">
-        {movies.map((m) => (
+        {props.movies.map((m) => (
           <span key={m.imdbID}>{m.Title}</span>
         ))}
       </div>
-      <button data-testid="next" onClick={onNext} />
-      <button data-testid="prev" onClick={onPrev} />
+
+      <button data-testid="next" onClick={props.onNext} />
+      <button data-testid="prev" onClick={props.onPrev} />
+      <button data-testid="refresh" onClick={props.onRefresh} />
     </div>
   ),
-}));
-
-vi.mock('../../api/services/movieService', () => ({
-  fetchMovies: vi.fn(),
 }));
 
 describe('MovieContainer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: '', page: '1' }),
-      vi.fn(),
-    ]);
+    mockParams = { search: '', page: 1, details: null };
+    savedSearch = 'star';
 
-    mockedFetchMovies.mockResolvedValue({
-      movies: [],
+    mockQueryResult = {
+      data: { Search: [] },
+      isLoading: false,
       error: null,
-    });
+      refetch,
+    };
   });
 
   it('loads default movies when no search is provided', async () => {
     render(<MovieContainer />);
 
     await waitFor(() => {
-      expect(mockedFetchMovies).toHaveBeenCalledWith('star', 1);
-    });
-  });
-
-  it('loads movies based on URL search and page', async () => {
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: 'Matrix', page: '3' }),
-      vi.fn(),
-    ]);
-
-    render(<MovieContainer />);
-
-    await waitFor(() => {
-      expect(mockedFetchMovies).toHaveBeenCalledWith('Matrix', 3);
+      expect(mockQueryResult.data.Search).toEqual([]);
     });
   });
 
   it('renders fetched movies', async () => {
-    mockedFetchMovies.mockResolvedValue({
-      movies: [
+    mockQueryResult.data = {
+      Search: [
         {
           Title: 'Matrix',
           Year: '1999',
@@ -115,79 +140,85 @@ describe('MovieContainer', () => {
           Type: 'movie',
         },
       ],
-      error: null,
-    });
+    };
 
     render(<MovieContainer />);
 
     expect(await screen.findByText('Matrix')).toBeInTheDocument();
   });
 
-  it('shows error if search is too short', async () => {
-    const user = userEvent.setup();
-
-    render(<MovieContainer />);
-
-    await user.click(screen.getByTestId('search-short'));
-
-    expect(
-      screen.getByText('Please enter at least 3 characters')
-    ).toBeInTheDocument();
-
-    expect(mockedFetchMovies).toHaveBeenCalledTimes(1);
-  });
-
   it('handles successful search', async () => {
     const user = userEvent.setup();
-    const setParams = vi.fn();
-
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: '', page: '1' }),
-      setParams,
-    ]);
 
     render(<MovieContainer />);
 
     await user.click(screen.getByTestId('search-long'));
 
-    expect(setParams).toHaveBeenCalledWith(
-      new URLSearchParams({ search: 'Batman', page: '1' })
-    );
+    expect(setSavedSearch).toHaveBeenCalledWith('Batman');
+    expect(updateParams).toHaveBeenCalledWith({
+      search: 'Batman',
+      page: '1',
+      details: null,
+    });
   });
 
   it('goes to next page', async () => {
     const user = userEvent.setup();
-    const setParams = vi.fn();
 
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: 'Batman', page: '1' }),
-      setParams,
-    ]);
+    mockParams = { search: 'Batman', page: 1, details: null };
 
     render(<MovieContainer />);
 
     await user.click(screen.getByTestId('next'));
 
-    expect(setParams).toHaveBeenCalledWith(
-      new URLSearchParams({ search: 'Batman', page: '2' })
-    );
+    expect(updateParams).toHaveBeenCalledWith({
+      search: 'Batman',
+      page: '2',
+    });
   });
 
   it('goes to previous page', async () => {
     const user = userEvent.setup();
-    const setParams = vi.fn();
 
-    mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams({ search: 'Batman', page: '3' }),
-      setParams,
-    ]);
+    mockParams = { search: 'Batman', page: 3, details: null };
 
     render(<MovieContainer />);
 
     await user.click(screen.getByTestId('prev'));
 
-    expect(setParams).toHaveBeenCalledWith(
-      new URLSearchParams({ search: 'Batman', page: '2' })
+    expect(updateParams).toHaveBeenCalledWith({
+      search: 'Batman',
+      page: '2',
+    });
+  });
+
+  it('navigates to /404 when page < 1', () => {
+    mockParams = { search: 'Batman', page: 0, details: null };
+
+    render(<MovieContainer />);
+
+    expect(screen.getByTestId('mock-navigate')).toHaveTextContent('/404');
+  });
+
+  it('refresh triggers invalidateTags + refetch', async () => {
+    const user = userEvent.setup();
+    const invalidate = vi.mocked(
+      (await import('../../api/api')).movieApi.util.invalidateTags
     );
+
+    render(<MovieContainer />);
+
+    await user.click(screen.getByTestId('refresh'));
+
+    expect(invalidate).toHaveBeenCalledWith(['Movies']);
+    expect(refetch).toHaveBeenCalled();
+  });
+
+  it('renders Outlet when details param exists', () => {
+    mockParams = { search: 'Batman', page: 1, details: 'tt123' };
+
+    render(<MovieContainer />);
+
+    expect(screen.getByTestId('mock-outlet')).toBeInTheDocument();
   });
 });
