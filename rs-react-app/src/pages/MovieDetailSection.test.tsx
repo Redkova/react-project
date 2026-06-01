@@ -127,8 +127,14 @@ describe('MovieDetailSection', () => {
     expect(screen.getByText(mockMovie.Actors)).toBeInTheDocument();
   });
 
-  it('shows spinner when loading', () => {
-    mockQueryState({ isLoading: true });
+  it('shows spinner when fetching and no movie yet', () => {
+    mockedQuery.mockReturnValue({
+      data: null,
+      isFetching: true,
+      isError: false,
+      error: null,
+      refetch: mockRefetch,
+    });
 
     render(
       <MemoryRouter>
