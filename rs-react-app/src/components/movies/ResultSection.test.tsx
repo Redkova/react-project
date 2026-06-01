@@ -37,6 +37,10 @@ vi.mock('../ui/Button', () => ({
   }) => <button onClick={onClick}>{children}</button>,
 }));
 
+vi.mock('../../utils/errorMapper', () => ({
+  mapMovieError: (err: unknown) => `Mapped: ${String(err)}`,
+}));
+
 const movies: OmdbMovie[] = [
   {
     Title: 'Matrix',
@@ -56,6 +60,7 @@ const defaultProps = {
   page: 1,
   isFirstPage: false,
   isLastPage: false,
+  onRefresh: vi.fn(),
 };
 
 describe('ResultsSection', () => {
@@ -75,13 +80,13 @@ describe('ResultsSection', () => {
   });
 
   it('shows error message', () => {
-    render(<ResultsSection {...defaultProps} error="Something went wrong" />);
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    render(<ResultsSection {...defaultProps} error="Boom" />);
+    expect(screen.getByText('Mapped: Boom')).toBeInTheDocument();
   });
 
   it('shows empty state when no movies', () => {
     render(<ResultsSection {...defaultProps} />);
-    expect(screen.getByText('No results found')).toBeInTheDocument();
+    expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
   it('renders movie list and pagination when movies exist', () => {
@@ -90,6 +95,15 @@ describe('ResultsSection', () => {
     expect(screen.getByText('Matrix')).toBeInTheDocument();
     expect(screen.getByTestId('movie-list')).toBeInTheDocument();
     expect(screen.getByTestId('pagination')).toBeInTheDocument();
+  });
+
+  it('calls onRefresh when Refresh button is clicked', async () => {
+    const user = userEvent.setup();
+    render(<ResultsSection {...defaultProps} />);
+
+    await user.click(screen.getByRole('button', { name: 'Refresh' }));
+
+    expect(defaultProps.onRefresh).toHaveBeenCalledTimes(1);
   });
 
   it('shows ErrorBoundary when simulate error is clicked', async () => {
