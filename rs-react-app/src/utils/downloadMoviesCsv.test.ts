@@ -1,19 +1,29 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { downloadMoviesCsv } from './downloadMoviesCsv';
-import { fetchMovieDetails } from '../api/omdb';
-import { generateMovieDetailsCsv } from './moviesDetailsCsv';
 import type { OmdbMovie, OmdbMovieDetails } from '../api/types';
+import { generateMovieDetailsCsv } from './moviesDetailsCsv';
+import { store } from '../store/store';
+import { movieApi } from '../api/api';
 
-vi.mock('../api/omdb', () => ({
-  fetchMovieDetails: vi.fn(),
+vi.mock('../store/store', () => ({
+  store: {
+    dispatch: vi.fn(),
+  },
+}));
+
+vi.mock('../api/api', () => ({
+  movieApi: {
+    endpoints: {
+      getMovieDetails: {
+        initiate: vi.fn(),
+      },
+    },
+  },
 }));
 
 vi.mock('./moviesDetailsCsv', () => ({
   generateMovieDetailsCsv: vi.fn(),
 }));
-
-const mockedFetch = vi.mocked(fetchMovieDetails);
-const mockedCsv = vi.mocked(generateMovieDetailsCsv);
 
 const movie: OmdbMovie = {
   Title: 'Matrix',
@@ -40,32 +50,69 @@ describe('downloadMoviesCsv', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockedFetch.mockResolvedValue(movieDetails);
-    mockedCsv.mockReturnValue('csv-content');
+    vi.mocked(generateMovieDetailsCsv).mockReturnValue('csv-content');
 
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:url');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
-    vi.spyOn(document.body, 'appendChild').mockImplementation((node) => node);
-    vi.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
+    vi.spyOn(document.body, 'appendChild').mockImplementation(
+      (node: Node) => node
+    );
+    vi.spyOn(document.body, 'removeChild').mockImplementation(
+      (node: Node) => node
+    );
 
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   });
 
-  it('fetches movie details for each movie', async () => {
+  it('fetches movie details for each movie via dispatch + unwrap', async () => {
+    const dispatchMock = vi.mocked(store.dispatch);
+    const initiateMock = vi.mocked(movieApi.endpoints.getMovieDetails.initiate);
+
+    const thunk = vi.fn();
+
+    dispatchMock.mockReturnValue({
+      type: 'getMovieDetails/fulfilled',
+      unwrap: vi.fn().mockResolvedValue(movieDetails),
+    });
+
+    initiateMock.mockReturnValue(thunk);
+
     await downloadMoviesCsv([movie]);
 
-    expect(mockedFetch).toHaveBeenCalledTimes(1);
-    expect(mockedFetch).toHaveBeenCalledWith('1');
+    expect(initiateMock).toHaveBeenCalledWith('1');
+    expect(dispatchMock).toHaveBeenCalledWith(thunk);
   });
 
   it('generates CSV from valid movie details', async () => {
+    const dispatchMock = vi.mocked(store.dispatch);
+    const initiateMock = vi.mocked(movieApi.endpoints.getMovieDetails.initiate);
+
+    const thunk = vi.fn();
+    initiateMock.mockReturnValue(thunk);
+
+    dispatchMock.mockReturnValue({
+      type: 'getMovieDetails/fulfilled',
+      unwrap: vi.fn().mockResolvedValue(movieDetails),
+    });
+
     await downloadMoviesCsv([movie]);
 
-    expect(mockedCsv).toHaveBeenCalledWith([movieDetails]);
+    expect(generateMovieDetailsCsv).toHaveBeenCalledWith([movieDetails]);
   });
 
   it('creates blob URL and revokes it', async () => {
+    const dispatchMock = vi.mocked(store.dispatch);
+    const initiateMock = vi.mocked(movieApi.endpoints.getMovieDetails.initiate);
+
+    const thunk = vi.fn();
+    initiateMock.mockReturnValue(thunk);
+
+    dispatchMock.mockReturnValue({
+      type: 'getMovieDetails/fulfilled',
+      unwrap: vi.fn().mockResolvedValue(movieDetails),
+    });
+
     const createSpy = vi.spyOn(URL, 'createObjectURL');
     const revokeSpy = vi.spyOn(URL, 'revokeObjectURL');
 
@@ -73,5 +120,24 @@ describe('downloadMoviesCsv', () => {
 
     expect(createSpy).toHaveBeenCalledTimes(1);
     expect(revokeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('creates a downloadable link and triggers click', async () => {
+    const dispatchMock = vi.mocked(store.dispatch);
+    const initiateMock = vi.mocked(movieApi.endpoints.getMovieDetails.initiate);
+
+    const thunk = vi.fn();
+    initiateMock.mockReturnValue(thunk);
+
+    dispatchMock.mockReturnValue({
+      type: 'getMovieDetails/fulfilled',
+      unwrap: vi.fn().mockResolvedValue(movieDetails),
+    });
+
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click');
+
+    await downloadMoviesCsv([movie]);
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 });
