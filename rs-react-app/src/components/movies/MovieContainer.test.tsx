@@ -49,6 +49,7 @@ const refetch = vi.fn();
 let mockQueryResult = {
   data: { Search: [] as OmdbMovie[] },
   isLoading: false,
+  isFetching: false,
   error: null as unknown,
   refetch,
 };
@@ -116,6 +117,7 @@ describe('MovieContainer', () => {
     mockQueryResult = {
       data: { Search: [] },
       isLoading: false,
+      isFetching: false,
       error: null,
       refetch,
     };
@@ -220,5 +222,47 @@ describe('MovieContainer', () => {
     render(<MovieContainer />);
 
     expect(screen.getByTestId('mock-outlet')).toBeInTheDocument();
+  });
+
+  it('shows spinner when isLoading is true', () => {
+    mockQueryResult = {
+      data: null,
+      isLoading: true,
+      isFetching: false,
+      error: null,
+      refetch,
+    };
+
+    render(<MovieContainer />);
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  });
+
+  it('shows spinner when isFetching is true', () => {
+    mockQueryResult = {
+      data: null,
+      isLoading: false,
+      isFetching: true,
+      error: null,
+      refetch,
+    };
+
+    render(<MovieContainer />);
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  });
+
+  it('does not show spinner when not loading or fetching', () => {
+    mockQueryResult = {
+      data: { Search: [] },
+      isLoading: false,
+      isFetching: false,
+      error: null,
+      refetch,
+    };
+
+    render(<MovieContainer />);
+
+    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
   });
 });
