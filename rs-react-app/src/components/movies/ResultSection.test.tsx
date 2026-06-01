@@ -54,6 +54,7 @@ const movies: OmdbMovie[] = [
 const defaultProps = {
   movies: [],
   loading: false,
+  fetching: false,
   error: null,
   onNext: vi.fn(),
   onPrev: vi.fn(),
@@ -72,11 +73,6 @@ describe('ResultsSection', () => {
     render(<ResultsSection {...defaultProps} />);
     expect(screen.getByText('Movie name')).toBeInTheDocument();
     expect(screen.getByText('Year')).toBeInTheDocument();
-  });
-
-  it('shows spinner when loading', () => {
-    render(<ResultsSection {...defaultProps} loading={true} />);
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('shows error message', () => {

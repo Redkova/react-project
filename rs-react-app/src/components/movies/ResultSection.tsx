@@ -49,6 +49,8 @@ function ResultsSection({
           </span>
         </div>
 
+        {loading && <Spinner />}
+
         {error && <MovieError message={mapMovieError(error)} />}
 
         {!loading && !error && movies.length === 0 && (
