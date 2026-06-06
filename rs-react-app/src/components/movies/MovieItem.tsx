@@ -31,7 +31,7 @@ function MovieItem({ movie }: Props) {
   return (
     <div
       onClick={handleOpenDetails}
-      className="flex justify-between items-center p-4 border rounded-xl bg-(--movie-card-bg) shadow-(--card-border-shadow) hover:shadow-(--card-border-hover-shadow) transition cursor-pointer"
+      className="flex justify-between items-center p-4 border rounded-xl bg-(--movie-card-bg) shadow-(--card-border-shadow) md:hover:shadow-(--card-border-hover-shadow) transition cursor-default md:cursor-pointer"
     >
       <div className="flex items-center gap-4">
         <Checkbox checked={isSelected} onChange={handleCheckboxChange} />

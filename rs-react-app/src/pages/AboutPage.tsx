@@ -20,9 +20,11 @@ export function AboutPage() {
           rel="noopener noreferrer"
           className="
             text-(--link-text-color) 
-            hover:text-blue-700 
+            md:hover:text-blue-700 
             transition 
-            hover:underline
+            md:hover:underline
+            cursor-default
+            md:cursor-pointer
           "
         >
           GitHub
@@ -34,9 +36,11 @@ export function AboutPage() {
           rel="noopener noreferrer"
           className="
             text-(--link-text-color) 
-            hover:text-blue-700 
+            md:hover:text-blue-700 
             transition 
-            hover:underline
+            md:hover:underline
+            cursor-default
+            md:cursor-pointer
           "
         >
           RS School
@@ -50,9 +54,11 @@ export function AboutPage() {
           text-white 
           rounded-lg 
           shadow-md 
-          hover:bg-(--btn-hover-bg) 
-          hover:shadow-lg 
+          md:hover:bg-(--btn-hover-bg) 
+          md:hover:shadow-lg 
           transition-all
+          cursor-default
+          md:cursor-pointer
         "
         >
           Back to main

@@ -75,12 +75,16 @@ function MovieContainer() {
     <>
       <div
         className={
-          isDetailOpen ? 'flex w-full gap-1 px-8' : 'flex w-full justify-center'
+          isDetailOpen
+            ? 'flex w-full gap-1 px-8 md:flex-row flex-col'
+            : 'flex w-full justify-center'
         }
       >
         <div
           className={
-            isDetailOpen ? 'w-[50%] relative' : 'w-full max-w-2xl relative'
+            isDetailOpen
+              ? 'md:w-[50%] w-full relative'
+              : 'w-full max-w-2xl relative'
           }
         >
           {(isLoading || isFetching) && (
@@ -110,11 +114,19 @@ function MovieContainer() {
           />
         </div>
         {isDetailOpen && (
-          <div className="w-[50%] pl-2 pt-30 flex justify-center sticky top-0 h-fit">
+          <div className="hidden md:flex w-[50%] pl-2 pt-30 justify-center sticky top-0 h-fit">
             <Outlet />
           </div>
         )}
       </div>
+
+      {isDetailOpen && (
+        <div className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[999] flex justify-center items-center p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl w-full max-w-xl shadow-xl flex justify-center overflow-auto max-h-[90vh] p-4">
+            <Outlet />
+          </div>
+        </div>
+      )}
     </>
   );
 }

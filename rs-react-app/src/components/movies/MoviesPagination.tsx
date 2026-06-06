@@ -23,7 +23,7 @@ function MoviesPagination({
         className={
           isFirstPage
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-gray-200 text-black hover:bg-gray-300'
+            : 'bg-gray-200 text-black md:hover:bg-gray-300'
         }
       >
         Prev
@@ -37,7 +37,7 @@ function MoviesPagination({
         className={
           isLastPage
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-gray-200 text-black hover:bg-gray-300'
+            : 'bg-gray-200 text-black md:hover:bg-gray-300'
         }
       >
         Next

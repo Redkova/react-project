@@ -10,7 +10,7 @@ export function Checkbox({ checked, onChange }: CheckboxProps) {
       checked={checked}
       onChange={onChange}
       onClick={(event) => event.stopPropagation()}
-      className="w-4 h-4 cursor-pointer"
+      className="w-4 h-4 cursor-default md:cursor-pointer"
     />
   );
 }

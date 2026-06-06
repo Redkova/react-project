@@ -63,7 +63,7 @@ export function MovieDetailSection() {
     <div className="relative w-full max-w-lg bg-(--movie-card-bg) py-6 px-4 rounded-xl shadow-(--card-border-shadow)">
       <button
         onClick={() => updateParams({ details: null })}
-        className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
+        className="absolute  top-2 right-3 text-gray-500 text-2xl leading-none cursor-default md:cursor-pointer md:hover:text-red-500"
       >
         ✕
       </button>
@@ -114,7 +114,7 @@ export function MovieDetailSection() {
         {isLong && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="ml-2 text-(--link-text-color) hover:underline"
+            className="ml-2 text-(--link-text-color) md:hover:underline"
           >
             {expanded ? 'Show less' : 'Show more'}
           </button>
@@ -123,7 +123,7 @@ export function MovieDetailSection() {
       <div className="flex justify-center items-center mt-4">
         <Button
           onClick={refreshDetails}
-          className="bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
+          className="bg-(--button-bg) text-white rounded-lg transition md:hover:bg-(--btn-hover-bg)"
         >
           Refresh
         </Button>

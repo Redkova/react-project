@@ -76,13 +76,13 @@ function ResultsSection({
       <div className="flex flex-col justify-center items-center gap-3 mt-4">
         <Button
           onClick={onRefresh}
-          className="bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
+          className="bg-(--button-bg) text-white rounded-lg md:hover:bg-(--btn-hover-bg) transition"
         >
           Refresh
         </Button>
         <Button
           onClick={() => setForceError(true)}
-          className="text-white bg-(--error-btn-bg) border border-(--error-btn-border) hover:bg-(--error-btn-hover-bg) hover:border-(--error-btn-hover-border) hover:shadow-lg transition"
+          className="text-white bg-(--error-btn-bg) border border-(--error-btn-border) md:hover:bg-(--error-btn-hover-bg) md:hover:border-(--error-btn-hover-border) md:hover:shadow-lg transition"
         >
           Simulate Error
         </Button>

@@ -27,7 +27,7 @@ function SearchSection({ onSearch, initialValue, error }: Props) {
         />
 
         <Button
-          className="px-5 py-2 bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
+          className="px-5 py-2 bg-(--button-bg) text-white rounded-lg md:hover:bg-(--btn-hover-bg) transition"
           type="submit"
         >
           Search
