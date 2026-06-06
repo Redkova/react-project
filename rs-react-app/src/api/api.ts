@@ -44,7 +44,7 @@ export const movieApi = createApi({
           plot: 'short',
         },
       }),
-      providesTags: (result, error, id) => [{ type: 'MovieDetails', id }],
+      providesTags: (_, __, id) => [{ type: 'MovieDetails', id }],
     }),
   }),
 });

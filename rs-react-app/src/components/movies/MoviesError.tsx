@@ -1,5 +1,5 @@
 interface Props {
-  message: string;
+  message?: string;
 }
 function MovieError({ message }: Props) {
   return (

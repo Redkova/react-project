@@ -6,6 +6,7 @@ import type { RootState } from '../../../store/store';
 import { useNavigate } from 'react-router';
 import { useMovieParams } from '../../../hooks/useMovieParams';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { movieApi } from '../../../api/api';
 
 vi.mock('react-router', () => ({
   useNavigate: vi.fn(),
@@ -80,7 +81,8 @@ describe('MovieItem', () => {
         selectedMovies: {
           movieItems: [],
         },
-      } as RootState)
+        api: movieApi.reducer(undefined, { type: 'init' }),
+      } satisfies RootState)
     );
   });
 

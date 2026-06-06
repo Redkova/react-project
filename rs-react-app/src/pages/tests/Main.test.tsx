@@ -227,7 +227,7 @@ describe('MovieContainer', () => {
 
   it('shows spinner when isLoading is true', () => {
     mockQueryResult = {
-      data: null,
+      data: { Search: [] },
       isLoading: true,
       isFetching: false,
       error: null,
@@ -241,7 +241,7 @@ describe('MovieContainer', () => {
 
   it('shows spinner when isFetching is true', () => {
     mockQueryResult = {
-      data: null,
+      data: { Search: [] },
       isLoading: false,
       isFetching: true,
       error: null,
