@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
-import { AboutPage } from './AboutPage';
+import { AboutPage } from '../AboutPage';
 
 vi.mock('react-router', async () => {
   const actual =

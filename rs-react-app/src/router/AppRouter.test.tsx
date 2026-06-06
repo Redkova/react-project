@@ -13,7 +13,7 @@ vi.mock('../components/layout/Layout', () => ({
   ),
 }));
 
-vi.mock('../components/movies/MovieContainer', () => ({
+vi.mock('../pages/Main', () => ({
   default: () => (
     <div data-testid="movie-container">
       <Outlet />

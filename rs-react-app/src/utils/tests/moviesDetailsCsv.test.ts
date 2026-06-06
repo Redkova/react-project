@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateMovieDetailsCsv } from './moviesDetailsCsv';
-import type { OmdbMovieDetails } from '../api/types';
+import { generateMovieDetailsCsv } from '../moviesDetailsCsv';
+import type { OmdbMovieDetails } from '../../api/types';
 
 const movie: OmdbMovieDetails = {
   Title: 'Matrix',

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import MovieContainer from './MovieContainer';
+import MovieContainer from '../Main';
 import type { OmdbMovie } from '../../api/types';
 import type { ComponentProps } from 'react';
 
@@ -67,13 +67,13 @@ vi.mock('react-redux', () => ({
   useDispatch: () => vi.fn(),
 }));
 
-import SearchSection from '../search/SearchSection';
-import ResultsSection from './ResultSection';
+import SearchSection from '../../components/layout/search/SearchSection';
+import ResultsSection from '../../components/layout/resultSection/ResultSection';
 
 type SearchSectionProps = ComponentProps<typeof SearchSection>;
 type ResultsSectionProps = ComponentProps<typeof ResultsSection>;
 
-vi.mock('../search/SearchSection', () => ({
+vi.mock('../../components/layout/search/SearchSection', () => ({
   default: (props: SearchSectionProps) => (
     <div>
       <input data-testid="search-input" defaultValue={props.initialValue} />
@@ -87,7 +87,7 @@ vi.mock('../search/SearchSection', () => ({
   ),
 }));
 
-vi.mock('./ResultSection', () => ({
+vi.mock('../../components/layout/resultSection/ResultSection', () => ({
   default: (props: ResultsSectionProps) => (
     <div>
       <div data-testid="loading">{props.loading ? 'loading' : 'idle'}</div>
@@ -221,7 +221,8 @@ describe('MovieContainer', () => {
 
     render(<MovieContainer />);
 
-    expect(screen.getByTestId('mock-outlet')).toBeInTheDocument();
+    const outlets = screen.getAllByTestId('mock-outlet');
+    expect(outlets.length).toBeGreaterThan(0);
   });
 
   it('shows spinner when isLoading is true', () => {

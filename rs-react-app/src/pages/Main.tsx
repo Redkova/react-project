@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Outlet, Navigate } from 'react-router';
-import SearchSection from '../search/SearchSection';
-import ResultsSection from './ResultSection';
-import { useMovieParams } from '../../hooks/useMovieParams';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { movieApi, useSearchMoviesQuery } from '../../api/api';
+import SearchSection from '../components/layout/search/SearchSection';
+import ResultsSection from '../components/layout/resultSection/ResultSection';
+import { useMovieParams } from '../hooks/useMovieParams';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { movieApi, useSearchMoviesQuery } from '../api/api';
 import { useDispatch } from 'react-redux';
-import Spinner from './Spinner';
+import Spinner from '../components/spinner/Spinner';
 
 const DEFAULT_SEARCH_TERM = 'star';
 

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { OmdbMovie } from '../../api/types';
-import MovieList from './MoviesList';
-import MoviesPagination from './MoviesPagination';
-import MovieError from './MoviesError';
-import Spinner from './Spinner';
-import Button from '../ui/Button';
-import { mapMovieError } from '../../utils/errorMapper';
+import type { OmdbMovie } from '../../../api/types';
+import MovieList from '../../movies/MoviesList';
+import MoviesPagination from '../../pagination/MoviesPagination';
+import MovieError from '../../movies/MoviesError';
+import Spinner from '../../spinner/Spinner';
+import Button from '../../ui/Button';
+import { mapMovieError } from '../../../utils/errorMapper';
 
 interface Props {
   movies: OmdbMovie[];

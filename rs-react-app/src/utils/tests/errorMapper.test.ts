@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { mapMovieError } from './errorMapper';
+import { mapMovieError } from '../errorMapper';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { OmdbErrorResponse } from '../api/types';
+import type { OmdbErrorResponse } from '../../api/types';
 
 describe('mapMovieError', () => {
   it('returns "Unknown error occurred" when error is undefined', () => {

@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
-import MovieList from './MoviesList';
-import type { OmdbMovie } from '../../api/types';
+import MovieList from '../MoviesList';
+import type { OmdbMovie } from '../../../api/types';
 
 vi.mock('react-router', () => ({
   useNavigate: () => vi.fn(),
 }));
 
-vi.mock('../../hooks/useMovieParams', () => ({
+vi.mock('../../../hooks/useMovieParams', () => ({
   useMovieParams: () => ({
     search: 'Batman',
     page: 1,
@@ -16,12 +16,12 @@ vi.mock('../../hooks/useMovieParams', () => ({
   }),
 }));
 
-vi.mock('../../hooks/reduxHooks', () => ({
+vi.mock('../../../hooks/reduxHooks', () => ({
   useAppDispatch: () => vi.fn(),
   useAppSelector: () => false,
 }));
 
-vi.mock('../ui/Checkbox', () => ({
+vi.mock('../../ui/Checkbox', () => ({
   Checkbox: ({
     checked,
     onChange,

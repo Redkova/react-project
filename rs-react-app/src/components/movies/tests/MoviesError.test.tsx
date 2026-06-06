@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import MovieError from './MoviesError';
+import MovieError from '../MoviesError';
 
 describe('MovieError', () => {
   it('renders error message correctly', () => {

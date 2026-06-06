@@ -1,26 +1,26 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, beforeEach, it, expect } from 'vitest';
-import MovieItem from './MovieItem';
-import type { OmdbMovie } from '../../api/types';
-import type { RootState } from '../../store/store';
+import MovieItem from '../MovieItem';
+import type { OmdbMovie } from '../../../api/types';
+import type { RootState } from '../../../store/store';
 import { useNavigate } from 'react-router';
-import { useMovieParams } from '../../hooks/useMovieParams';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useMovieParams } from '../../../hooks/useMovieParams';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 
 vi.mock('react-router', () => ({
   useNavigate: vi.fn(),
 }));
 
-vi.mock('../../hooks/useMovieParams', () => ({
+vi.mock('../../../hooks/useMovieParams', () => ({
   useMovieParams: vi.fn(),
 }));
 
-vi.mock('../../hooks/reduxHooks', () => ({
+vi.mock('../../../hooks/reduxHooks', () => ({
   useAppDispatch: vi.fn(),
   useAppSelector: vi.fn(),
 }));
 
-vi.mock('../ui/Checkbox', () => ({
+vi.mock('../../ui/Checkbox', () => ({
   Checkbox: ({
     checked,
     onChange,
@@ -38,7 +38,7 @@ vi.mock('../ui/Checkbox', () => ({
   ),
 }));
 
-vi.mock('../ui/PosterImage', () => ({
+vi.mock('../../ui/PosterImage', () => ({
   PosterImage: ({ src, alt }: { src: string; alt: string }) =>
     src === 'N/A' ? <span>No image</span> : <img src={src} alt={alt} />,
 }));

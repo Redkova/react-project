@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { MovieDetailSection } from './MovieDetailSection';
+import { MovieDetailSection } from '../MovieDetailSection';
 import type {
   OmdbMovieDetails,
   MovieDetailsResult,
   OmdbErrorResponse,
-} from '../api/types';
-import { useGetMovieDetailsQuery, movieApi } from '../api/api';
+} from '../../api/types';
+import { useGetMovieDetailsQuery, movieApi } from '../../api/api';
 import type { ReactNode } from 'react';
 
 const mockUpdateParams = vi.fn();
@@ -18,7 +18,7 @@ vi.mock('react-redux', () => ({
   useDispatch: () => mockDispatch,
 }));
 
-vi.mock('../hooks/useMovieParams', () => ({
+vi.mock('../../hooks/useMovieParams', () => ({
   useMovieParams: (): {
     page: number;
     details: string | null;
@@ -30,7 +30,7 @@ vi.mock('../hooks/useMovieParams', () => ({
   }),
 }));
 
-vi.mock('../api/api', () => ({
+vi.mock('../../api/api', () => ({
   useGetMovieDetailsQuery: vi.fn(),
   movieApi: {
     util: {
@@ -39,7 +39,7 @@ vi.mock('../api/api', () => ({
   },
 }));
 
-vi.mock('../components/ui/PosterImage', () => ({
+vi.mock('../../components/ui/PosterImage', () => ({
   PosterImage: ({
     src,
     alt,
@@ -50,21 +50,21 @@ vi.mock('../components/ui/PosterImage', () => ({
   }) => (src && src !== 'N/A' ? <img src={src} alt={alt} /> : null),
 }));
 
-vi.mock('../components/movies/Spinner', () => ({
+vi.mock('../../components/movies/Spinner', () => ({
   default: () => <div data-testid="spinner">Loading...</div>,
 }));
 
-vi.mock('../components/movies/MoviesError', () => ({
+vi.mock('../../components/movies/MoviesError', () => ({
   default: ({ message }: { message: string }) => (
     <div data-testid="error">{message}</div>
   ),
 }));
 
-vi.mock('../utils/errorMapper', () => ({
+vi.mock('../../utils/errorMapper', () => ({
   mapMovieError: (err: unknown) => `Mapped: ${String(err)}`,
 }));
 
-vi.mock('../components/ui/Button', () => ({
+vi.mock('../../components/ui/Button', () => ({
   default: ({
     children,
     onClick,

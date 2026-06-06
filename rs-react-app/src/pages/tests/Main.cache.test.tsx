@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import MovieContainer from './MovieContainer';
+import MovieContainer from '../Main';
 import { movieApi } from '../../api/api';
 import selectedMoviesReducer from '../../store/selectedMoviesSlice';
 

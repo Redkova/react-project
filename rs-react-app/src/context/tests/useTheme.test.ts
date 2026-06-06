@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ThemeProvider } from './ThemeProvider';
-import { useTheme } from './useTheme';
+import { ThemeProvider } from '../ThemeProvider';
+import { useTheme } from '../useTheme';
 
 describe('useTheme', () => {
   it('throws when used outside ThemeProvider', () => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router';
-import Spinner from '../components/movies/Spinner';
+import Spinner from '../components/spinner/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
 import { useGetMovieDetailsQuery } from '../api/api';
 import { PosterImage } from '../components/ui/PosterImage';

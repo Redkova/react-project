@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { downloadMoviesCsv } from './downloadMoviesCsv';
-import type { OmdbMovie, OmdbMovieDetails } from '../api/types';
-import { generateMovieDetailsCsv } from './moviesDetailsCsv';
-import { store } from '../store/store';
-import { movieApi } from '../api/api';
+import { downloadMoviesCsv } from '../downloadMoviesCsv';
+import type { OmdbMovie, OmdbMovieDetails } from '../../api/types';
+import { generateMovieDetailsCsv } from '../moviesDetailsCsv';
+import { store } from '../../store/store';
+import { movieApi } from '../../api/api';
 
-vi.mock('../store/store', () => ({
+vi.mock('../../store/store', () => ({
   store: {
     dispatch: vi.fn(),
   },
 }));
 
-vi.mock('../api/api', () => ({
+vi.mock('../../api/api', () => ({
   movieApi: {
     endpoints: {
       getMovieDetails: {
@@ -21,7 +21,7 @@ vi.mock('../api/api', () => ({
   },
 }));
 
-vi.mock('./moviesDetailsCsv', () => ({
+vi.mock('../moviesDetailsCsv', () => ({
   generateMovieDetailsCsv: vi.fn(),
 }));
 
