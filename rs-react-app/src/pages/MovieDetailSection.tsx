@@ -10,6 +10,10 @@ import Button from '../components/ui/Button';
 import { useDispatch } from 'react-redux';
 import { movieApi } from '../api/api';
 
+function hasError(value: unknown): boolean {
+  return value !== null && value !== undefined;
+}
+
 export function MovieDetailSection() {
   const dispatch = useDispatch();
   const { page, details, updateParams } = useMovieParams();
@@ -47,8 +51,8 @@ export function MovieDetailSection() {
     );
   }
 
-  if (isError) {
-    return <MovieError message={mapMovieError(error) ?? 'Unknown error'} />;
+  if (isError && hasError(error)) {
+    return <MovieError message={mapMovieError(error)} />;
   }
 
   if (!movie || movie.Response === 'False') {

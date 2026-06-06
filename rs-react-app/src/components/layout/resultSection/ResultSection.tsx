@@ -20,6 +20,10 @@ interface Props {
   onRefresh: () => void;
 }
 
+function hasError(value: unknown): boolean {
+  return value !== null && value !== undefined;
+}
+
 function ResultsSection({
   movies,
   loading,
@@ -51,9 +55,7 @@ function ResultsSection({
 
         {loading && <Spinner />}
 
-        {error && (
-          <MovieError message={mapMovieError(error) ?? 'Unknown error'} />
-        )}
+        {hasError(error) ? <MovieError message={mapMovieError(error)} /> : null}
 
         {!loading && !error && movies.length === 0 && (
           <p className="mt-4 text-sm text-(--error-text) bg-(--error-text-bg) border border-red-300 px-4 py-2 rounded-md text-center">
