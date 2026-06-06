@@ -48,7 +48,7 @@ export function MovieDetailSection() {
   }
 
   if (isError) {
-    return <MovieError message={mapMovieError(error)} />;
+    return <MovieError message={mapMovieError(error) ?? 'Unknown error'} />;
   }
 
   if (!movie || movie.Response === 'False') {

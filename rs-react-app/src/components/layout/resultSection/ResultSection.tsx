@@ -51,7 +51,9 @@ function ResultsSection({
 
         {loading && <Spinner />}
 
-        {error && <MovieError message={mapMovieError(error)} />}
+        {error && (
+          <MovieError message={mapMovieError(error) ?? 'Unknown error'} />
+        )}
 
         {!loading && !error && movies.length === 0 && (
           <p className="mt-4 text-sm text-(--error-text) bg-(--error-text-bg) border border-red-300 px-4 py-2 rounded-md text-center">
