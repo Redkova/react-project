@@ -61,7 +61,7 @@ export const Modal = ({
             ref={closeButtonRef}
             type='button'
             onClick={onClose}
-            className='rounded px-2 py-1 text-sm hover:bg-gray-100'
+            className='rounded px-2 py-1 text-sm hover:bg-gray-100 cursor-pointer'
           >
             x
           </button>
