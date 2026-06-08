@@ -4,6 +4,8 @@ import { useInputFields } from '../../hooks/useInputFields';
 import { getUserData } from '../../utils/getUserData';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import { useState } from 'react';
+import { PasswordFieldUncontrolled } from '../password/uncontrolledForm/PasswordFieldUncontrolled';
+import { ConfirmPasswordUncontrolled } from '../password/uncontrolledForm/ConfirmPasswordUncontrolled';
 
 type Props = {
   onSuccess?: () => void;
@@ -14,6 +16,12 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
   const { inputFields, refs, fileRef } = useInputFields();
 
   const [fileName, setFileName] = useState<string | null>(null);
+  const [strength, setStrength] = useState({
+    hasUpper: false,
+    hasLower: false,
+    hasNumber: false,
+    hasSpecial: false,
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,6 +57,29 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
   return (
     <form onSubmit={handleSubmit}>
       {inputFields.map((field) => {
+        if (field.name === 'password') {
+          return (
+            <PasswordFieldUncontrolled
+              key={field.name}
+              label={field.label}
+              inputRef={refs.password}
+              strength={strength}
+              setStrength={setStrength}
+            />
+          );
+        }
+
+        if (field.name === 'confirmPassword') {
+          return (
+            <ConfirmPasswordUncontrolled
+              key={field.name}
+              label={field.label}
+              inputRef={refs.confirmPassword}
+              passwordRef={refs.password}
+            />
+          );
+        }
+
         if (field.type === 'checkbox') {
           return (
             <div key={field.name} className='mb-4 flex items-center gap-2'>

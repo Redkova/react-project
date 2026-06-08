@@ -3,20 +3,29 @@ import { useDispatch } from 'react-redux';
 import { addSubmittedForm } from '../../store/submittedFormsSlice';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import { useState } from 'react';
+import { getPasswordStrength } from '../../utils/getPasswordStrength';
+import { PasswordFieldRHF } from '../password/reactHookForm/PasswordFieldRHF';
+import { ConfirmPasswordRHF } from '../password/reactHookForm/ConfirmPasswordRHF';
 
-type RHFValues = {
+export type RHFValues = {
   name: string;
   age: number;
   email: string;
   gender: string;
   terms: boolean;
   file: FileList;
+  password: string;
+  confirmPassword: string;
 };
 
 export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const dispatch = useDispatch();
   const { register, handleSubmit, watch } = useForm<RHFValues>();
   const [fileName, setFileName] = useState<string | null>(null);
+
+  const passwordValue = watch('password') || '';
+  const confirmValue = watch('confirmPassword') || '';
+  const strength = getPasswordStrength(passwordValue);
 
   const onSubmit = async (formValues: RHFValues) => {
     let fileBase64: string | null = null;
@@ -91,6 +100,14 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         />
         <span>Accept Terms & Conditions</span>
       </div>
+
+      <PasswordFieldRHF register={register} passwordValue={passwordValue} />
+
+      <ConfirmPasswordRHF
+        register={register}
+        passwordValue={passwordValue}
+        confirmValue={confirmValue}
+      />
 
       <div className='mb-4'>
         <label className='block mb-1 font-medium'>Upload Image</label>
