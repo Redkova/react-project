@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -127,42 +127,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,42 +182,42 @@ type Props = {
   suggestions: string[];
 };
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Autocomplete = ({</span></span>
+export const Autocomplete = ({
   label,
   value,
   onChange,
   suggestions,
 }: Props) =&gt; {
-  const [open, <span class="cstat-no" title="statement not covered" >setOpen] = useState(false);</span>
+  const [open, setOpen] = useState(false);
 &nbsp;
-  const filtered = <span class="cstat-no" title="statement not covered" >value.length</span>
-    ? suggestions.<span class="fstat-no" title="function not covered" >filter((c</span>ountry) =&gt;
-<span class="cstat-no" title="statement not covered" >        country.toLowerCase().includes(value.toLowerCase())</span>
+  const filtered = value.length
+    ? suggestions.filter((country) =&gt;
+        country.toLowerCase().includes(value.toLowerCase())
       )
     : [];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div className='mb-4 relative'&gt;
       &lt;label className='block mb-1 font-medium'&gt;{label}&lt;/label&gt;
 &nbsp;
       &lt;input
         value={value}
-<span class="fstat-no" title="function not covered" >        onChange={(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >          onChange(e.target.value);</span>
-<span class="cstat-no" title="statement not covered" >          setOpen(true);</span>
+        onChange={(e) =&gt; {
+          onChange(e.target.value);
+          setOpen(true);
         }}
         className='border p-2 rounded w-full'
       /&gt;
 &nbsp;
       {open &amp;&amp; filtered.length &gt; 0 &amp;&amp; (
         &lt;ul className='absolute left-0 right-0 bg-white border rounded shadow mt-1 z-10'&gt;
-          {filtered.<span class="fstat-no" title="function not covered" >map((c</span>ountry) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;li</span>
+          {filtered.map((country) =&gt; (
+            &lt;li
               key={country}
               className='p-2 hover:bg-gray-100 cursor-pointer'
-<span class="fstat-no" title="function not covered" >              onClick={() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                onChange(country);</span>
-<span class="cstat-no" title="statement not covered" >                setOpen(false);</span>
+              onClick={() =&gt; {
+                onChange(country);
+                setOpen(false);
               }}
             &gt;
               {country}
@@ -235,7 +235,7 @@ export const <span class="cstat-no" title="statement not covered" ><span class="
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-08T19:03:19.502Z
+                at 2026-06-08T19:38:19.228Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
