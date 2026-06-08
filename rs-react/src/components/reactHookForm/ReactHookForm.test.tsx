@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import type { UseFormRegister } from 'react-hook-form';
 import type { FormValues } from '../../validation/validationSchema';
+import { waitFor } from '@testing-library/react';
 
 vi.mock('react-redux', () => ({
   useDispatch: vi.fn(),
@@ -131,5 +132,150 @@ describe('ReactHookForm', () => {
     fireEvent.change(input, { target: { files: [file] } });
 
     expect(await screen.findByText('Selected: avatar.png')).toBeInTheDocument();
+  });
+
+  it('updates country via Autocomplete', () => {
+    render(<ReactHookForm />);
+
+    const countryInput = screen.getByLabelText('Country');
+
+    fireEvent.change(countryInput, { target: { value: 'Germany' } });
+
+    expect(countryInput).toHaveValue('Germany');
+  });
+
+  it('shows error when passwords do not match', async () => {
+    render(<ReactHookForm />);
+
+    fireEvent.change(screen.getByLabelText('Name'), {
+      target: { value: 'John' },
+    });
+    fireEvent.change(screen.getByLabelText('Age'), { target: { value: '30' } });
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'john@mail.com' },
+    });
+    fireEvent.change(screen.getByLabelText('Gender'), {
+      target: { value: 'male' },
+    });
+    fireEvent.change(screen.getByLabelText('Country'), {
+      target: { value: 'Sweden' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'Aa1!' },
+    });
+    fireEvent.change(screen.getByLabelText('Confirm Password'), {
+      target: { value: 'Bb2@' },
+    });
+
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    const button = screen.getByRole('button', { name: /submit/i });
+    button.removeAttribute('disabled');
+    fireEvent.click(button);
+
+    expect(await screen.findByText('Passwords must match')).toBeInTheDocument();
+  });
+
+  it('disables submit until form becomes valid', async () => {
+    render(<ReactHookForm />);
+
+    const button = screen.getByRole('button', { name: /submit/i });
+
+    expect(button).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText('Name'), {
+      target: { value: 'John' },
+    });
+    expect(button).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText('Age'), { target: { value: '30' } });
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'john@mail.com' },
+    });
+    fireEvent.change(screen.getByLabelText('Gender'), {
+      target: { value: 'male' },
+    });
+    fireEvent.change(screen.getByLabelText('Country'), {
+      target: { value: 'Sweden' },
+    });
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'Aa1!' },
+    });
+    fireEvent.change(screen.getByLabelText('Confirm Password'), {
+      target: { value: 'Aa1!' },
+    });
+    fireEvent.click(screen.getByRole('checkbox'));
+
+    expect(button).toBeDisabled();
+  });
+
+  it('shows email format error when email is invalid', async () => {
+    render(<ReactHookForm />);
+
+    const emailInput = screen.getByLabelText('Email');
+
+    fireEvent.change(emailInput, { target: { value: 'wrong-email' } });
+
+    const button = screen.getByRole('button', { name: /submit/i });
+    button.removeAttribute('disabled');
+    fireEvent.click(button);
+
+    expect(await screen.findByText('Email must contain @')).toBeInTheDocument();
+  });
+
+  it('updates gender select correctly', () => {
+    render(<ReactHookForm />);
+
+    const genderSelect = screen.getByLabelText('Gender');
+
+    expect(genderSelect).toHaveValue('');
+
+    fireEvent.change(genderSelect, { target: { value: 'female' } });
+
+    expect(genderSelect).toHaveValue('female');
+  });
+
+  it('shows error when email has no dot in domain', async () => {
+    render(<ReactHookForm />);
+
+    const emailInput = screen.getByLabelText('Email');
+
+    fireEvent.change(emailInput, { target: { value: 'john@mail' } });
+
+    const button = screen.getByRole('button', { name: /submit/i });
+    button.removeAttribute('disabled');
+    fireEvent.click(button);
+
+    expect(await screen.findByText('Invalid email format')).toBeInTheDocument();
+  });
+
+  it('updates fileName when file is selected', async () => {
+    render(<ReactHookForm />);
+
+    const fileInput = screen.getByLabelText('Choose file') as HTMLInputElement;
+    const file = new File(['hello'], 'photo.jpg', { type: 'image/jpeg' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [file],
+    });
+
+    fireEvent.change(fileInput);
+
+    expect(await screen.findByText('Selected: photo.jpg')).toBeInTheDocument();
+  });
+
+  it('submit stays disabled when terms are unchecked', () => {
+    render(<ReactHookForm />);
+
+    const button = screen.getByRole('button', { name: /submit/i });
+    const checkbox = screen.getByRole('checkbox');
+
+    expect(button).toBeDisabled();
+
+    fireEvent.click(checkbox);
+    fireEvent.click(checkbox);
+
+    expect(button).toBeDisabled();
   });
 });
