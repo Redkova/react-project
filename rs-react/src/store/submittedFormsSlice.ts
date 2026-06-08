@@ -3,7 +3,9 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 export type SubmittedForm = {
   id: string;
   formType: 'uncontrolled' | 'rhf';
-  data: Record<string, unknown>;
+  data: Record<string, unknown> & {
+    fileBase64?: string | null;
+  };
   createdAt: string;
 };
 
