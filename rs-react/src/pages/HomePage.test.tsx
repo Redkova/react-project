@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { HomePage } from './HomePage';
 import { useSelector } from 'react-redux';
 
-// ---- Моки компонентов ----
 vi.mock('../components/Modal', () => ({
   Modal: ({
     isOpen,
@@ -46,7 +45,6 @@ vi.mock('../components/SubmittedCard/SubmittedCard', () => ({
   ),
 }));
 
-// ---- Мок Redux ----
 vi.mock('react-redux', () => ({
   useSelector: vi.fn(),
 }));
@@ -124,7 +122,7 @@ describe('HomePage', () => {
 
     const cards = screen.getAllByTestId('submitted-card');
     expect(cards).toHaveLength(2);
-    expect(cards[0]).toHaveTextContent('Uncontrolled'); // reverse order
+    expect(cards[0]).toHaveTextContent('Uncontrolled');
     expect(cards[1]).toHaveTextContent('RHF');
   });
 });

@@ -81,38 +81,6 @@ describe('ReactHookForm', () => {
     vi.mocked(fileToBase64).mockResolvedValue('base64-image');
   });
 
-  const fillValidForm = () => {
-    fireEvent.change(screen.getByLabelText('Name'), {
-      target: { value: 'John' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Age'), {
-      target: { value: '25' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Email'), {
-      target: { value: 'john@mail.com' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Gender'), {
-      target: { value: 'male' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Country'), {
-      target: { value: 'Sweden' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Aa1!' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Aa1!' },
-    });
-
-    fireEvent.click(screen.getByRole('checkbox'));
-  };
-
   it('renders all fields', () => {
     render(<ReactHookForm />);
 
