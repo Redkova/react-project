@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import type { UseFormRegister } from 'react-hook-form';
 import type { FormValues } from '../../validation/validationSchema';
-import { waitFor } from '@testing-library/react';
 
 vi.mock('react-redux', () => ({
   useDispatch: vi.fn(),
