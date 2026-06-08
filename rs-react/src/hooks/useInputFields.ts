@@ -45,5 +45,7 @@ export const useInputFields = () => {
     gender: useRef<HTMLSelectElement>(null),
   };
 
-  return { inputFields, refs };
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  return { inputFields, refs, fileRef };
 };
