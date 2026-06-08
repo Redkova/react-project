@@ -4,7 +4,7 @@ import countriesReducer from './countriesSlice';
 
 export const store = configureStore({
   reducer: {
-    submissions: submittedFormsReducer,
+    submittedForms: submittedFormsReducer,
     countries: countriesReducer,
   },
 });

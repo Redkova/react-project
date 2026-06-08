@@ -1,4 +1,6 @@
-import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { markAsOld } from '../../store/submittedFormsSlice';
 
 type Props = {
   item: {
@@ -6,12 +8,30 @@ type Props = {
     formType: string;
     data: Record<string, unknown>;
     createdAt: string;
+    isNew?: boolean;
   };
 };
 
 export const SubmittedCard = ({ item }: Props) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (item.isNew) {
+      const timer = setTimeout(() => {
+        dispatch(markAsOld(item.id));
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [item.isNew, item.id, dispatch]);
+
   return (
-    <div className='border rounded-lg p-4 shadow bg-white w-full max-w-md'>
+    <div
+      className={`
+        border rounded-lg p-4 shadow w-full max-w-md transition-all duration-500
+        ${item.isNew ? 'bg-green-100 border-green-400' : 'bg-white'}
+      `}
+    >
       <h3 className='text-lg font-semibold mb-3 capitalize'>
         {item.formType} form
       </h3>
@@ -21,7 +41,7 @@ export const SubmittedCard = ({ item }: Props) => {
             <img
               src={item.data.fileBase64 as string}
               alt='Uploaded'
-              className='w-10 h-15 object-cover rounded border'
+              className='w-15 h-20 object-cover rounded border'
             />
           </div>
         )}

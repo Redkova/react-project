@@ -7,6 +7,7 @@ export type SubmittedForm = {
     fileBase64?: string | null;
   };
   createdAt: string;
+  isNew?: boolean;
 };
 
 type SubmittedFormsState = {
@@ -22,10 +23,15 @@ const submittedFormsSlice = createSlice({
   initialState,
   reducers: {
     addSubmittedForm: (state, action: PayloadAction<SubmittedForm>) => {
-      state.items.push(action.payload);
+      state.items.push({ ...action.payload, isNew: true });
+    },
+
+    markAsOld: (state, action: PayloadAction<string>) => {
+      const item = state.items.find((i) => i.id === action.payload);
+      if (item) item.isNew = false;
     },
   },
 });
 
-export const { addSubmittedForm } = submittedFormsSlice.actions;
+export const { addSubmittedForm, markAsOld } = submittedFormsSlice.actions;
 export default submittedFormsSlice.reducer;

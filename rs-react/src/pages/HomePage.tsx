@@ -15,7 +15,7 @@ export const HomePage = () => {
   const openRHFModalButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const submissions = useSelector(
-    (state: RootState) => state.submissions.items
+    (state: RootState) => state.submittedForms.items
   );
 
   return (
@@ -42,7 +42,7 @@ export const HomePage = () => {
         </div>
 
         <div className='grid gap-4 w-full max-w-lg'>
-          {submissions.map((item) => (
+          {[...submissions].reverse().map((item) => (
             <SubmittedCard key={item.id} item={item} />
           ))}
         </div>
@@ -54,12 +54,16 @@ export const HomePage = () => {
           returnFocusRef={openUncontrolledModalButtonRef}
         >
           <UncontrolledForm
-            onSuccess={() => setIsUncontrolledModalOpen(false)}
+            onSuccess={() => {
+              setIsUncontrolledModalOpen(false);
+            }}
           />
         </Modal>
         <Modal
           isOpen={isReactHookFormModalOpen}
-          onClose={() => setIsReactHookFormModalOpen(false)}
+          onClose={() => {
+            setIsReactHookFormModalOpen(false);
+          }}
           title='User Registration'
           returnFocusRef={openRHFModalButtonRef}
         >
