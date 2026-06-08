@@ -50,7 +50,7 @@ export const Modal = ({
         aria-labelledby={title ? titleId : undefined}
         className='relative w-full max-w-lg rounded-lg bg-white p-6 shadow-lg'
       >
-        <div className='mb-4 flex items-center justify-between'>
+        <div className='mb-1 flex items-center justify-between'>
           {title && (
             <h2 id={titleId} className='text-lg font-semibold'>
               {title}

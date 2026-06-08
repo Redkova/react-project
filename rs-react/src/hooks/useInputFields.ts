@@ -24,11 +24,11 @@ type Refs = {
   name: React.RefObject<HTMLInputElement>;
   age: React.RefObject<HTMLInputElement>;
   email: React.RefObject<HTMLInputElement>;
-  terms: React.RefObject<HTMLInputElement>;
   gender: React.RefObject<HTMLSelectElement>;
   country: React.RefObject<HTMLInputElement>;
   password: React.RefObject<HTMLInputElement>;
   confirmPassword: React.RefObject<HTMLInputElement>;
+  terms: React.RefObject<HTMLInputElement>;
 };
 
 export const useInputFields = () => {
@@ -37,21 +37,21 @@ export const useInputFields = () => {
     { name: 'age', label: 'Age', type: 'number' },
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'gender', label: 'Gender', type: 'select' },
-    { name: 'terms', label: 'Accept Terms & Conditions', type: 'checkbox' },
     { name: 'country', label: 'Country', type: 'text' },
     { name: 'password', label: 'Password', type: 'password' },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password' },
+    { name: 'terms', label: 'Accept Terms & Conditions', type: 'checkbox' },
   ];
 
   const refs: Refs = {
-    name: useRef<HTMLInputElement>(null),
-    age: useRef<HTMLInputElement>(null),
-    email: useRef<HTMLInputElement>(null),
-    terms: useRef<HTMLInputElement>(null),
-    gender: useRef<HTMLSelectElement>(null),
-    country: useRef<HTMLInputElement>(null),
-    password: useRef<HTMLInputElement>(null),
-    confirmPassword: useRef<HTMLInputElement>(null),
+    name: useRef(null),
+    age: useRef(null),
+    email: useRef(null),
+    gender: useRef(null),
+    country: useRef(null),
+    password: useRef(null),
+    confirmPassword: useRef(null),
+    terms: useRef(null),
   };
 
   const fileRef = useRef<HTMLInputElement>(null);

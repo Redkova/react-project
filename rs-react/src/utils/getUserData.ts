@@ -6,24 +6,23 @@ type Refs = {
   email: React.RefObject<HTMLInputElement>;
   terms: React.RefObject<HTMLInputElement>;
   gender: React.RefObject<HTMLSelectElement>;
+  country: React.RefObject<HTMLInputElement>;
+  password: React.RefObject<HTMLInputElement>;
+  confirmPassword: React.RefObject<HTMLInputElement>;
 };
 
-export const getUserData = (refs: Refs, fields: InputField[]) => {
-  const result: Record<string, unknown> = {};
+export const getUserData = (refs: Refs, inputFields: InputField[]) => {
+  const data: Record<string, unknown> = {};
 
-  fields.forEach((field) => {
-    const ref = refs[field.name];
-    const element = ref.current;
-    if (!element) return;
-
-    if (field.type === 'checkbox' && element instanceof HTMLInputElement) {
-      result[field.name] = element.checked;
+  inputFields.forEach((field) => {
+    if (field.type === 'checkbox') {
+      data[field.name] = refs[field.name].current?.checked ?? false;
+    } else if (field.type === 'select') {
+      data[field.name] = refs[field.name].current?.value ?? '';
     } else {
-      result[field.name] = (
-        element as HTMLInputElement | HTMLSelectElement
-      ).value;
+      data[field.name] = refs[field.name].current?.value ?? '';
     }
   });
 
-  return result;
+  return data;
 };
