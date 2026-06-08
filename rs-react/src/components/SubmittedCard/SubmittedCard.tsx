@@ -21,7 +21,7 @@ export const SubmittedCard = ({ item }: Props) => {
             <img
               src={item.data.fileBase64 as string}
               alt='Uploaded'
-              className='w-[40px] h-[60px] object-cover rounded border'
+              className='w-10 h-15 object-cover rounded border'
             />
           </div>
         )}
@@ -47,8 +47,18 @@ export const SubmittedCard = ({ item }: Props) => {
           </div>
 
           <div className='grid grid-cols-2 gap-4 justify-items-center'>
+            <span className='font-medium'>Country:</span>
+            <span>{item.data.country as string}</span>
+          </div>
+
+          <div className='grid grid-cols-2 gap-4 justify-items-center'>
             <span className='font-medium'>Terms:</span>
             <span>{item.data.terms ? 'Accepted' : 'Not accepted'}</span>
+          </div>
+
+          <div className='grid grid-cols-2 gap-4 justify-items-center'>
+            <span className='font-medium'>Password:</span>
+            <span>{item.data.password as string}</span>
           </div>
         </div>
       </div>

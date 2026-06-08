@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 type TextField = {
-  name: 'name' | 'age' | 'email' | 'password' | 'confirmPassword';
+  name: 'name' | 'age' | 'email' | 'country' | 'password' | 'confirmPassword';
   label: string;
   type: 'text' | 'number' | 'email' | 'password';
 };
@@ -26,6 +26,7 @@ type Refs = {
   email: React.RefObject<HTMLInputElement>;
   terms: React.RefObject<HTMLInputElement>;
   gender: React.RefObject<HTMLSelectElement>;
+  country: React.RefObject<HTMLInputElement>;
   password: React.RefObject<HTMLInputElement>;
   confirmPassword: React.RefObject<HTMLInputElement>;
 };
@@ -37,6 +38,7 @@ export const useInputFields = () => {
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'gender', label: 'Gender', type: 'select' },
     { name: 'terms', label: 'Accept Terms & Conditions', type: 'checkbox' },
+    { name: 'country', label: 'Country', type: 'text' },
     { name: 'password', label: 'Password', type: 'password' },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password' },
   ];
@@ -47,6 +49,7 @@ export const useInputFields = () => {
     email: useRef<HTMLInputElement>(null),
     terms: useRef<HTMLInputElement>(null),
     gender: useRef<HTMLSelectElement>(null),
+    country: useRef<HTMLInputElement>(null),
     password: useRef<HTMLInputElement>(null),
     confirmPassword: useRef<HTMLInputElement>(null),
   };

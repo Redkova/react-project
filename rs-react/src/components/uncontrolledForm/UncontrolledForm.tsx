@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addSubmittedForm } from '../../store/submittedFormsSlice';
 import { useInputFields } from '../../hooks/useInputFields';
 import { getUserData } from '../../utils/getUserData';
@@ -6,6 +6,8 @@ import { fileToBase64 } from '../../utils/fileToBase64';
 import { useState } from 'react';
 import { PasswordFieldUncontrolled } from '../password/uncontrolledForm/PasswordFieldUncontrolled';
 import { ConfirmPasswordUncontrolled } from '../password/uncontrolledForm/ConfirmPasswordUncontrolled';
+import { Autocomplete } from '../autocomplete/Autocomplete';
+import { selectCountries } from '../../store/countriesSlice';
 
 type Props = {
   onSuccess?: () => void;
@@ -13,9 +15,11 @@ type Props = {
 
 export const UncontrolledForm = ({ onSuccess }: Props) => {
   const dispatch = useDispatch();
+  const countries = useSelector(selectCountries);
   const { inputFields, refs, fileRef } = useInputFields();
 
   const [fileName, setFileName] = useState<string | null>(null);
+  const [countryValue, setCountryValue] = useState('');
   const [strength, setStrength] = useState({
     hasUpper: false,
     hasLower: false,
@@ -76,6 +80,23 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
               label={field.label}
               inputRef={refs.confirmPassword}
               passwordRef={refs.password}
+            />
+          );
+        }
+
+        if (field.name === 'country') {
+          return (
+            <Autocomplete
+              key={field.name}
+              label={field.label}
+              value={countryValue}
+              onChange={(v) => {
+                setCountryValue(v);
+                if (refs.country.current) {
+                  refs.country.current.value = v;
+                }
+              }}
+              suggestions={countries}
             />
           );
         }

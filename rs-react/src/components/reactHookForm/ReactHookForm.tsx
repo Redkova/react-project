@@ -1,11 +1,13 @@
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addSubmittedForm } from '../../store/submittedFormsSlice';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import { useState } from 'react';
 import { getPasswordStrength } from '../../utils/getPasswordStrength';
 import { PasswordFieldRHF } from '../password/reactHookForm/PasswordFieldRHF';
 import { ConfirmPasswordRHF } from '../password/reactHookForm/ConfirmPasswordRHF';
+import { Autocomplete } from '../autocomplete/Autocomplete';
+import { selectCountries } from '../../store/countriesSlice';
 
 export type RHFValues = {
   name: string;
@@ -16,16 +18,19 @@ export type RHFValues = {
   file: FileList;
   password: string;
   confirmPassword: string;
+  country: string;
 };
 
 export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const dispatch = useDispatch();
-  const { register, handleSubmit, watch } = useForm<RHFValues>();
+  const countries = useSelector(selectCountries);
+
+  const { register, handleSubmit, watch, setValue } = useForm<RHFValues>();
   const [fileName, setFileName] = useState<string | null>(null);
 
   const passwordValue = watch('password') || '';
   const confirmValue = watch('confirmPassword') || '';
-  const strength = getPasswordStrength(passwordValue);
+  const countryValue = watch('country') || '';
 
   const onSubmit = async (formValues: RHFValues) => {
     let fileBase64: string | null = null;
@@ -100,6 +105,13 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         />
         <span>Accept Terms & Conditions</span>
       </div>
+
+      <Autocomplete
+        label='Country'
+        value={countryValue}
+        onChange={(v) => setValue('country', v)}
+        suggestions={countries}
+      />
 
       <PasswordFieldRHF register={register} passwordValue={passwordValue} />
 
