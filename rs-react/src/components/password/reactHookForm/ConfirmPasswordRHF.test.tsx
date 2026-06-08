@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { ConfirmPasswordRHF } from './ConfirmPasswordRHF';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import type { FormValues } from '../../../validation/validationSchema';
+import type { UseFormRegister } from 'react-hook-form';
 
 describe('ConfirmPasswordRHF', () => {
   const registerMock = vi.fn(
@@ -17,7 +18,7 @@ describe('ConfirmPasswordRHF', () => {
   it('calls register with correct field name', () => {
     render(
       <ConfirmPasswordRHF
-        register={registerMock as unknown as any}
+        register={registerMock as unknown as UseFormRegister<FormValues>}
         passwordValue=''
         confirmValue=''
       />
