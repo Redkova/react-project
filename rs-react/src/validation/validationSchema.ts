@@ -46,17 +46,14 @@ export const formSchema = z
         message: 'Image is required',
       })
 
-      // Проверка: выбран ли файл
       .refine((files) => files.length > 0, {
         message: 'Image is required',
       })
 
-      // Проверка формата
       .refine((files) => ['image/png', 'image/jpeg'].includes(files[0]?.type), {
         message: 'Only PNG or JPEG allowed',
       })
 
-      // Проверка размера
       .refine((files) => files[0]?.size <= 2 * 1024 * 1024, {
         message: 'Max file size is 2MB',
       }),

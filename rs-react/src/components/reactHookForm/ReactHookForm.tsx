@@ -41,7 +41,7 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
     dispatch(
       addSubmittedForm({
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        formType: 'rhf',
+        formType: 'RHF',
         data: {
           ...formValues,
           fileBase64,

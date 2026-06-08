@@ -2,6 +2,7 @@ import {
   type Strength,
   getPasswordStrength,
 } from '../../../utils/getPasswordStrength';
+import { useState } from 'react';
 
 type Props = {
   label: string;
@@ -16,13 +17,15 @@ export const PasswordFieldUncontrolled = ({
   strength,
   setStrength,
 }: Props) => {
+  const [value, setValue] = useState('');
+
   const isValid =
     strength.hasUpper &&
     strength.hasLower &&
     strength.hasNumber &&
     strength.hasSpecial;
 
-  const showRules = !isValid && (inputRef.current?.value?.length ?? 0) > 0;
+  const showRules = !isValid && value.length > 0;
 
   return (
     <div className='mb-4'>
@@ -35,7 +38,11 @@ export const PasswordFieldUncontrolled = ({
         id='password'
         type='password'
         className='border p-2 rounded w-full'
-        onChange={(e) => setStrength(getPasswordStrength(e.target.value))}
+        onChange={(e) => {
+          const v = e.target.value;
+          setValue(v);
+          setStrength(getPasswordStrength(v));
+        }}
       />
 
       {showRules && (

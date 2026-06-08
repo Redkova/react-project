@@ -1,10 +1,10 @@
 import { type Strength } from '../../../utils/getPasswordStrength';
 import { getPasswordStrength } from '../../../utils/getPasswordStrength';
 import { type UseFormRegister } from 'react-hook-form';
-import { type RHFValues } from '../../reactHookForm/ReactHookForm';
+import { type FormValues } from '../../../validation/validationSchema';
 
 type Props = {
-  register: UseFormRegister<RHFValues>;
+  register: UseFormRegister<FormValues>;
   passwordValue: string;
 };
 

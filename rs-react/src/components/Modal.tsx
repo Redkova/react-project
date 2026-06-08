@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef, useId } from 'react';
+import { type ReactNode, useRef, useId } from 'react';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 import { useInitialFocus } from '../hooks/useInitialFocus';
 import { useReturnFocus } from '../hooks/useReturnFocus';
