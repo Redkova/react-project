@@ -5,7 +5,6 @@ import ResultsSection from '../components/layout/resultSection/ResultSection';
 import { useMovieParams } from '../hooks/useMovieParams';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useSearchMoviesQuery } from '../api/api';
-import { useDispatch } from 'react-redux';
 import Spinner from '../components/spinner/Spinner';
 
 const DEFAULT_SEARCH_TERM = 'star';
@@ -107,7 +106,7 @@ function MovieContainer() {
           <SearchSection
             key={search || 'empty'}
             onSearch={handleSearch}
-            initialValue={inputValue}
+            value={inputValue}
             onChange={setInputValue}
             error={inputError}
           />

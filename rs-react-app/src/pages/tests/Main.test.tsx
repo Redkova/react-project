@@ -76,7 +76,7 @@ type ResultsSectionProps = ComponentProps<typeof ResultsSection>;
 vi.mock('../../components/layout/search/SearchSection', () => ({
   default: (props: SearchSectionProps) => (
     <div>
-      <input data-testid="search-input" defaultValue={props.initialValue} />
+      <input data-testid="search-input" defaultValue={props.value} />
       <div data-testid="search-error">{props.error}</div>
       <button
         data-testid="search-long"

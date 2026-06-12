@@ -5,25 +5,31 @@ import SearchSection from './SearchSection';
 
 describe('SearchSection', () => {
   it('renders input and button', () => {
-    render(<SearchSection initialValue="" onSearch={() => {}} />);
+    render(<SearchSection value="" onSearch={() => {}} onChange={() => {}} />);
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   it('renders initialValue in input', () => {
-    render(<SearchSection initialValue="Harry Potter" onSearch={() => {}} />);
+    render(
+      <SearchSection
+        value="Harry Potter"
+        onSearch={() => {}}
+        onChange={() => {}}
+      />
+    );
     expect(screen.getByRole('textbox')).toHaveValue('Harry Potter');
   });
 
   it('renders empty input when initialValue is empty', () => {
-    render(<SearchSection initialValue="" onSearch={() => {}} />);
+    render(<SearchSection value="" onSearch={() => {}} onChange={() => {}} />);
     expect(screen.getByRole('textbox')).toHaveValue('');
   });
 
   it('updates input value when user types', async () => {
     const user = userEvent.setup();
-    render(<SearchSection initialValue="" onSearch={() => {}} />);
+    render(<SearchSection value="" onSearch={() => {}} onChange={() => {}} />);
 
     const input = screen.getByRole('textbox');
     await user.type(input, 'Avatar');
@@ -33,7 +39,7 @@ describe('SearchSection', () => {
   it('calls onSearch with entered value after form submit', async () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();
-    render(<SearchSection initialValue="" onSearch={onSearch} />);
+    render(<SearchSection value="" onSearch={onSearch} onChange={() => {}} />);
     const input = screen.getByRole('textbox');
     await user.type(input, 'Matrix');
     await user.click(screen.getByRole('button', { name: 'Search' }));
@@ -44,7 +50,7 @@ describe('SearchSection', () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();
 
-    render(<SearchSection initialValue="" onSearch={onSearch} />);
+    render(<SearchSection value="" onSearch={onSearch} onChange={() => {}} />);
 
     const input = screen.getByRole('textbox');
     await user.type(input, 'Avatar{enter}');
@@ -54,18 +60,23 @@ describe('SearchSection', () => {
 
   it('updates input value when initialValue prop changes', () => {
     const { rerender } = render(
-      <SearchSection initialValue="Batman" onSearch={() => {}} />
+      <SearchSection value="Batman" onSearch={() => {}} onChange={() => {}} />
     );
 
     expect(screen.getByRole('textbox')).toHaveValue('Batman');
     rerender(
-      <SearchSection key="matrix" initialValue="Matrix" onSearch={() => {}} />
+      <SearchSection
+        key="matrix"
+        value="Matrix"
+        onSearch={() => {}}
+        onChange={() => {}}
+      />
     );
     expect(screen.getByRole('textbox')).toHaveValue('Matrix');
   });
 
   it('falls back to empty string when initialValue is null', () => {
-    render(<SearchSection initialValue="" onSearch={() => {}} />);
+    render(<SearchSection value="" onSearch={() => {}} onChange={() => {}} />);
     expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });
