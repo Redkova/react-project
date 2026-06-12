@@ -1,11 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { type FormValuesData } from '../types/forms';
 
 export type SubmittedForm = {
   id: string;
   formType: 'uncontrolled' | 'RHF';
-  data: Record<string, unknown> & {
-    fileBase64?: string | null;
-  };
+  data: FormValuesData;
   createdAt: string;
   isNew?: boolean;
 };

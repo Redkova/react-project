@@ -9,6 +9,7 @@ import { ConfirmPasswordUncontrolled } from '../password/uncontrolledForm/Confir
 import { Autocomplete } from '../autocomplete/Autocomplete';
 import { selectCountries } from '../../store/countriesSlice';
 import { formSchema } from '../../validation/validationSchema';
+import { type FormValuesData } from '../../types/forms';
 
 type Props = {
   onSuccess?: () => void;
@@ -45,8 +46,13 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
       const formatted = validation.error.flatten().fieldErrors;
       const map: Record<string, string> = {};
 
-      for (const key in formatted) {
-        if (formatted[key]) map[key] = formatted[key]![0];
+      for (const key of Object.keys(formatted) as Array<
+        keyof typeof formatted
+      >) {
+        const messages = formatted[key];
+        if (messages && messages.length > 0) {
+          map[key] = messages[0];
+        }
       }
 
       setErrors(map);
@@ -68,7 +74,7 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
         data: {
           ...userData,
           fileBase64,
-        },
+        } satisfies FormValuesData,
         createdAt: new Date().toISOString(),
       })
     );

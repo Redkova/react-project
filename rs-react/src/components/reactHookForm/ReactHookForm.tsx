@@ -8,7 +8,10 @@ import { ConfirmPasswordRHF } from '../password/reactHookForm/ConfirmPasswordRHF
 import { Autocomplete } from '../autocomplete/Autocomplete';
 import { selectCountries } from '../../store/countriesSlice';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formSchema, type FormValues } from '../../validation/validationSchema';
+import {
+  formSchema,
+  type FormValuesData,
+} from '../../validation/validationSchema';
 
 export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const dispatch = useDispatch();
@@ -20,7 +23,7 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
     watch,
     setValue,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
+  } = useForm<FormValuesData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
@@ -33,8 +36,8 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
 
   const fileRegister = register('file');
 
-  const onSubmit = async (formValues: FormValues) => {
-    const file = formValues.file?.[0];
+  const onSubmit = async (FormValuesData: FormValuesData) => {
+    const file = FormValuesData.file?.[0];
 
     const fileBase64 = await fileToBase64(file);
 
@@ -43,7 +46,7 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         formType: 'RHF',
         data: {
-          ...formValues,
+          ...FormValuesData,
           fileBase64,
         },
         createdAt: new Date().toISOString(),

@@ -3,11 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { PasswordFieldUncontrolled } from './PasswordFieldUncontrolled';
 import { getPasswordStrength } from '../../../utils/getPasswordStrength';
 import type { Strength } from '../../../utils/getPasswordStrength';
+import React from 'react';
 
 vi.mock('../../../utils/getPasswordStrength');
 
 describe('PasswordFieldUncontrolled', () => {
-  const inputRef = { current: null } as React.RefObject<HTMLInputElement>;
+  const inputRef = React.createRef<HTMLInputElement>();
   const setStrength = vi.fn();
 
   const weakStrength: Strength = {

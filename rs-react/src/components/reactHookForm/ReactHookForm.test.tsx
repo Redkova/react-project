@@ -4,7 +4,7 @@ import { ReactHookForm } from './ReactHookForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import type { UseFormRegister } from 'react-hook-form';
-import type { FormValues } from '../../validation/validationSchema';
+import type { FormValuesData } from '../../validation/validationSchema';
 
 vi.mock('react-redux', () => ({
   useDispatch: vi.fn(),
@@ -42,7 +42,7 @@ vi.mock('../password/reactHookForm/PasswordFieldRHF', () => ({
   PasswordFieldRHF: ({
     register,
   }: {
-    register: UseFormRegister<FormValues>;
+    register: UseFormRegister<FormValuesData>;
     passwordValue: string;
   }) => (
     <div>
@@ -56,7 +56,7 @@ vi.mock('../password/reactHookForm/ConfirmPasswordRHF', () => ({
   ConfirmPasswordRHF: ({
     register,
   }: {
-    register: UseFormRegister<FormValues>;
+    register: UseFormRegister<FormValuesData>;
     passwordValue: string;
     confirmValue: string;
   }) => (

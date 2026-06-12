@@ -11,7 +11,17 @@ describe('submittedFormsSlice', () => {
   const sampleForm: SubmittedForm = {
     id: '123',
     formType: 'RHF',
-    data: { name: 'John' },
+    data: {
+      name: 'John',
+      age: '25',
+      email: 'john@example.com',
+      gender: 'male',
+      terms: true,
+      country: 'Sweden',
+      password: '123456',
+      confirmPassword: '123456',
+      fileBase64: null,
+    },
     createdAt: '2024-01-01',
   };
 

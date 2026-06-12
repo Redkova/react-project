@@ -6,6 +6,8 @@ import { useInputFields } from '../../hooks/useInputFields';
 import { getUserData } from '../../utils/getUserData';
 import { fileToBase64 } from '../../utils/fileToBase64';
 import { formSchema } from '../../validation/validationSchema';
+import { ZodError } from 'zod';
+import { type FormValuesData } from '../../validation/validationSchema';
 
 vi.mock('react-redux', () => ({
   useDispatch: vi.fn(),
@@ -111,18 +113,20 @@ describe('UncontrolledForm', () => {
       },
     } as ReturnType<typeof formSchema.safeParse>);
 
-  const mockErrorValidation = () =>
+  const mockErrorValidation = () => {
+    const err = new ZodError([
+      {
+        code: 'custom',
+        message: 'Name required',
+        path: ['name'],
+      },
+    ]) as ZodError<FormValuesData>;
+
     vi.mocked(formSchema.safeParse).mockReturnValue({
       success: false,
-      error: {
-        flatten: () => ({
-          formErrors: [],
-          fieldErrors: {
-            name: ['Name required'],
-          },
-        }),
-      },
-    } as ReturnType<typeof formSchema.safeParse>);
+      error: err,
+    });
+  };
 
   it('renders form fields', () => {
     mockSuccessValidation();

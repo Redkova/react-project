@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 export const useInitialFocus = (
   isOpen: boolean,
-  ref: React.RefObject<HTMLElement>
+  ref: React.RefObject<HTMLElement | null>
 ) => {
   useEffect(() => {
     if (isOpen) {

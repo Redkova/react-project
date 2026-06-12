@@ -1,14 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ConfirmPasswordUncontrolled } from './ConfirmPasswordUncontrolled';
+import React from 'react';
 
 describe('ConfirmPasswordUncontrolled', () => {
-  let inputRef: React.RefObject<HTMLInputElement>;
-  let passwordRef: React.RefObject<HTMLInputElement>;
+  let inputRef: React.RefObject<HTMLInputElement | null>;
+  let passwordRef: React.RefObject<HTMLInputElement | null>;
 
   beforeEach(() => {
-    inputRef = { current: null };
-    passwordRef = { current: null };
+    inputRef = React.createRef<HTMLInputElement>();
+    passwordRef = React.createRef<HTMLInputElement>();
   });
 
   const setup = (passwordValue: string) => {

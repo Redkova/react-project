@@ -1,7 +1,7 @@
 import { type RefObject, useCallback } from 'react';
 
 export const useClickOutside = (
-  overlayRef: RefObject<HTMLDivElement>,
+  overlayRef: RefObject<HTMLDivElement | null>,
   onClose: () => void
 ) => {
   return useCallback(

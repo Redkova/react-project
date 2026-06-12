@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PasswordFieldRHF } from './PasswordFieldRHF';
 import { useForm } from 'react-hook-form';
-import type { FormValues } from '../../../validation/validationSchema';
+import type { FormValuesData } from '../../../validation/validationSchema';
 import { getPasswordStrength } from '../../../utils/getPasswordStrength';
 
 vi.mock('../../../utils/getPasswordStrength');
@@ -14,7 +14,7 @@ describe('PasswordFieldRHF', () => {
 
   function setup(passwordValue: string) {
     const Wrapper = () => {
-      const { register } = useForm<FormValues>();
+      const { register } = useForm<FormValuesData>();
 
       return (
         <PasswordFieldRHF register={register} passwordValue={passwordValue} />

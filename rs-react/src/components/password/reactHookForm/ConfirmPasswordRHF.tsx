@@ -1,8 +1,8 @@
 import { type UseFormRegister } from 'react-hook-form';
-import type { FormValues } from '../../../validation/validationSchema';
+import type { FormValuesData } from '../../../validation/validationSchema';
 
 type Props = {
-  register: UseFormRegister<FormValues>;
+  register: UseFormRegister<FormValuesData>;
   passwordValue: string;
   confirmValue: string;
 };

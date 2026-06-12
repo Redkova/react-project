@@ -7,7 +7,6 @@ function createFileList(files: File[]): FileList {
     0: files[0],
     length: files.length,
     item: (i: number) => files[i] ?? null,
-    ...files,
   } as unknown as FileList;
 }
 

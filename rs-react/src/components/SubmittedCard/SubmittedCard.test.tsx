@@ -36,6 +36,7 @@ describe('SubmittedCard', () => {
       country: 'Sweden',
       terms: true,
       password: 'Aa1!',
+      confirmPassword: 'Aa1!',
       fileBase64: undefined,
     },
   };

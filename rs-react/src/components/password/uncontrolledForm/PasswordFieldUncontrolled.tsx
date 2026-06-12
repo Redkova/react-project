@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 type Props = {
   label: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   strength: Strength;
   setStrength: (s: Strength) => void;
 };

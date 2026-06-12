@@ -1,12 +1,13 @@
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { markAsOld } from '../../store/submittedFormsSlice';
+import { type FormValuesData } from '../../types/forms';
 
 type Props = {
   item: {
     id: string;
     formType: string;
-    data: Record<string, unknown>;
+    data: FormValuesData;
     createdAt: string;
     isNew?: boolean;
   };

@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 type Props = {
   label: string;
-  inputRef: React.RefObject<HTMLInputElement>;
-  passwordRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  passwordRef: React.RefObject<HTMLInputElement | null>;
 };
 
 export const ConfirmPasswordUncontrolled = ({

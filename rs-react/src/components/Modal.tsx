@@ -10,7 +10,7 @@ type ModalProps = {
   onClose: () => void;
   title?: string;
   children: ReactNode;
-  returnFocusRef?: React.RefObject<HTMLElement>;
+  returnFocusRef?: React.RefObject<HTMLElement | null>;
 };
 
 export const Modal = ({
