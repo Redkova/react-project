@@ -4,14 +4,13 @@ import SearchSection from '../components/layout/search/SearchSection';
 import ResultsSection from '../components/layout/resultSection/ResultSection';
 import { useMovieParams } from '../hooks/useMovieParams';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { movieApi, useSearchMoviesQuery } from '../api/api';
+import { useSearchMoviesQuery } from '../api/api';
 import { useDispatch } from 'react-redux';
 import Spinner from '../components/spinner/Spinner';
 
 const DEFAULT_SEARCH_TERM = 'star';
 
 function MovieContainer() {
-  const dispatch = useDispatch();
   const [savedSearch, setSavedSearch] = useLocalStorage(
     'movie-search',
     DEFAULT_SEARCH_TERM
@@ -21,6 +20,7 @@ function MovieContainer() {
   const { search, page, details, updateParams } = useMovieParams();
   const effectiveSearch = search || savedSearch;
   const isDetailOpen = Boolean(details);
+  const [inputValue, setInputValue] = useState('');
 
   const { data, isLoading, isFetching, error, refetch } = useSearchMoviesQuery(
     { query: effectiveSearch, page },
@@ -33,6 +33,18 @@ function MovieContainer() {
 
   function handleSearch(value: string) {
     const trimmed = value.trim();
+
+    if (trimmed.length === 0) {
+      setInputError(null);
+      setSavedSearch(DEFAULT_SEARCH_TERM);
+
+      updateParams({
+        search: DEFAULT_SEARCH_TERM,
+        page: '1',
+        details: null,
+      });
+      return;
+    }
     if (trimmed.length < 3) {
       setInputError('Please enter at least 3 characters');
       return;
@@ -63,7 +75,6 @@ function MovieContainer() {
   }
 
   function refreshMovies() {
-    dispatch(movieApi.util.invalidateTags(['Movies']));
     refetch();
   }
 
@@ -87,7 +98,7 @@ function MovieContainer() {
               : 'w-full max-w-2xl relative'
           }
         >
-          {(isLoading || isFetching) && (
+          {isFetching && (
             <div className="fixed inset-0 flex justify-center items-center bg-black/40 backdrop-blur-sm z-[999] pointer-events-none">
               <Spinner />
             </div>
@@ -96,7 +107,8 @@ function MovieContainer() {
           <SearchSection
             key={search || 'empty'}
             onSearch={handleSearch}
-            initialValue={search}
+            initialValue={inputValue}
+            onChange={setInputValue}
             error={inputError}
           />
 

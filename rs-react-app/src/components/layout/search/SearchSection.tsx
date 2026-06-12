@@ -5,6 +5,7 @@ import Button from '../../ui/Button';
 interface Props {
   onSearch: (value: string) => void;
   initialValue: string;
+  onChange: (value: string) => void;
   error?: string | null;
 }
 

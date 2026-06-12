@@ -27,10 +27,7 @@ export const movieApi = createApi({
           page,
         },
       }),
-      providesTags: (result) =>
-        result?.Search
-          ? [{ type: 'Movies', id: 'LIST' }]
-          : [{ type: 'Movies', id: 'LIST' }],
+      providesTags: () => [{ type: 'Movies', id: 'LIST' }],
     }),
     getMovieDetails: builder.query<
       OmdbMovieDetails | OmdbErrorResponse,
