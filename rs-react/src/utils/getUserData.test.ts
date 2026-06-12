@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getUserData } from './getUserData';
-import type { InputField } from '../hooks/useInputFields';
+import { type InputField } from '../types/forms';
 
 describe('getUserData', () => {
   const createRefs = () => ({
@@ -19,7 +19,7 @@ describe('getUserData', () => {
     { name: 'age', label: 'Age', type: 'number' },
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'gender', label: 'Gender', type: 'select' },
-    { name: 'country', label: 'Country', type: 'text' },
+    { name: 'country', label: 'Country', type: 'autocomplete' },
     { name: 'password', label: 'Password', type: 'password' },
     { name: 'confirmPassword', label: 'Confirm Password', type: 'password' },
     { name: 'terms', label: 'Terms', type: 'checkbox' },

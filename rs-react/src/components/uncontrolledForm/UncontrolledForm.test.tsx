@@ -54,21 +54,6 @@ describe('UncontrolledForm', () => {
     vi.mocked(useSelector).mockReturnValue(['Sweden', 'Germany']);
 
     vi.mocked(useInputFields).mockReturnValue({
-      inputFields: [
-        { name: 'name', label: 'Name', type: 'text' },
-        { name: 'age', label: 'Age', type: 'text' },
-        { name: 'email', label: 'Email', type: 'text' },
-        { name: 'country', label: 'Country', type: 'text' },
-        { name: 'password', label: 'Password', type: 'password' },
-        {
-          name: 'confirmPassword',
-          label: 'Confirm Password',
-          type: 'password',
-        },
-        { name: 'gender', label: 'Gender', type: 'select' },
-        { name: 'terms', label: 'Terms', type: 'checkbox' },
-      ],
-
       refs: {
         name: { current: document.createElement('input') },
         age: { current: document.createElement('input') },
