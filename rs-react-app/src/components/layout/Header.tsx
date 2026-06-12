@@ -8,7 +8,7 @@ function Header() {
       <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
         <button
           onClick={toggleTheme}
-          className="w-12 h-6 rounded-full bg-(--card-bg) border relative transition cursor-pointer"
+          className="w-12 h-6 rounded-full bg-(--card-bg) border relative transition cursor-default md:cursor-pointer"
         >
           <span
             className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-(--button-bg) transition ${
@@ -21,8 +21,10 @@ function Header() {
           <Link
             to="/about"
             className=" 
-              hover:text-(--header-text-hover)
-              transition"
+              md:hover:text-(--header-text-hover)
+              transition
+              cursor-default
+              md:cursor-pointer"
           >
             About
           </Link>

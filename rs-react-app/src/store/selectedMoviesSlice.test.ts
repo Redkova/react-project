@@ -5,6 +5,10 @@ import reducer, {
 } from './selectedMoviesSlice';
 import type { OmdbMovie } from '../api/types';
 
+interface TestState {
+  movieItems: OmdbMovie[];
+}
+
 const movie1: OmdbMovie = {
   Title: 'Matrix',
   Year: '1999',
@@ -24,39 +28,38 @@ const movie2: OmdbMovie = {
 describe('selectedMoviesSlice', () => {
   it('should return initial state', () => {
     const state = reducer(undefined, { type: 'unknown' });
-    expect(state.selectedMovies).toEqual([]);
+    expect(state.movieItems).toEqual([]);
   });
 
   it('should add a movie when toggled and not selected', () => {
-    const state = reducer({ selectedMovies: [] }, toggleMovieSelection(movie1));
+    const initial: TestState = { movieItems: [] };
 
-    expect(state.selectedMovies).toEqual([movie1]);
+    const state = reducer(initial, toggleMovieSelection(movie1));
+
+    expect(state.movieItems).toEqual([movie1]);
   });
 
   it('should remove a movie when toggled and already selected', () => {
-    const state = reducer(
-      { selectedMovies: [movie1] },
-      toggleMovieSelection(movie1)
-    );
+    const initial: TestState = { movieItems: [movie1] };
 
-    expect(state.selectedMovies).toEqual([]);
+    const state = reducer(initial, toggleMovieSelection(movie1));
+
+    expect(state.movieItems).toEqual([]);
   });
 
   it('should unselect a specific movie', () => {
-    const state = reducer(
-      { selectedMovies: [movie1, movie2] },
-      unselectMovie('1')
-    );
+    const initial: TestState = { movieItems: [movie1, movie2] };
 
-    expect(state.selectedMovies).toEqual([movie2]);
+    const state = reducer(initial, unselectMovie('1'));
+
+    expect(state.movieItems).toEqual([movie2]);
   });
 
   it('should unselect all movies', () => {
-    const state = reducer(
-      { selectedMovies: [movie1, movie2] },
-      unselectAllMovies()
-    );
+    const initial: TestState = { movieItems: [movie1, movie2] };
 
-    expect(state.selectedMovies).toEqual([]);
+    const state = reducer(initial, unselectAllMovies());
+
+    expect(state.movieItems).toEqual([]);
   });
 });

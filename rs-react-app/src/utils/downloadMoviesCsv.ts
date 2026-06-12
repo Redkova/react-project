@@ -1,14 +1,20 @@
 import type { OmdbMovie, OmdbMovieDetails } from '../api/types';
-import { fetchMovieDetails } from '../api/omdb';
 import { generateMovieDetailsCsv } from './moviesDetailsCsv';
+
+import { store } from '../store/store';
+import { movieApi } from '../api/api';
 
 export async function downloadMoviesCsv(movies: OmdbMovie[]) {
   const details = await Promise.all(
-    movies.map((m) => fetchMovieDetails(m.imdbID))
+    movies.map((m) =>
+      store
+        .dispatch(movieApi.endpoints.getMovieDetails.initiate(m.imdbID))
+        .unwrap()
+    )
   );
 
   const validMovieDetails = details.filter(
-    (detail): detail is OmdbMovieDetails => detail !== null
+    (detail): detail is OmdbMovieDetails => detail.Response === 'True'
   );
 
   const moviesCsv = generateMovieDetailsCsv(validMovieDetails);

@@ -2,11 +2,11 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { OmdbMovie } from '../api/types';
 
 interface SelectedMoviesState {
-  selectedMovies: OmdbMovie[];
+  movieItems: OmdbMovie[];
 }
 
 const initialState: SelectedMoviesState = {
-  selectedMovies: [],
+  movieItems: [],
 };
 
 const selectedMoviesSlice = createSlice({
@@ -14,27 +14,27 @@ const selectedMoviesSlice = createSlice({
   initialState,
   reducers: {
     toggleMovieSelection(state, action: PayloadAction<OmdbMovie>) {
-      const isMovieSelected = state.selectedMovies.some(
+      const isMovieSelected = state.movieItems.some(
         (m) => m.imdbID === action.payload.imdbID
       );
 
       if (isMovieSelected) {
-        state.selectedMovies = state.selectedMovies.filter(
+        state.movieItems = state.movieItems.filter(
           (m) => m.imdbID !== action.payload.imdbID
         );
       } else {
-        state.selectedMovies.push(action.payload);
+        state.movieItems.push(action.payload);
       }
     },
 
     unselectMovie(state, action: PayloadAction<string>) {
-      state.selectedMovies = state.selectedMovies.filter(
+      state.movieItems = state.movieItems.filter(
         (m) => m.imdbID !== action.payload
       );
     },
 
     unselectAllMovies(state) {
-      state.selectedMovies = [];
+      state.movieItems = [];
     },
   },
 });

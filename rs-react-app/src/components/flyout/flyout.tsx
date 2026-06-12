@@ -2,15 +2,17 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { unselectAllMovies } from '../../store/selectedMoviesSlice';
 import Button from '../ui/Button';
 import { downloadMoviesCsv } from '../../utils/downloadMoviesCsv';
+import {
+  selectSelectedMovies,
+  selectSelectedMoviesCount,
+} from '../../store/selectedMoviesSelectors';
 
 export function SelectedMoviesFlyout() {
   const dispatch = useAppDispatch();
 
-  const selectedMovies = useAppSelector(
-    (state) => state.selectedMovies.selectedMovies
-  );
+  const selectedMovies = useAppSelector(selectSelectedMovies);
 
-  const selectedMoviesCount = selectedMovies.length;
+  const selectedMoviesCount = useAppSelector(selectSelectedMoviesCount);
 
   if (selectedMoviesCount === 0) return null;
 

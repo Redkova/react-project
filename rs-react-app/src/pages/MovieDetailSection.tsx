@@ -1,39 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Navigate } from 'react-router';
-import type { MovieDetailsResult } from '../api/types';
-import Spinner from '../components/movies/Spinner';
+import Spinner from '../components/spinner/Spinner';
 import { useMovieParams } from '../hooks/useMovieParams';
+import { useGetMovieDetailsQuery } from '../api/api';
+import { PosterImage } from '../components/ui/PosterImage';
+import MovieError from '../components/movies/MoviesError';
+import { mapMovieError } from '../utils/errorMapper';
+import Button from '../components/ui/Button';
+import { useDispatch } from 'react-redux';
+import { movieApi } from '../api/api';
+
+function hasError(value: unknown): boolean {
+  return value !== null && value !== undefined;
+}
 
 export function MovieDetailSection() {
+  const dispatch = useDispatch();
   const { page, details, updateParams } = useMovieParams();
-  const [movie, setMovie] = useState<MovieDetailsResult | null>(null);
-  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
-  const [imageError, setImageError] = useState(false);
 
-  useEffect(() => {
-    if (!details) return;
+  const {
+    data: movie,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGetMovieDetailsQuery(details!, {
+    skip: !details,
+  });
 
-    async function load() {
-      const url = `https://www.omdbapi.com/?apikey=88101ce2&i=${details}&plot=full`;
-      const res = await fetch(url);
-      const data: MovieDetailsResult = await res.json();
-      setMovie(data);
-      setLoading(false);
-    }
-
-    load();
-  }, [details]);
+  function refreshDetails() {
+    dispatch(movieApi.util.invalidateTags([{ type: 'MovieDetails' }]));
+    refetch();
+  }
 
   if (!details || !/^tt\d+$/.test(details)) {
-    return <p className="text-red-500 text-center">Movie not found</p>;
+    return <MovieError message="Movie not found" />;
   }
+
   const pageNum = Number(page);
   if (Number.isNaN(pageNum) || pageNum < 1) {
     return <Navigate to="/404" replace />;
   }
 
-  if (loading) {
+  if (isFetching && !movie) {
     return (
       <div className="flex justify-center py-10">
         <Spinner />
@@ -41,42 +51,39 @@ export function MovieDetailSection() {
     );
   }
 
+  if (isError && hasError(error)) {
+    return <MovieError message={mapMovieError(error)} />;
+  }
+
   if (!movie || movie.Response === 'False') {
-    return <p className="text-red-500 text-center">Movie not found</p>;
+    return <MovieError message="Movie not found" />;
   }
 
   const isLong = movie.Plot.length > 700;
   const shortPlot =
     movie.Plot.length > 700 ? movie.Plot.slice(0, 700) + '...' : movie.Plot;
 
-  const hasPoster =
-    movie.Poster && movie.Poster !== 'N/A' && movie.Poster.trim() !== '';
-
-  const showPoster = hasPoster && !imageError;
-
   return (
     <div className="relative w-full max-w-lg bg-(--movie-card-bg) py-6 px-4 rounded-xl shadow-(--card-border-shadow)">
       <button
         onClick={() => updateParams({ details: null })}
-        className="absolute  top-2 right-3 text-gray-500 hover:text-red-500 text-2xl leading-none cursor-pointer"
+        className="absolute  top-2 right-3 text-gray-500 text-2xl leading-none cursor-default md:cursor-pointer md:hover:text-red-500"
       >
         ✕
       </button>
+
+      {isFetching && (
+        <div className="absolute inset-0 flex justify-center items-center bg-black/40 backdrop-blur-sm z-[999] pointer-events-none rounded-xl">
+          <Spinner />
+        </div>
+      )}
+
       <div className="flex gap-4">
-        {showPoster ? (
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            className="w-28 h-40 object-cover rounded-md shadow"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="w-28 h-40 rounded-md bg-linear-to-br from-gray-100 to-gray-300 border border-gray-200 flex flex-col items-center justify-center shadow-sm">
-            <span className="text-[10px] text-gray-600 text-center leading-tight px-1">
-              No image
-            </span>
-          </div>
-        )}
+        <PosterImage
+          src={movie.Poster}
+          alt={movie.Title}
+          className="w-28 h-40"
+        />
 
         <div className="flex flex-col justify-start gap-1">
           <h2 className="text-2xl font-bold">{movie.Title}</h2>
@@ -111,12 +118,20 @@ export function MovieDetailSection() {
         {isLong && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="ml-2 text-(--link-text-color) hover:underline"
+            className="ml-2 text-(--link-text-color) md:hover:underline"
           >
             {expanded ? 'Show less' : 'Show more'}
           </button>
         )}
       </p>
+      <div className="flex justify-center items-center mt-4">
+        <Button
+          onClick={refreshDetails}
+          className="bg-(--button-bg) text-white rounded-lg transition md:hover:bg-(--btn-hover-bg)"
+        >
+          Refresh
+        </Button>
+      </div>
     </div>
   );
 }

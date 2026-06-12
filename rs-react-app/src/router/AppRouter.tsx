@@ -4,7 +4,7 @@ import { MovieDetailSection } from '../pages/MovieDetailSection';
 import { AboutPage } from '../pages/AboutPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { PagePath } from './paths';
-import MovieContainer from '../components/movies/MovieContainer';
+import MovieContainer from '../pages/Main';
 
 export function AppRouter() {
   return (

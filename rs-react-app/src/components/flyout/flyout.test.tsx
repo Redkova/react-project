@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import { SelectedMoviesFlyout } from './flyout';
-import { type OmdbMovie } from '../../api/types';
+import type { OmdbMovie } from '../../api/types';
 
 const mockDispatch = vi.fn();
 
@@ -25,6 +25,7 @@ vi.mock('../ui/Button', () => ({
   }: {
     children: React.ReactNode;
     onClick: () => void;
+    className?: string;
   }) => <button onClick={onClick}>{children}</button>,
 }));
 
@@ -51,7 +52,7 @@ describe('SelectedMoviesFlyout', () => {
   });
 
   it('returns null when no movies selected', () => {
-    vi.mocked(useAppSelector).mockReturnValue([]);
+    vi.mocked(useAppSelector).mockReturnValueOnce([]).mockReturnValueOnce(0);
 
     const { container } = render(<SelectedMoviesFlyout />);
 
@@ -59,7 +60,9 @@ describe('SelectedMoviesFlyout', () => {
   });
 
   it('renders flyout when movies are selected', () => {
-    vi.mocked(useAppSelector).mockReturnValue(movies);
+    vi.mocked(useAppSelector)
+      .mockReturnValueOnce(movies)
+      .mockReturnValueOnce(2);
 
     render(<SelectedMoviesFlyout />);
 
@@ -68,7 +71,9 @@ describe('SelectedMoviesFlyout', () => {
   });
 
   it('dispatches unselectAllMovies when clicking Unselect all', () => {
-    vi.mocked(useAppSelector).mockReturnValue(movies);
+    vi.mocked(useAppSelector)
+      .mockReturnValueOnce(movies)
+      .mockReturnValueOnce(2);
 
     render(<SelectedMoviesFlyout />);
 
@@ -79,7 +84,9 @@ describe('SelectedMoviesFlyout', () => {
   });
 
   it('calls downloadMoviesCsv with selected movies', () => {
-    vi.mocked(useAppSelector).mockReturnValue(movies);
+    vi.mocked(useAppSelector)
+      .mockReturnValueOnce(movies)
+      .mockReturnValueOnce(2);
 
     render(<SelectedMoviesFlyout />);
 
