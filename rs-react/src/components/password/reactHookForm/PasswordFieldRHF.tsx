@@ -2,14 +2,15 @@ import { type Strength } from '../../../utils/getPasswordStrength';
 import { getPasswordStrength } from '../../../utils/getPasswordStrength';
 import { type UseFormRegister } from 'react-hook-form';
 import { type FormValuesData } from '../../../validation/validationSchema';
+import { PasswordRules } from '../PasswordRules';
 
 type Props = {
   register: UseFormRegister<FormValuesData>;
-  passwordValue: string;
+  passwordValue?: string;
 };
 
-export const PasswordFieldRHF = ({ register, passwordValue }: Props) => {
-  const strength: Strength = getPasswordStrength(passwordValue);
+export const PasswordFieldRHF = ({ register, passwordValue = '' }: Props) => {
+  const strength: Strength = getPasswordStrength(passwordValue || '');
 
   const isValid =
     strength.hasUpper &&
@@ -28,24 +29,7 @@ export const PasswordFieldRHF = ({ register, passwordValue }: Props) => {
         className='border p-2 rounded w-full mb-2'
       />
 
-      {showRules && (
-        <div className='text-sm mt-1 space-y-1 mb-4'>
-          <p className={strength.hasUpper ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 uppercase letter
-          </p>
-          <p className={strength.hasLower ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 lowercase letter
-          </p>
-          <p className={strength.hasNumber ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 number
-          </p>
-          <p
-            className={strength.hasSpecial ? 'text-green-600' : 'text-red-600'}
-          >
-            • Password must contain at least 1 special character
-          </p>
-        </div>
-      )}
+      <PasswordRules strength={strength} showRules={showRules} />
     </div>
   );
 };

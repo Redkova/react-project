@@ -3,6 +3,7 @@ import {
   getPasswordStrength,
 } from '../../../utils/getPasswordStrength';
 import { useState } from 'react';
+import { PasswordRules } from '../PasswordRules';
 
 type Props = {
   label: string;
@@ -44,25 +45,7 @@ export const PasswordFieldUncontrolled = ({
           setStrength(getPasswordStrength(v));
         }}
       />
-
-      {showRules && (
-        <div className='text-sm mt-1 space-y-1'>
-          <p className={strength.hasUpper ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 uppercase letter
-          </p>
-          <p className={strength.hasLower ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 lowercase letter
-          </p>
-          <p className={strength.hasNumber ? 'text-green-600' : 'text-red-600'}>
-            • Password must contain at least 1 number
-          </p>
-          <p
-            className={strength.hasSpecial ? 'text-green-600' : 'text-red-600'}
-          >
-            • Password must contain at least 1 special character
-          </p>
-        </div>
-      )}
+      <PasswordRules strength={strength} showRules={showRules} />
     </div>
   );
 };
