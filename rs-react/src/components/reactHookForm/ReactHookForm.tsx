@@ -36,17 +36,19 @@ export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {
 
   const fileRegister = register('file');
 
-  const onSubmit = async (FormValuesData: FormValuesData) => {
-    const file = FormValuesData.file?.[0];
+  const onSubmit = async (formValues: FormValuesData) => {
+    const file = formValues.file?.[0] ?? null;
 
     const fileBase64 = await fileToBase64(file);
+
+    const { file: _removed, ...rest } = formValues;
 
     dispatch(
       addSubmittedForm({
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         formType: 'RHF',
         data: {
-          ...FormValuesData,
+          ...rest,
           fileBase64,
         },
         createdAt: new Date().toISOString(),
