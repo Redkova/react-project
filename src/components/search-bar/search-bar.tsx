@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import styles from './search-bar.module.css';
 
 type SearchBarProps = {
@@ -6,6 +7,12 @@ type SearchBarProps = {
 };
 
 export const SearchBar = ({ value, onChange }: SearchBarProps) => {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.value);
+    },
+    [onChange]
+  );
   return (
     <div className={styles.container}>
       <label htmlFor="search" className={styles.label}>
@@ -15,7 +22,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
         id="search"
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
         placeholder="Type to search..."
         className={styles.input}
       />
