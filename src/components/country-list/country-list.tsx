@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import type { Country } from '../../types';
 import { CountryCard } from '../country-card/country-card';
 import { getPopulationForYear, createYearDataMap } from '../../utils/data-transformers';
@@ -15,7 +15,7 @@ type CountryListProps = {
   onYearChange: (year: number) => void;
 };
 
-export const CountryList = ({
+export const CountryList = memo(function CountryList({
   countries,
   searchQuery,
   selectedColumns,
@@ -23,7 +23,7 @@ export const CountryList = ({
   selectedYear,
   sortField,
   sortOrder,
-}: CountryListProps) => {
+}: CountryListProps) {
   const filteredCountries = useMemo(() => {
     return countries
       .filter((c) => {
@@ -35,19 +35,22 @@ export const CountryList = ({
         if (sortField === 'name') {
           return sortOrder === 'asc' ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id);
         }
+
         const mapA = createYearDataMap(a.data);
         const mapB = createYearDataMap(b.data);
+
         const popA = getPopulationForYear(mapA, selectedYear) || 0;
         const popB = getPopulationForYear(mapB, selectedYear) || 0;
+
         return sortOrder === 'asc' ? popA - popB : popB - popA;
       });
   }, [countries, searchQuery, selectedRegion, selectedYear, sortField, sortOrder]);
 
   return (
     <div className={styles.countryList}>
-      {filteredCountries.map((country, index) => (
+      {filteredCountries.map((country) => (
         <CountryCard
-          key={index}
+          key={country.id}
           country={country}
           selectedYear={selectedYear}
           selectedColumns={selectedColumns}
@@ -55,4 +58,4 @@ export const CountryList = ({
       ))}
     </div>
   );
-};
+});

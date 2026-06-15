@@ -1,5 +1,5 @@
 import styles from './column-modal.module.css';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 type ColumnModalProps = {
   isOpen: boolean;
@@ -9,13 +9,13 @@ type ColumnModalProps = {
   onClose: () => void;
 };
 
-export const ColumnModal = ({
+export const ColumnModal = memo(function ColumnModal({
   isOpen,
   availableColumns,
   selectedColumns,
   onToggle,
   onClose,
-}: ColumnModalProps) => {
+}: ColumnModalProps) {
   const handleToggle = useCallback(
     (column: string) => {
       onToggle(column);
@@ -58,4 +58,4 @@ export const ColumnModal = ({
       </div>
     </div>
   );
-};
+});
