@@ -1,24 +1,17 @@
 import { type Strength } from '../../../utils/getPasswordStrength';
 import { getPasswordStrength } from '../../../utils/getPasswordStrength';
-import { type UseFormRegister } from 'react-hook-form';
-import { type FormValuesData } from '../../../validation/validationSchema';
 import { PasswordRules } from '../PasswordRules';
+import { usePasswordValidation } from '../../../hooks/usePasswordValidation';
+import { type FieldRendererProps } from '../../reactHookForm/FormFieldRenderRHF';
 
-type Props = {
-  register: UseFormRegister<FormValuesData>;
-  passwordValue?: string;
-};
-
-export const PasswordFieldRHF = ({ register, passwordValue = '' }: Props) => {
-  const strength: Strength = getPasswordStrength(passwordValue || '');
-
-  const isValid =
-    strength.hasUpper &&
-    strength.hasLower &&
-    strength.hasNumber &&
-    strength.hasSpecial;
-
-  const showRules = !isValid && passwordValue.length > 0;
+export const PasswordFieldRHF = ({
+  register,
+  watch,
+  errors,
+}: FieldRendererProps) => {
+  const passwordValue = watch('password') ?? '';
+  const strength: Strength = getPasswordStrength(passwordValue);
+  const { showRules } = usePasswordValidation(strength, passwordValue);
 
   return (
     <div className='mb-4'>
@@ -30,6 +23,9 @@ export const PasswordFieldRHF = ({ register, passwordValue = '' }: Props) => {
       />
 
       <PasswordRules strength={strength} showRules={showRules} />
+      {errors.password && (
+        <p className='text-red-600 text-sm'>{errors.password.message}</p>
+      )}
     </div>
   );
 };

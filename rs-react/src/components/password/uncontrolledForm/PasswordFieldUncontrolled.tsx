@@ -4,6 +4,7 @@ import {
 } from '../../../utils/getPasswordStrength';
 import { useState } from 'react';
 import { PasswordRules } from '../PasswordRules';
+import { usePasswordValidation } from '../../../hooks/usePasswordValidation';
 
 type Props = {
   label: string;
@@ -20,13 +21,7 @@ export const PasswordFieldUncontrolled = ({
 }: Props) => {
   const [value, setValue] = useState('');
 
-  const isValid =
-    strength.hasUpper &&
-    strength.hasLower &&
-    strength.hasNumber &&
-    strength.hasSpecial;
-
-  const showRules = !isValid && value.length > 0;
+  const { showRules } = usePasswordValidation(strength, value);
 
   return (
     <div className='mb-4'>

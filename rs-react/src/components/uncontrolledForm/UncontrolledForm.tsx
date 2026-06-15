@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { selectCountries } from '../../store/countriesSlice';
 import { formSchema } from '../../validation/validationSchema';
 import { type FormValuesData } from '../../types/forms';
-import { formFields } from '../forms/formFields';
+import { formFields } from '../../constants/constants';
 import { FormFieldRenderer } from './FormFieldRender';
 
 type Props = {

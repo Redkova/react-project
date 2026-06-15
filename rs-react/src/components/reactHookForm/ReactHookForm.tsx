@@ -9,7 +9,7 @@ import {
   formSchema,
   type FormValuesData,
 } from '../../validation/validationSchema';
-import { formFields } from '../forms/formFields';
+import { formFields } from '../../constants/constants';
 import { FormFieldRendererRHF } from './FormFieldRenderRHF';
 
 export const ReactHookForm = ({ onSuccess }: { onSuccess?: () => void }) => {

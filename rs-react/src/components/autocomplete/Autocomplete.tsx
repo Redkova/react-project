@@ -16,8 +16,8 @@ export const Autocomplete = ({
   const [open, setOpen] = useState(false);
 
   const filtered = value.length
-    ? suggestions.filter((country) =>
-        country.toLowerCase().includes(value.toLowerCase())
+    ? suggestions.filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
       )
     : [];
 

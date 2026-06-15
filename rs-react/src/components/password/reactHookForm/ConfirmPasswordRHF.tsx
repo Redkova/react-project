@@ -1,21 +1,32 @@
-import { type UseFormRegister } from 'react-hook-form';
-import type { FormValuesData } from '../../../validation/validationSchema';
+import { type FieldRendererProps } from '../../reactHookForm/FormFieldRenderRHF';
 
-type Props = {
-  register: UseFormRegister<FormValuesData>;
-  passwordValue: string;
-  confirmValue: string;
-};
+export const ConfirmPasswordRHF = ({
+  register,
+  watch,
+  errors,
+}: FieldRendererProps) => {
+  const passwordValue = watch('password') ?? '';
+  const confirmValue = watch('confirmPassword') ?? '';
 
-export const ConfirmPasswordRHF = ({ register }: Props) => {
+  const match = confirmValue.length > 0 && confirmValue === passwordValue;
+
   return (
     <div className='mb-4'>
       <label>Confirm Password</label>
+
       <input
         type='password'
         {...register('confirmPassword')}
         className='border p-2 rounded w-full'
       />
+
+      {!match && confirmValue.length > 0 && (
+        <p className='text-red-600 text-sm'>Passwords do not match</p>
+      )}
+
+      {errors.confirmPassword && (
+        <p className='text-red-600 text-sm'>{errors.confirmPassword.message}</p>
+      )}
     </div>
   );
 };

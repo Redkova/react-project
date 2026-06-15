@@ -1,4 +1,4 @@
-import { type InputField } from '../../types/forms';
+import { type InputField } from '../types/forms';
 
 export const formFields: InputField[] = [
   { name: 'name', label: 'Name', type: 'text' },
