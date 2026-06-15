@@ -8,7 +8,7 @@ import { selectCountries } from '../../store/countriesSlice';
 import { formSchema } from '../../validation/validationSchema';
 import { type FormValuesData } from '../../types/forms';
 import { formFields } from '../../constants/constants';
-import { FormFieldRenderer } from './FormFieldRender';
+import { FormFieldRendererUncontrolled } from './FormFieldRenderUncontrolled';
 
 type Props = {
   onSuccess?: () => void;
@@ -77,7 +77,7 @@ export const UncontrolledForm = ({ onSuccess }: Props) => {
   return (
     <form onSubmit={handleSubmit} className='max-h-[80vh] overflow-y-auto p-4'>
       {formFields.map((field) => (
-        <FormFieldRenderer
+        <FormFieldRendererUncontrolled
           key={field.name}
           field={field}
           refs={refs}
