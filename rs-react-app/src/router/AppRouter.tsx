@@ -1,8 +1,8 @@
 import { Routes, Route, Outlet, Navigate } from 'react-router';
 import MainLayout from '../components/layout/Layout';
-import { MovieDetailSection } from '../pages/MovieDetailSection';
-import { AboutPage } from '../pages/AboutPage';
-import { NotFoundPage } from '../pages/NotFoundPage';
+import { MovieDetailSection } from '../components/movies/MovieDetailSection';
+import { AboutPage } from '../app/[locale]/about/page';
+import { NotFoundPage } from '../app/[locale]/(movies)/not-found';
 import { PagePath } from './paths';
 import MovieContainer from '../pages/Main';
 

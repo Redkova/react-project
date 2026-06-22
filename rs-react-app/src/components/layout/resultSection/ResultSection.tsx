@@ -1,44 +1,54 @@
-import { useState } from 'react';
-import type { OmdbMovie } from '../../../api/types';
-import MovieList from '../../movies/MoviesList';
-import MoviesPagination from '../../pagination/MoviesPagination';
-import MovieError from '../../movies/MoviesError';
-import Spinner from '../../spinner/Spinner';
-import Button from '../../ui/Button';
-import { mapMovieError } from '../../../utils/errorMapper';
+'use client';
 
-interface Props {
-  movies: OmdbMovie[];
-  loading: boolean;
-  fetching: boolean;
-  error: unknown;
-  onNext: () => void;
-  onPrev: () => void;
-  page: number;
-  isFirstPage: boolean;
-  isLastPage: boolean;
-  onRefresh: () => void;
-}
+import { useState, useEffect, ReactElement } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchMoviesQuery } from '@/api/api';
+import MovieList from '@/components/movies/MoviesList';
+import MoviesPagination from '@/components/pagination/MoviesPagination';
+import MovieError from '@/components/movies/MoviesError';
+import Spinner from '@/components/spinner/Spinner';
+import Button from '@/components/ui/Button';
+import { mapMovieError } from '@/utils/errorMapper';
 
-function hasError(value: unknown): boolean {
-  return value !== null && value !== undefined;
-}
+function ResultsSection(): ReactElement {
+  const router = useRouter();
+  const params = useSearchParams();
 
-function ResultsSection({
-  movies,
-  loading,
-  error,
-  onNext,
-  onPrev,
-  page,
-  isFirstPage,
-  isLastPage,
-  onRefresh,
-}: Props) {
+  const DEFAULT_SEARCH_TERM = 'star';
+  const search = params?.get('search') ?? DEFAULT_SEARCH_TERM;
+  const pageParam = params?.get('page') ?? '1';
+  const page = Number(pageParam);
+
+  useEffect(() => {
+    if (!params?.get('search')) {
+      router.replace(`?search=${DEFAULT_SEARCH_TERM}&page=1`);
+    }
+  }, [params, router]);
+
   const [forceError, setForceError] = useState(false);
+  const { data, isLoading, isFetching, error, refetch } = useSearchMoviesQuery(
+    { query: search, page },
+    { skip: !search }
+  );
 
   if (forceError) {
     throw new Error('Simulated render error');
+  }
+
+  const movies = data?.Search ?? [];
+  const isFirstPage = page === 1;
+  const isLastPage = movies.length < 10;
+
+  function goToPage(newPage: number): void {
+    router.push(`?search=${search}&page=${newPage}`);
+  }
+
+  function nextPage(): void {
+    goToPage(page + 1);
+  }
+
+  function prevPage(): void {
+    goToPage(Math.max(1, page - 1));
   }
 
   return (
@@ -53,23 +63,23 @@ function ResultsSection({
           </span>
         </div>
 
-        {loading && <Spinner />}
+        {isLoading && <Spinner />}
 
-        {hasError(error) ? <MovieError message={mapMovieError(error)} /> : null}
+        {error && <MovieError message={mapMovieError(error)} />}
 
-        {!loading && !error && movies.length === 0 && (
+        {!isLoading && !error && movies.length === 0 && (
           <p className="mt-4 text-sm text-(--error-text) bg-(--error-text-bg) border border-red-300 px-4 py-2 rounded-md text-center">
             No results found.
           </p>
         )}
 
-        {!loading && !error && movies.length > 0 && (
+        {!isLoading && !error && movies.length > 0 && (
           <>
             <MovieList key={page} movies={movies} />
             <MoviesPagination
               page={page}
-              onNext={onNext}
-              onPrev={onPrev}
+              onNext={nextPage}
+              onPrev={prevPage}
               isFirstPage={isFirstPage}
               isLastPage={isLastPage}
             />
@@ -79,7 +89,7 @@ function ResultsSection({
 
       <div className="flex flex-col justify-center items-center gap-3 mt-4">
         <Button
-          onClick={onRefresh}
+          onClick={() => refetch()}
           className="bg-(--button-bg) text-white rounded-lg md:hover:bg-(--btn-hover-bg) transition"
         >
           Refresh

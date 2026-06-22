@@ -5,12 +5,12 @@ import type {
   OmdbErrorResponse,
 } from './types';
 
-const cacheTTL = Number(import.meta.env.VITE_CACHE_TTL ?? 60);
+const cacheTTL = Number(process.env.NEXT_PUBLIC_CACHE_TTL ?? 60);
 
 export const movieApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_OMDB_API_URL,
+    baseUrl: process.env.NEXT_PUBLIC_OMDB_API_URL,
   }),
   keepUnusedDataFor: cacheTTL,
   tagTypes: ['Movies', 'MovieDetails'],
@@ -22,7 +22,7 @@ export const movieApi = createApi({
       query: ({ query, page }) => ({
         url: '',
         params: {
-          apikey: import.meta.env.VITE_OMDB_API_KEY,
+          apikey: process.env.NEXT_PUBLIC_OMDB_API_KEY,
           s: query,
           page,
         },
@@ -36,7 +36,7 @@ export const movieApi = createApi({
       query: (id) => ({
         url: '',
         params: {
-          apikey: import.meta.env.VITE_OMDB_API_KEY,
+          apikey: process.env.NEXT_PUBLIC_OMDB_API_KEY,
           i: id,
           plot: 'short',
         },
