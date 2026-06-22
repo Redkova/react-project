@@ -19,5 +19,30 @@
   "NotFound": {
     "title": "Oops! Page not found",
     "back": "Back to main"
+  },
+  "Movie": {
+    "year": "Year",
+    "genre": "Genre",
+    "country": "Country",
+    "actors": "Actors",
+    "rating": "IMDb",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "refresh": "Refresh"
+  },
+  "Pagination": {
+    "next": "Next",
+    "prev": "Previous"
+  },
+  "Errors": {
+    "Unknown": "Unknown error occurred",
+    "Network": "Network error. Please check your connection.",
+    "InvalidData": "Server returned invalid data",
+    "TooManyResults": "Too many results. Try a more specific title.",
+    "MovieNotFound": "Movie not found.",
+    "InvalidApiKey": "Invalid API key.",
+    "LimitReached": "Request limit reached. Try again later.",
+    "ServerError": "Server error. Please try again later.",
+    "SomethingWrong": "Something went wrong. Please try again."
   }
 }

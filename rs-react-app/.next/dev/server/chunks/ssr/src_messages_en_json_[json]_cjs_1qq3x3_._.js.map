@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":["file:///Users/Sandrik/react-project/rs-react-app/src/messages/en.json.%5Bjson%5D.cjs/turbopack%3A/src/messages/en.json"],"sourcesContent":["{\"Header\":{\"about\":\"About\",\"title\":\"Find Your Movie\"},\"Footer\":{\"copyright\":\"© 2026 Alexandra Redkova\"},\"Search\":{\"placeholder\":\"Search movies...\",\"button\":\"Search\",\"errorMinLength\":\"Please enter at least 3 characters\"},\"About\":{\"developed\":\"This application was developed by\",\"description\":\"The project demonstrates React fundamentals, routing, API integration, testing, and modern UI/UX practices.\",\"back\":\"Back to main\"},\"NotFound\":{\"title\":\"Oops! Page not found\",\"back\":\"Back to main\"}}"],"names":[],"mappings":""}}]
-}

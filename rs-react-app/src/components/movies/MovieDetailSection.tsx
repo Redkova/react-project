@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { ReactElement, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Spinner from '@/components/spinner/Spinner';
@@ -11,6 +12,7 @@ import { mapMovieError } from '@/utils/errorMapper';
 import Button from '@/components/ui/Button';
 
 function MovieDetailSection(): ReactElement {
+  const t = useTranslations('Movie');
   const router = useRouter();
   const searchParams = useSearchParams()!;
   const dispatch = useAppDispatch();
@@ -88,19 +90,27 @@ function MovieDetailSection(): ReactElement {
         <div className="flex flex-col justify-start gap-1">
           <h2 className="text-2xl font-bold">{movie.Title}</h2>
           <p className="text-(--text-color)">
-            <strong className="text-(--text-color-secondary)">Year:</strong>{' '}
+            <strong className="text-(--text-color-secondary)">
+              {t('year')}:
+            </strong>{' '}
             {movie.Year}
           </p>
           <p className="text-(--text-color)">
-            <strong className="text-(--text-color-secondary)">Genre:</strong>{' '}
+            <strong className="text-(--text-color-secondary)">
+              {t('genre')}:
+            </strong>{' '}
             {movie.Genre}
           </p>
           <p className="text-(--text-color)">
-            <strong className="text-(--text-color-secondary)">Country:</strong>{' '}
+            <strong className="text-(--text-color-secondary)">
+              {t('country')}:
+            </strong>{' '}
             {movie.Country}
           </p>
           <p className="text-(--text-color) flex items-center gap-1">
-            <strong className="text-(--text-color-secondary)">IMDb:</strong>
+            <strong className="text-(--text-color-secondary)">
+              {t('rating')}:
+            </strong>
             <span className="text-yellow-500 text-lg">★</span>
             {movie.imdbRating}
           </p>
@@ -108,7 +118,9 @@ function MovieDetailSection(): ReactElement {
       </div>
       <div className="mt-4">
         <p className="text-(--text-color)">
-          <strong className="text-(--text-color-secondary)">Actors:</strong>{' '}
+          <strong className="text-(--text-color-secondary)">
+            {t('actors')}:
+          </strong>{' '}
           {movie.Actors}
         </p>
       </div>
@@ -120,7 +132,7 @@ function MovieDetailSection(): ReactElement {
             onClick={() => setExpanded(!expanded)}
             className="ml-2 text-(--link-text-color) md:hover:underline"
           >
-            {expanded ? 'Show less' : 'Show more'}
+            {expanded ? t('showLess') : t('showMore')}
           </button>
         )}
       </p>
@@ -129,7 +141,7 @@ function MovieDetailSection(): ReactElement {
           onClick={refreshDetails}
           className="bg-(--button-bg) text-white rounded-lg transition md:hover:bg-(--btn-hover-bg)"
         >
-          Refresh
+          {t('refresh')}
         </Button>
       </div>
     </div>

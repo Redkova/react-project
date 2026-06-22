@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import Button from '../ui/Button';
 
 interface Props {
@@ -15,6 +18,7 @@ function MoviesPagination({
   isFirstPage,
   isLastPage,
 }: Props) {
+  const t = useTranslations('Pagination');
   return (
     <div className="flex justify-center gap-4 mt-6">
       <Button
@@ -26,7 +30,7 @@ function MoviesPagination({
             : 'bg-gray-200 text-black md:hover:bg-gray-300'
         }
       >
-        Prev
+        {t('prev')}
       </Button>
 
       <span className="font-semibold">Page {page}</span>
@@ -40,7 +44,7 @@ function MoviesPagination({
             : 'bg-gray-200 text-black md:hover:bg-gray-300'
         }
       >
-        Next
+        {t('next')}
       </Button>
     </div>
   );

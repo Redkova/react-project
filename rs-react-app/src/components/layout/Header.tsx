@@ -1,12 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter, usePathname } from '@/i18n/navigation';
 import { useTheme } from '../../context/useTheme';
+import LanguageSwitcher from '../language/LanguageSwitcher';
 
 export default function Header() {
   const t = useTranslations('Header');
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <header className="w-full bg-(--bg) shadow-(--header-shadow)">
@@ -24,10 +27,11 @@ export default function Header() {
 
         <h1 className="text-xl font-bold text-center">{t('title')}</h1>
 
-        <nav className="w-24 text-right">
+        <nav className="flex items-center  gap-4">
           <Link href="/about" className="md:hover:text-(--header-text-hover)">
             {t('about')}
           </Link>
+          <LanguageSwitcher />
         </nav>
       </div>
     </header>

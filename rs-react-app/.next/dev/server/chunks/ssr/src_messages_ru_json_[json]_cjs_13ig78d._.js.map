@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":["file:///Users/Sandrik/react-project/rs-react-app/src/messages/ru.json.%5Bjson%5D.cjs/turbopack%3A/src/messages/ru.json"],"sourcesContent":["{\"Header\":{\"about\":\"О проекте\",\"title\":\"Найди свой фильм\"},\"Footer\":{\"copyright\":\"© 2026 Александра Редкова\"},\"Search\":{\"placeholder\":\"Поиск фильмов...\",\"button\":\"Искать\",\"errorMinLength\":\"Введите минимум 3 символа\"},\"About\":{\"developed\":\"Это приложение было разработано\",\"description\":\"Проект демонстрирует основы React, роутинг, интеграцию API, тестирование и современные UI/UX практики.\",\"back\":\"Вернуться на главную\"},\"NotFound\":{\"title\":\"Упс! Страница не найдена\",\"back\":\"Вернуться на главную\"}}"],"names":[],"mappings":""}}]
-}

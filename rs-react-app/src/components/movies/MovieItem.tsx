@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { ReactElement } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { OmdbMovie } from '../../api/types';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 function MovieItem({ movie }: Props): ReactElement {
+  const t = useTranslations('Movie');
   const router = useRouter();
   const params = useSearchParams();
   const dispatch = useAppDispatch();
@@ -42,7 +44,7 @@ function MovieItem({ movie }: Props): ReactElement {
 
         <PosterImage
           src={movie.Poster}
-          alt={movie.Title}
+          alt={`${movie.Title} ${t('year')} ${movie.Year}`}
           className="w-14 h-20"
         />
 
