@@ -49,5 +49,11 @@
     "selected": "Выбрано фильмов:",
     "unselect": "Снять выбор",
     "download": "Скачать"
+  },
+  "ResultsSection": {
+    "movieName": "Название",
+    "year": "Год",
+    "noResults": "Ничего не найдено.",
+    "refresh": "Обновить"
   }
 }

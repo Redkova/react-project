@@ -26,7 +26,9 @@ export default function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
 
   function switchLanguage(locale: 'en' | 'ru') {
-    router.replace(pathname, { locale });
+    const params = new URLSearchParams(window.location.search);
+
+    router.replace(`${pathname}?${params.toString()}`, { locale });
     setOpen(false);
   }
 

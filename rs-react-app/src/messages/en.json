@@ -49,5 +49,11 @@
     "selected": "Selected movies:",
     "unselect": "Unselect all",
     "download": "Download"
+  },
+  "ResultsSection": {
+    "movieName": "Movie name",
+    "year": "Year",
+    "noResults": "No results found.",
+    "refresh": "Refresh"
   }
 }

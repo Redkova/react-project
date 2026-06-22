@@ -19,7 +19,7 @@ function MovieItem({ movie }: Props): ReactElement {
   const params = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const search = params?.get('search') ?? '';
+  const search = params?.get('search') ?? 'star';
   const page = params?.get('page') ?? '1';
 
   const isSelected = useAppSelector((state) =>
