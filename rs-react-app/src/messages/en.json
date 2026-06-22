@@ -13,7 +13,7 @@
   },
   "About": {
     "developed": "This application was developed by",
-    "description": "The project demonstrates React fundamentals, routing, API integration, testing, and modern UI/UX practices.",
+    "description": "The project demonstrates React and Next.js development practices, routing, API integration, testing, and modern UI/UX practices.",
     "back": "Back to main"
   },
   "NotFound": {
