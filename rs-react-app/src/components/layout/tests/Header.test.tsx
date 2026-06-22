@@ -11,18 +11,6 @@ vi.mock('../../../context/useTheme', () => ({
   }),
 }));
 
-vi.mock('react-router', async () => {
-  const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
-
-  return {
-    ...actual,
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-      <a href={to}>{children}</a>
-    ),
-  };
-});
-
 describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks();

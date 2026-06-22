@@ -1,15 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Link, useRouter, usePathname } from '@/i18n/navigation';
+import { Link } from '@/i18n/navigation';
 import { useTheme } from '../../context/useTheme';
 import LanguageSwitcher from '../language/LanguageSwitcher';
 
 export default function Header() {
   const t = useTranslations('Header');
   const { theme, toggleTheme } = useTheme();
-  const router = useRouter();
-  const pathname = usePathname();
 
   return (
     <header className="w-full bg-(--bg) shadow-(--header-shadow)">
