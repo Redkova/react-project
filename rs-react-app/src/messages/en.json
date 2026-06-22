@@ -44,5 +44,10 @@
     "LimitReached": "Request limit reached. Try again later.",
     "ServerError": "Server error. Please try again later.",
     "SomethingWrong": "Something went wrong. Please try again."
+  },
+  "Flyout": {
+    "selected": "Selected movies:",
+    "unselect": "Unselect all",
+    "download": "Download"
   }
 }
