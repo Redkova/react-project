@@ -20,8 +20,6 @@ export default function LanguageSwitcher() {
   const t = useTranslations('Header');
 
   const locale = useLocale() as 'en' | 'ru';
-  console.log('pathname:', pathname);
-  console.log('currentLocale:', locale);
 
   const [open, setOpen] = useState(false);
 

@@ -1,51 +1,46 @@
-'use client';
-
 import { useTranslations } from 'next-intl';
-import Button from '../ui/Button';
+import { Link } from '@/i18n/navigation';
 
 interface Props {
   page: number;
-  onNext: () => void;
-  onPrev: () => void;
+  search: string;
   isFirstPage: boolean;
   isLastPage: boolean;
 }
 
-function MoviesPagination({
-  page,
-  onNext,
-  onPrev,
-  isFirstPage,
-  isLastPage,
-}: Props) {
+function MoviesPagination({ page, search, isFirstPage, isLastPage }: Props) {
   const t = useTranslations('Pagination');
+
+  const prevPage = page - 1;
+  const nextPage = page + 1;
+
   return (
     <div className="flex justify-center gap-4 mt-6">
-      <Button
-        onClick={onPrev}
-        disabled={isFirstPage}
+      <Link
+        href={`?search=${search}&page=${prevPage}`}
         className={
           isFirstPage
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-gray-200 text-black md:hover:bg-gray-300'
+            ? 'px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed'
+            : 'px-4 py-2 bg-gray-200 text-black rounded-lg md:hover:bg-gray-300'
         }
+        aria-disabled={isFirstPage}
       >
         {t('prev')}
-      </Button>
+      </Link>
 
       <span className="font-semibold">Page {page}</span>
 
-      <Button
-        onClick={onNext}
-        disabled={isLastPage}
+      <Link
+        href={`?search=${search}&page=${nextPage}`}
         className={
           isLastPage
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-gray-200 text-black md:hover:bg-gray-300'
+            ? 'px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed'
+            : 'px-4 py-2 bg-gray-200 text-black rounded-lg md:hover:bg-gray-300'
         }
+        aria-disabled={isLastPage}
       >
         {t('next')}
-      </Button>
+      </Link>
     </div>
   );
 }

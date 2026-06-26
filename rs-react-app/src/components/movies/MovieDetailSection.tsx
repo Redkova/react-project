@@ -3,19 +3,19 @@
 import { useTranslations } from 'next-intl';
 import { ReactElement, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Spinner from '@/components/spinner/Spinner';
-import { useGetMovieDetailsQuery, movieApi } from '@/api/api';
-import { useAppDispatch } from '@/hooks/reduxHooks';
 import { PosterImage } from '@/components/ui/PosterImage';
 import MovieError from '@/components/movies/MoviesError';
-import { mapMovieError } from '@/utils/errorMapper';
 import Button from '@/components/ui/Button';
+import type { OmdbMovieDetails } from '@/api/types';
 
-function MovieDetailSection(): ReactElement {
+interface Props {
+  movie: OmdbMovieDetails | null;
+}
+
+export default function MovieDetailSection({ movie }: Props): ReactElement {
   const t = useTranslations('Movie');
   const router = useRouter();
   const searchParams = useSearchParams()!;
-  const dispatch = useAppDispatch();
 
   const id = searchParams.get('details');
   const page = searchParams?.get('page') ?? '1';
@@ -23,43 +23,20 @@ function MovieDetailSection(): ReactElement {
 
   const [expanded, setExpanded] = useState(false);
 
-  const {
-    data: movie,
-    isFetching,
-    isError,
-    error,
-    refetch,
-  } = useGetMovieDetailsQuery(id!, {
-    skip: !id,
-  });
-
   function closeDetails(): void {
     router.push(`?search=${search}&page=${page}`);
   }
 
   function refreshDetails(): void {
-    dispatch(movieApi.util.invalidateTags([{ type: 'MovieDetails' }]));
-    refetch();
+    router.refresh();
   }
 
   if (!id || !/^tt\d+$/.test(id)) {
-    return <MovieError message="Movie not found" />;
+    return <MovieError message="MovieNotFound" />;
   }
 
-  if (isFetching && !movie) {
-    return (
-      <div className="flex justify-center py-10">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return <MovieError message={mapMovieError(error)} />;
-  }
-
-  if (!movie || movie.Response === 'False') {
-    return <MovieError message="Movie not found" />;
+  if (!movie) {
+    return <MovieError message="MovieNotFound" />;
   }
 
   const isLong = movie.Plot.length > 700;
@@ -69,16 +46,10 @@ function MovieDetailSection(): ReactElement {
     <div className="relative w-full max-w-lg bg-(--movie-card-bg) py-6 px-4 rounded-xl shadow-(--card-border-shadow)">
       <button
         onClick={closeDetails}
-        className="absolute  top-2 right-3 text-gray-500 text-2xl leading-none cursor-default md:cursor-pointer md:hover:text-red-500"
+        className="absolute top-2 right-3 text-gray-500 text-2xl leading-none cursor-default md:cursor-pointer md:hover:text-red-500"
       >
         ✕
       </button>
-
-      {isFetching && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black/40 backdrop-blur-sm z-[999] pointer-events-none rounded-xl">
-          <Spinner />
-        </div>
-      )}
 
       <div className="flex gap-4">
         <PosterImage
@@ -116,6 +87,7 @@ function MovieDetailSection(): ReactElement {
           </p>
         </div>
       </div>
+
       <div className="mt-4">
         <p className="text-(--text-color)">
           <strong className="text-(--text-color-secondary)">
@@ -124,6 +96,7 @@ function MovieDetailSection(): ReactElement {
           {movie.Actors}
         </p>
       </div>
+
       <p className="mt-4 text-(--text-color) leading-relaxed">
         {expanded || !isLong ? movie.Plot : shortPlot}
 
@@ -136,6 +109,7 @@ function MovieDetailSection(): ReactElement {
           </button>
         )}
       </p>
+
       <div className="flex justify-center items-center mt-4">
         <Button
           onClick={refreshDetails}
@@ -147,5 +121,3 @@ function MovieDetailSection(): ReactElement {
     </div>
   );
 }
-
-export default MovieDetailSection;
