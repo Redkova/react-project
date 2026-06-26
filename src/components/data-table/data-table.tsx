@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { YearData } from '../../types';
 import { formatNumber } from '../../utils/format-utils';
 import styles from './data-table.module.css';
@@ -9,14 +9,12 @@ type DataTableProps = {
   columns: string[];
 };
 
-export const DataTable = memo(function DataTable({ data, year, columns }: DataTableProps) {
+export function DataTable({ data, year, columns }: DataTableProps) {
   const yearData = useMemo(() => {
     return data.filter((d) => d.year === year);
   }, [data, year]);
 
-  const record = useMemo(() => {
-    return yearData[0];
-  }, [yearData]);
+  const record = yearData[0];
 
   if (!record) {
     return <div className={styles.noData}>No data available for year {year}</div>;
@@ -38,4 +36,4 @@ export const DataTable = memo(function DataTable({ data, year, columns }: DataTa
       </tbody>
     </table>
   );
-});
+}

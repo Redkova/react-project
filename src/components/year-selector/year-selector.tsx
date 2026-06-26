@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react';
 import styles from './year-selector.module.css';
 
 type YearSelectorProps = {
@@ -7,17 +6,10 @@ type YearSelectorProps = {
   onChange: (year: number) => void;
 };
 
-export const YearSelector = memo(function YearSelector({
-  year,
-  years,
-  onChange,
-}: YearSelectorProps) {
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onChange(Number(e.target.value));
-    },
-    [onChange]
-  );
+export function YearSelector({ year, years, onChange }: YearSelectorProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onChange(Number(e.target.value));
+  };
 
   return (
     <div className={styles.container}>
@@ -33,4 +25,4 @@ export const YearSelector = memo(function YearSelector({
       </select>
     </div>
   );
-});
+}

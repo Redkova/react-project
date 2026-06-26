@@ -5,7 +5,7 @@ import { SearchBar } from '../search-bar/search-bar';
 import { YearSelector } from '../year-selector/year-selector';
 import { CountryList } from '../country-list/country-list';
 import { ColumnModal } from '../column-modal/column-modal';
-import { getAvailableYears, getAvailableColumns } from '../../utils/data-transformers';
+import { getAvailableYears, AVAILABLE_COLUMNS } from '../../utils/data-transformers';
 
 import styles from './app.module.css';
 
@@ -33,7 +33,7 @@ export const App = () => {
   });
 
   const years = data ? getAvailableYears(data) : [];
-  const availableColumns = getAvailableColumns();
+  const availableColumns = AVAILABLE_COLUMNS;
 
   const handleSearch = useCallback((value: string) => {
     setState((prev) => ({ ...prev, searchQuery: value }));

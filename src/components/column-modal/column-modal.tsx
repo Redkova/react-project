@@ -1,32 +1,20 @@
 import styles from './column-modal.module.css';
-import { memo, useCallback } from 'react';
 
 type ColumnModalProps = {
   isOpen: boolean;
-  availableColumns: string[];
+  availableColumns: readonly string[];
   selectedColumns: string[];
   onToggle: (column: string) => void;
   onClose: () => void;
 };
 
-export const ColumnModal = memo(function ColumnModal({
+export function ColumnModal({
   isOpen,
   availableColumns,
   selectedColumns,
   onToggle,
   onClose,
 }: ColumnModalProps) {
-  const handleToggle = useCallback(
-    (column: string) => {
-      onToggle(column);
-    },
-    [onToggle]
-  );
-
-  const handleClose = useCallback(() => {
-    onClose();
-  }, [onClose]);
-
   if (!isOpen) {
     return null;
   }
@@ -42,7 +30,7 @@ export const ColumnModal = memo(function ColumnModal({
                 <input
                   type="checkbox"
                   checked={selectedColumns.includes(column)}
-                  onChange={() => handleToggle(column)}
+                  onChange={() => onToggle(column)}
                   className={styles.checkbox}
                 />
                 {column}
@@ -51,11 +39,11 @@ export const ColumnModal = memo(function ColumnModal({
           ))}
         </div>
         <div className={styles.buttonContainer}>
-          <button onClick={handleClose} className={styles.closeButton}>
+          <button onClick={onClose} className={styles.closeButton}>
             Close
           </button>
         </div>
       </div>
     </div>
   );
-});
+}
