@@ -8,7 +8,7 @@ import {
   selectSelectedMovies,
   selectSelectedMoviesCount,
 } from '../../store/selectedMoviesSelectors';
-import { exportMoviesCsv } from '@/app/[locale]/actions/exportMovies';
+import { exportMoviesCsv } from '@/app/[locale]/(movies)/actions/exportMovies';
 
 export function SelectedMoviesFlyout() {
   const t = useTranslations('Flyout');
