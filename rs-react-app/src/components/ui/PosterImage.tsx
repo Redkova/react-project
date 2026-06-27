@@ -15,6 +15,16 @@ export function PosterImage({ src, alt, className }: PosterImageProps) {
 
   const hasPoster = src && src !== 'N/A' && src.trim() !== '';
 
+  if (!hasPoster) {
+    return (
+      <div
+        className={`relative rounded-md overflow-hidden border bg-gray-200 flex items-center justify-center text-[10px] text-gray-600 ${className}`}
+      >
+        No image
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative rounded-md overflow-hidden border bg-gray-200 ${className}`}

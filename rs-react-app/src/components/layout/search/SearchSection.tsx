@@ -11,7 +11,11 @@ const DEFAULT_SEARCH_TERM = 'star';
 
 function SearchSection(): ReactElement {
   const t = useTranslations('Search');
-  const [value, setValue] = useState<string>('');
+  const params = useSearchParams();
+  const initialSearch = params.get('search') ?? '';
+
+  const [value, setValue] = useState(initialSearch);
+
   const [error, setError] = useState<string | null>(null);
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>): void {
