@@ -1,8 +1,6 @@
 import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
 
-export const dynamic = 'force-static';
-
 export default async function AboutPage() {
   const t = await getTranslations('About');
   return (

@@ -6,12 +6,12 @@ import { useTranslations, useLocale } from 'next-intl';
 
 const LANGUAGES = {
   en: 'English',
-  ru: 'Русский',
+  sv: 'Svenska',
 };
 
 const LANGUAGE_CODES = {
   en: 'EN',
-  ru: 'RU',
+  sv: 'SV',
 };
 
 export default function LanguageSwitcher() {
@@ -19,11 +19,11 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
   const t = useTranslations('Header');
 
-  const locale = useLocale() as 'en' | 'ru';
+  const locale = useLocale() as 'en' | 'sv';
 
   const [open, setOpen] = useState(false);
 
-  function switchLanguage(locale: 'en' | 'ru') {
+  function switchLanguage(locale: 'en' | 'sv') {
     const params = new URLSearchParams(window.location.search);
 
     router.replace(`${pathname}?${params.toString()}`, { locale });
@@ -46,7 +46,7 @@ export default function LanguageSwitcher() {
             .map(([code, label]) => (
               <button
                 key={code}
-                onClick={() => switchLanguage(code as 'en' | 'ru')}
+                onClick={() => switchLanguage(code as 'en' | 'sv')}
                 className="block w-full text-left px-4 py-2 md:hover:bg-(--btn-hover-bg) transition md:cursor-pointer"
               >
                 {label}
