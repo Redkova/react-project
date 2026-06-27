@@ -1,8 +1,11 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { ReactElement } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { OmdbMovie } from '../../api/types';
-import { useNavigate } from 'react-router';
-import { useMovieParams } from '../../hooks/useMovieParams';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { toggleMovieSelection } from '../../store/selectedMoviesSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
+import { toggleMovieSelection } from '@/store/selectedMoviesSlice';
 import { Checkbox } from '../ui/Checkbox';
 import { PosterImage } from '../ui/PosterImage';
 
@@ -10,23 +13,26 @@ interface Props {
   movie: OmdbMovie;
 }
 
-function MovieItem({ movie }: Props) {
-  const navigate = useNavigate();
+function MovieItem({ movie }: Props): ReactElement {
+  const t = useTranslations('Movie');
+  const router = useRouter();
+  const params = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const { search, page } = useMovieParams();
+  const search = params?.get('search') ?? 'star';
+  const page = params?.get('page') ?? '1';
 
   const isSelected = useAppSelector((state) =>
     state.selectedMovies.movieItems.some((m) => m.imdbID === movie.imdbID)
   );
 
-  const handleOpenDetails = () => {
-    navigate(`/?search=${search}&page=${page}&details=${movie.imdbID}`);
-  };
+  function handleOpenDetails(): void {
+    router.push(`?search=${search}&page=${page}&details=${movie.imdbID}`);
+  }
 
-  const handleCheckboxChange = () => {
+  function handleCheckboxChange(): void {
     dispatch(toggleMovieSelection(movie));
-  };
+  }
 
   return (
     <div
@@ -38,7 +44,7 @@ function MovieItem({ movie }: Props) {
 
         <PosterImage
           src={movie.Poster}
-          alt={movie.Title}
+          alt={`${movie.Title} ${t('year')} ${movie.Year}`}
           className="w-14 h-20"
         />
 

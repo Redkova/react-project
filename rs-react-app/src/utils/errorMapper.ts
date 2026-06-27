@@ -16,11 +16,11 @@ function isOmdbErrorResponse(data: unknown): data is OmdbErrorResponse {
 
 export function mapMovieError(error: unknown): string {
   if (!error) {
-    return 'Unknown error occurred';
+    return 'Errors.Unknown';
   }
 
   if (error instanceof Error) {
-    return error.message || 'Unknown error occurred';
+    return 'Errors.Unknown';
   }
 
   if (typeof error === 'string') {
@@ -29,26 +29,26 @@ export function mapMovieError(error: unknown): string {
 
   if (isFetchBaseQueryError(error)) {
     if (error.status === 'FETCH_ERROR') {
-      return 'Network error. Please check your connection.';
+      return 'Errors.Network';
     }
     if (error.status === 'PARSING_ERROR') {
-      return 'Server returned invalid data';
+      return 'Errors.InvalidData';
     }
 
     if (isOmdbErrorResponse(error.data)) {
       const msg = error.data.Error;
 
       if (msg === 'Too many results.') {
-        return 'Too many results. Try a more specific title.';
+        return 'Errors.TooManyResults';
       }
       if (msg === 'Movie not found!') {
-        return 'No movies found with that title.';
+        return 'Errors.MovieNotFound';
       }
       if (msg === 'Invalid API key!') {
-        return 'Invalid API key.';
+        return 'Errors.InvalidApiKey';
       }
       if (msg === 'Request limit reached!') {
-        return 'Request limit reached. Try again later.';
+        return 'Errors.LimitReached';
       }
 
       return msg;
@@ -56,16 +56,16 @@ export function mapMovieError(error: unknown): string {
 
     if (typeof error.status === 'number') {
       if (error.status >= 500) {
-        return 'Server error. Please try again later.';
+        return 'Errors.ServerError';
       }
       if (error.status === 401) {
-        return 'Invalid API key.';
+        return 'Errors.InvalidApiKey';
       }
       if (error.status === 404) {
-        return 'Movie not found.';
+        return 'Errors.MovieNotFound';
       }
     }
   }
 
-  return 'Something went wrong. Please try again.';
+  return 'Errors.SomethingWrong';
 }

@@ -1,0 +1,59 @@
+{
+  "Header": {
+    "about": "About",
+    "title": "Find Your Movie"
+  },
+  "Footer": {
+    "copyright": "© 2026 Alexandra Redkova"
+  },
+  "Search": {
+    "placeholder": "Search movies...",
+    "button": "Search",
+    "errorMinLength": "Please enter at least 3 characters"
+  },
+  "About": {
+    "developed": "This application was developed by",
+    "description": "The project demonstrates React and Next.js development practices, routing, API integration and modern UI/UX practices.",
+    "back": "Back to main"
+  },
+  "NotFound": {
+    "title": "Oops! Page not found",
+    "back": "Back to main"
+  },
+  "Movie": {
+    "year": "Year",
+    "genre": "Genre",
+    "country": "Country",
+    "actors": "Actors",
+    "rating": "IMDb",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "refresh": "Refresh"
+  },
+  "Pagination": {
+    "next": "Next",
+    "prev": "Previous"
+  },
+  "Errors": {
+    "Unknown": "Unknown error occurred",
+    "Network": "Network error. Please check your connection.",
+    "InvalidData": "Server returned invalid data",
+    "TooManyResults": "Too many results. Try a more specific title.",
+    "MovieNotFound": "Movie not found.",
+    "InvalidApiKey": "Invalid API key.",
+    "LimitReached": "Request limit reached. Try again later.",
+    "ServerError": "Server error. Please try again later.",
+    "SomethingWrong": "Something went wrong. Please try again."
+  },
+  "Flyout": {
+    "selected": "Selected movies:",
+    "unselect": "Unselect all",
+    "download": "Download"
+  },
+  "ResultsSection": {
+    "movieName": "Movie name",
+    "year": "Year",
+    "noResults": "No results found.",
+    "refresh": "Refresh"
+  }
+}

@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface PosterImageProps {
   src: string | null;
@@ -11,14 +14,23 @@ export function PosterImage({ src, alt, className }: PosterImageProps) {
   const [error, setError] = useState(false);
 
   const hasPoster = src && src !== 'N/A' && src.trim() !== '';
-  const showSpinner = hasPoster && loading && !error;
+
+  if (!hasPoster) {
+    return (
+      <div
+        className={`relative rounded-md overflow-hidden border bg-gray-200 flex items-center justify-center text-[10px] text-gray-600 ${className}`}
+      >
+        No image
+      </div>
+    );
+  }
 
   return (
     <div
       className={`relative rounded-md overflow-hidden border bg-gray-200 ${className}`}
     >
-      {showSpinner && (
-        <div className="absolute inset-0 flex items-center justify-center">
+      {loading && !error && hasPoster && (
+        <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
         </div>
       )}
@@ -30,11 +42,12 @@ export function PosterImage({ src, alt, className }: PosterImageProps) {
       )}
 
       {hasPoster && !error && (
-        <img
-          key={src}
+        <Image
           src={src}
           alt={alt}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
+          width={300}
+          height={450}
+          className={`object-cover w-full h-full transition-opacity duration-300 ${
             loading ? 'opacity-0' : 'opacity-100'
           }`}
           onLoad={() => setLoading(false)}
