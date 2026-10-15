@@ -5,7 +5,7 @@ import { ReactElement, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PosterImage } from '@/components/ui/PosterImage';
 import MovieError from '@/components/movies/MoviesError';
-import Button from '@/components/ui/Button';
+// import Button from '@/components/ui/Button';
 import type { OmdbMovieDetails } from '@/api/types';
 
 interface Props {
@@ -27,9 +27,9 @@ export default function MovieDetailSection({ movie }: Props): ReactElement {
     router.push(`?search=${search}&page=${page}`);
   }
 
-  function refreshDetails(): void {
-    router.refresh();
-  }
+  // function refreshDetails(): void {
+  //   router.refresh();
+  // }
 
   if (!id || !/^tt\d+$/.test(id)) {
     return <MovieError message="MovieNotFound" />;
@@ -110,14 +110,14 @@ export default function MovieDetailSection({ movie }: Props): ReactElement {
         )}
       </p>
 
-      <div className="flex justify-center items-center mt-4">
+      {/* <div className="flex justify-center items-center mt-4">
         <Button
           onClick={refreshDetails}
           className="bg-(--button-bg) text-white rounded-lg transition md:hover:bg-(--btn-hover-bg)"
         >
           {t('refresh')}
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
