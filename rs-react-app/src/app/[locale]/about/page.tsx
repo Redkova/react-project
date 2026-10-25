@@ -1,0 +1,69 @@
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
+
+export default async function AboutPage() {
+  const t = await getTranslations('About');
+  return (
+    <div className="w-full max-w-lg py-6 px-4 rounded-xl bg-(--bg) shadow-(--card-border-shadow)">
+      <p className="text-(--text-color) text-lg mb-4 leading-relaxed">
+        {t('developed')} <strong>Alexandra Redkova</strong>
+      </p>
+
+      <p className="text-(--text-color) text-lg mb-6 leading-relaxed">
+        {t('description')}
+      </p>
+
+      <div className="border-t pt-6 flex flex-col gap-3 text-center items-center">
+        <a
+          href="https://github.com/Redkova"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            text-(--link-text-color) 
+            md:hover:text-blue-700 
+            transition 
+            md:hover:underline
+            cursor-default
+            md:cursor-pointer
+          "
+        >
+          GitHub
+        </a>
+
+        <a
+          href="https://rs.school/courses/reactjs"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            text-(--link-text-color) 
+            md:hover:text-blue-700 
+            transition 
+            md:hover:underline
+            cursor-default
+            md:cursor-pointer
+          "
+        >
+          RS School
+        </a>
+        <Link
+          href="/"
+          className="
+          inline-block 
+          px-6 py-3 
+          bg-(--button-bg) 
+          text-white 
+          rounded-lg 
+          shadow-md 
+          md:hover:bg-(--btn-hover-bg) 
+          md:hover:shadow-lg 
+          transition-all
+          cursor-default
+          md:cursor-pointer
+        "
+        >
+          {t('back')}
+        </Link>
+      </div>
+    </div>
+  );
+}

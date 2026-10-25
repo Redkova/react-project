@@ -1,54 +1,51 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { unselectAllMovies } from '../../store/selectedMoviesSlice';
 import Button from '../ui/Button';
-import { downloadMoviesCsv } from '../../utils/downloadMoviesCsv';
 import {
   selectSelectedMovies,
   selectSelectedMoviesCount,
 } from '../../store/selectedMoviesSelectors';
+import { exportMoviesCsv } from '@/app/[locale]/(movies)/actions/exportMovies';
 
 export function SelectedMoviesFlyout() {
+  const t = useTranslations('Flyout');
   const dispatch = useAppDispatch();
+  const movies = useAppSelector(selectSelectedMovies);
+  const count = useAppSelector(selectSelectedMoviesCount);
 
-  const selectedMovies = useAppSelector(selectSelectedMovies);
-
-  const selectedMoviesCount = useAppSelector(selectSelectedMoviesCount);
-
-  if (selectedMoviesCount === 0) return null;
-
-  const handleDownload = () => {
-    downloadMoviesCsv(selectedMovies);
-  };
+  if (count === 0) return null;
 
   return (
-    <>
-      <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[70%]
-        bg-(--flyout-bg) border rounded-lg shadow-(--header-shadow)
-        p-8 flex flex-col items-center gap-3
-        z-50"
-      >
-        <p className="text-lg text-(--text-color) font-medium text-center">
-          Selected movies:{' '}
-          <span className="font-bold">{selectedMoviesCount}</span>
-        </p>
+    <div
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[70%]
+      bg-(--flyout-bg) border rounded-lg shadow-(--header-shadow)
+      p-8 flex flex-col items-center gap-3 z-50"
+    >
+      <p className="text-lg text-(--text-color) font-medium text-center">
+        {t('selected')} <span className="font-bold">{count}</span>
+      </p>
 
-        <div className="flex gap-3">
-          <Button
-            className="px-4 py-2 bg-(--button-bg) text-white rounded hover:bg-(--btn-hover-bg) transition"
-            onClick={() => dispatch(unselectAllMovies())}
-          >
-            Unselect all
-          </Button>
+      <div className="flex gap-3">
+        <Button
+          className="px-4 py-2 bg-(--button-bg) text-white rounded hover:bg-(--btn-hover-bg) transition"
+          onClick={() => dispatch(unselectAllMovies())}
+        >
+          {t('unselect')}
+        </Button>
 
+        <form action={exportMoviesCsv}>
+          <input type="hidden" name="movies" value={JSON.stringify(movies)} />
           <Button
+            type="submit"
             className="px-4 py-2 bg-(--button-bg) text-white rounded-lg hover:bg-(--btn-hover-bg) transition"
-            onClick={handleDownload}
           >
-            Download
+            {t('download')}
           </Button>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }

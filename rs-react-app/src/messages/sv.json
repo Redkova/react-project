@@ -1,0 +1,59 @@
+{
+  "Header": {
+    "about": "Om projektet",
+    "title": "Hitta din film"
+  },
+  "Footer": {
+    "copyright": "© 2026 Alexandra Redkova"
+  },
+  "Search": {
+    "placeholder": "Sök filmer...",
+    "button": "Sök",
+    "errorMinLength": "Ange minst 3 tecken"
+  },
+  "About": {
+    "developed": "Denna applikation utvecklades av",
+    "description": "Projektet demonstrerar utvecklingspraxis i React och Next.js, routing, API‑integration och modern UI/UX‑design.",
+    "back": "Tillbaka till startsidan"
+  },
+  "NotFound": {
+    "title": "Oj! Sidan kunde inte hittas",
+    "back": "Tillbaka till startsidan"
+  },
+  "Movie": {
+    "year": "År",
+    "genre": "Genre",
+    "country": "Land",
+    "actors": "Skådespelare",
+    "rating": "IMDb",
+    "showMore": "Visa mer",
+    "showLess": "Visa mindre",
+    "refresh": "Uppdatera"
+  },
+  "Pagination": {
+    "next": "Nästa",
+    "prev": "Föregående"
+  },
+  "Errors": {
+    "Unknown": "Ett okänt fel uppstod",
+    "Network": "Nätverksfel. Kontrollera din anslutning.",
+    "InvalidData": "Servern returnerade ogiltiga data",
+    "TooManyResults": "För många resultat. Försök med en mer specifik titel.",
+    "MovieNotFound": "Filmen hittades inte.",
+    "InvalidApiKey": "Ogiltig API‑nyckel.",
+    "LimitReached": "Förfrågningsgränsen har nåtts. Försök igen senare.",
+    "ServerError": "Serverfel. Försök igen senare.",
+    "SomethingWrong": "Något gick fel. Försök igen."
+  },
+  "Flyout": {
+    "selected": "Valda filmer:",
+    "unselect": "Avmarkera alla",
+    "download": "Ladda ner"
+  },
+  "ResultsSection": {
+    "movieName": "Filmtitel",
+    "year": "År",
+    "noResults": "Inga resultat hittades.",
+    "refresh": "Uppdatera"
+  }
+}
