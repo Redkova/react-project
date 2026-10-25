@@ -1,13 +1,11 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState, useEffect, ReactElement } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, ReactElement } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import { searchMoviesAction } from '@/app/[locale]/(movies)/actions/searchMoviesAction';
-
-const DEFAULT_SEARCH_TERM = 'star';
 
 function SearchSection(): ReactElement {
   const t = useTranslations('Search');
@@ -22,6 +20,7 @@ function SearchSection(): ReactElement {
     const trimmed = value.trim();
 
     if (trimmed.length === 0) {
+      e.preventDefault();
       setError(null);
       return;
     }
